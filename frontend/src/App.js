@@ -1,17 +1,18 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
-import "./App.css"; // Import your CSS file for styling
+import "./App.css"; 
 
-// Import your components
 import Login from './components/Login';
-import Dashboard from './components/Dashboard'; // Assuming you have a Dashboard component
+import Dashboard from './components/Dashboard'; 
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   const { user } = useAuth();
 
   return (
+    <div className="phone-simulation-container">
+      <div className="app-frame">
     <BrowserRouter>
       <Routes>
         {/*
@@ -48,6 +49,8 @@ function App() {
         
       </Routes>
     </BrowserRouter>
+    </div>
+  </div>
   );
 }
 

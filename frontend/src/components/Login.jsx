@@ -53,6 +53,7 @@ function Login() {
   };
 
   return (
+    <div className="page-container">
     <div className="card">
       <h1 className="title">
         <TitleFlowerIcon className="title-icon" width="28" height="28" />
@@ -91,6 +92,7 @@ function Login() {
         </button>
       </form>
     </div>
+  </div>
   );
 }
 

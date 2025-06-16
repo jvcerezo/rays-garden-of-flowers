@@ -45,12 +45,20 @@ body {
   max-width: 393px;
   background-color: var(--card-background);
   padding: 40px 30px;
-  border-radius: 24px;
-  box-shadow: var(--card-shadow);
+  border-radius: 28px; /* Slightly more rounded */
   box-sizing: border-box;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  
+  /* IMPROVED: A more subtle, lifted shadow */
+  box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+
+  /* IMPROVED: Corrected and enhanced border */
+  border: 1px solid rgba(255, 255, 255, 0.6);
+
+  /* This adds the frosted glass effect */
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+
+  /* Your animation remains the same */
   animation: fadeIn 0.5s ease-out forwards;
 }
 
@@ -65,19 +73,11 @@ body {
   }
 }
 
-/* --- Icon Sizing --- */
+/* --- Icon Sizing (Cleaned up) --- */
+/* These classes define the color and position, size is now controlled by props in React */
 .title-icon {
   color: var(--primary-color);
   flex-shrink: 0;
-  /* CHANGED: Explicitly set the size for the container */
-  width: 28px;
-  height: 28px;
-}
-
-/* NEW RULE: Force the SVG inside to fill the container */
-.title-icon svg {
-    width: 100%;
-    height: 100%;
 }
 
 .input-icon {
@@ -87,16 +87,8 @@ body {
   transform: translateY(-50%);
   color: var(--icon-color);
   transition: color 0.2s ease-in-out;
-  /* CHANGED: Explicitly set the size for the container */
-  width: 20px;
-  height: 20px;
 }
 
-/* NEW RULE: Force the SVG inside to fill the container */
-.input-icon svg {
-    width: 100%;
-    height: 100%;
-}
 
 /* --- Form Element Styles --- */
 .form {
@@ -305,4 +297,46 @@ body {
   .card-title {
     font-size: 16px;
   }
+}
+
+.phone-simulation-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Dark background to frame the app */
+  background-color: #2d3748; 
+}
+
+/* This is the actual frame for your app */
+.app-frame {
+  width: 393px;
+  height: 852px;
+
+  /* These ensure it shrinks to fit smaller screens without breaking */
+  max-width: 100vw;
+  max-height: 100vh;
+
+  background-color: var(--background-start); /* Uses your existing theme */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  border-radius: 40px; /* Rounded corners like a phone */
+  overflow-y: auto; /* Allows content to scroll within the frame */
+  position: relative;
+}
+
+/* Hide scrollbar for a cleaner look */
+.app-frame::-webkit-scrollbar {
+  display: none;
+}
+
+.page-container {
+  width: 100%;
+  height: 100%; /* This is crucial for vertical centering */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
