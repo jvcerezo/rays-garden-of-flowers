@@ -1,24 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './context/AuthContext';
+import "./App.css"; // Import your CSS file for styling
+
+// Import your components
+import Login from './components/Login';
+import Dashboard from './components/Dashboard'; // Assuming you have a Dashboard component
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
+  const { user } = useAuth();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/*
+          Route 1: Login Page
+          If a logged-in user tries to go to /login, redirect them to the dashboard.
+        */}
+        <Route 
+          path="/login" 
+          element={user ? <Navigate to="/dashboard" /> : <Login />} 
+        />
+
+        {/*
+          Route 2: Dashboard Page (Protected)
+          This route is wrapped by our ProtectedRoute component.
+        */}
+        <Route 
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/*
+          Route 3: Root Path
+          This will be the default page. It redirects to the dashboard if logged in,
+          or to the login page if not.
+        */}
+        <Route 
+          path="/" 
+          element={user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} 
+        />
+        
+      </Routes>
+    </BrowserRouter>
   );
 }
 

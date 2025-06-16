@@ -1,38 +1,308 @@
-.App {
-  text-align: center;
+/* --- Google Font Import --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+/* --- CSS Variables for Powder Blue Theme --- */
+:root {
+  --primary-color: #5dadec; /* Powder Blue */
+  --primary-hover: #4a9dcf; /* Deeper Powder Blue */
+  --background-start: #eef7ff; /* Very light blue */
+  --background-end: #f7f9fb;   /* Off-white with a hint of blue */
+  --card-background: rgba(255, 255, 255, 0.7); /* Frosted Glass Effect */
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --icon-color: #9ca3af;
+  --error-color: #d9534f;
+  --error-background: #fdf3f2;
+  --border-color: #dbeafe;
+  --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* --- General Body and Container Styles --- */
+body {
+  margin: 0;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-start);
+  background-image: linear-gradient(135deg, var(--background-start), var(--background-end));
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  min-height: 100vh;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-.App-link {
-  color: #61dafb;
+/* --- Card Styles --- */
+.card {
+  width: 100%;
+  max-width: 393px;
+  background-color: var(--card-background);
+  padding: 40px 30px;
+  border-radius: 24px;
+  box-shadow: var(--card-shadow);
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  animation: fadeIn 0.5s ease-out forwards;
 }
 
-@keyframes App-logo-spin {
+@keyframes fadeIn {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
+    transform: translateY(10px);
   }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Icon Sizing --- */
+.title-icon {
+  color: var(--primary-color);
+  flex-shrink: 0;
+  /* CHANGED: Explicitly set the size for the container */
+  width: 28px;
+  height: 28px;
+}
+
+/* NEW RULE: Force the SVG inside to fill the container */
+.title-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--icon-color);
+  transition: color 0.2s ease-in-out;
+  /* CHANGED: Explicitly set the size for the container */
+  width: 20px;
+  height: 20px;
+}
+
+/* NEW RULE: Force the SVG inside to fill the container */
+.input-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* --- Form Element Styles --- */
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 14px 16px 14px 45px; 
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background-color: #f8fbff;
+  box-sizing: border-box;
+  transition: all 0.2s ease-in-out;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(93, 173, 236, 0.2);
+}
+
+.input-wrapper:focus-within .input-icon {
+  color: var(--primary-color);
+}
+
+/* --- Button Styles --- */
+.button {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 14px rgba(93, 173, 236, 0.25);
+}
+
+.button:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(93, 173, 236, 0.3);
+}
+
+.button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 14px rgba(93, 173, 236, 0.25);
+}
+
+/* --- Messages --- */
+.error-message {
+  color: var(--error-color);
+  background-color: var(--error-background);
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.welcome-message {
+  font-size: 18px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.email-display {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--primary-hover);
+  text-align: center;
+  margin-bottom: 24px;
+  word-break: break-all;
+}
+
+/* --- Dashboard Styles --- */
+
+/* Main container for the dashboard view */
+.dashboard-container {
+  width: 100%;
+  max-width: 900px; /* Max width for larger screens */
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Header section with greeting and logout button */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 10px 0;
+}
+
+.dashboard-greeting {
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.dashboard-username {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.logout-button {
+  background-color: var(--background-start);
+  color: var(--primary-color);
+  border: 1px solid var(--border-color);
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.logout-button:hover {
+  background-color: var(--primary-color);
+  color: #fff;
+  border-color: var(--primary-color);
+}
+
+
+/* Grid layout for the feature cards */
+.dashboard-grid {
+  display: grid;
+  /* On mobile (like 393px), we have 2 columns */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* Individual feature cards */
+.dashboard-card {
+  background-color: var(--card-background);
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  aspect-ratio: 1 / 1; /* Makes the cards square */
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  background-color: #fff;
+  box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+  width: 40px;
+  height: 40px;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+/* This makes sure the SVG inside the div takes up the full space */
+.card-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* --- Responsiveness --- */
+/* For screens wider than a typical mobile phone, we can make the layout wider */
+@media (min-width: 640px) {
+  .dashboard-grid {
+    /* On tablets and larger, we can have 3 columns */
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .card-title {
+    font-size: 16px;
   }
 }
