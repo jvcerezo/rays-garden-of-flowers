@@ -13,12 +13,12 @@ function Dashboard() {
   const { user, logout } = useAuth();
 
   const dashboardItems = [
-    { title: 'Movie Watch List', icon: <MovieIcon />, path: '/moviewatchlist' },
-    { title: 'Date Ideas', icon: <DateIcon />, path: '/dateideas' },
-    { title: 'Period Tracker', icon: <PeriodIcon />, path: '/periodtracker' },
+    { title: 'Movie Watch List', icon: <MovieIcon />, path: '/movie-watch-list' },
+    { title: 'Date Ideas', icon: <DateIcon />, path: '/date-ideas' },
+    { title: 'Period Tracker', icon: <PeriodIcon />, path: '/period-tracker' },
     { title: 'Reminders', icon: <BellIcon />, path: '/reminders' },
-    { title: 'Calorie Tracker', icon: <CalorieIcon />, path: '/calorietracker' },
-    { title: 'Current Goals', icon: <GoalIcon />, path: '/currentgoals' },
+    { title: 'Calorie Tracker', icon: <CalorieIcon />, path: '/calorie-tracker' },
+    { title: 'Current Goals', icon: <GoalIcon />, path: '/current-goals' },
   ];
 
   const getGreeting = () => {
