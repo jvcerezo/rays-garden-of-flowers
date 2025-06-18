@@ -6,6 +6,7 @@ import "./App.css";
 import Login from './components/Login';
 import Dashboard from './components/Dashboard'; 
 import ProtectedRoute from './components/ProtectedRoute';
+import MovieWatchList from './components/MovieWatchList';
 
 function App() {
   const { user } = useAuth();
@@ -33,6 +34,15 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route 
+          path="/movie-watch-list"
+          element={
+            <ProtectedRoute>
+              <MovieWatchList />
             </ProtectedRoute>
           }
         />
