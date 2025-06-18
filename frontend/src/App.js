@@ -7,6 +7,7 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard'; 
 import ProtectedRoute from './components/ProtectedRoute';
 import MovieWatchList from './components/MovieWatchList';
+import DateIdeas from './components/DateIdeas'; // Assuming you have a DateIdeas component
 
 function App() {
   const { user } = useAuth();
@@ -45,6 +46,15 @@ function App() {
               <MovieWatchList />
             </ProtectedRoute>
           }
+        />
+
+        <Route
+        path="/date-ideas"
+        element={
+          <ProtectedRoute>
+            <DateIdeas />
+          </ProtectedRoute>
+        }
         />
 
         {/*

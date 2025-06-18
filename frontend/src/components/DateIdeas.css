@@ -1,0 +1,98 @@
+/* --- Page Layout --- */
+.date-ideas-page { justify-content: flex-start; padding: 40px 20px; }
+.date-ideas-card { width: 100%; max-width: 393px; padding: 25px; }
+
+/* --- Header --- */
+.date-ideas-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 25px; }
+.add-idea-button { width: 38px; height: 38px; border-radius: 50%; background-color: var(--primary-color); color: white; border: none; font-size: 28px; font-weight: 300; line-height: 38px; cursor: pointer; transition: all 0.2s ease; }
+.add-idea-button:hover { background-color: var(--primary-hover); transform: scale(1.05); }
+.back-button { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; color: var(--primary-color); background-color: transparent; transition: all 0.2s ease; }
+.back-button:hover { background-color: #eef7ff; transform: scale(1.05); }
+.back-button svg { width: 24px; height: 24px; }
+.header-text-container { text-align: center; }
+.header-title { font-size: 20px; font-weight: 600; color: var(--text-primary); margin: 0; }
+.header-spacer { width: 38px; height: 38px; }
+
+/* --- List Segmentation & Container --- */
+.date-ideas-list-container { width: 100%; min-height: 200px; }
+.list-section { width: 100%; margin-bottom: 25px; }
+.list-section-header { display: flex; align-items: center; justify-content: space-between; padding: 0 5px 10px 5px; border-bottom: 1px solid var(--border-color); margin-bottom: 15px; }
+.list-section-header h3 { margin: 0; font-size: 16px; font-weight: 600; color: var(--text-primary); }
+.movie-count-badge { font-size: 12px; font-weight: 600; background-color: var(--background-start); color: var(--primary-color); padding: 3px 8px; border-radius: 12px; }
+
+/* --- Ideas Grid & Items --- */
+.date-ideas-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.date-idea-item { display: flex; align-items: center; gap: 15px; background-color: #fff; border-radius: 16px; padding: 15px; border: 1px solid var(--border-color); box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.03); transition: all 0.3s ease; }
+.date-idea-content { flex-grow: 1; }
+.date-idea-title { font-size: 16px; font-weight: 600; color: var(--text-primary); margin: 0; transition: color 0.3s ease; }
+.date-idea-description {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 4px 0 12px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.4;
+    transition: color 0.3s ease;
+}
+.date-idea-details { display: flex; align-items: center; flex-wrap: wrap; gap: 15px; font-size: 13px; color: var(--text-secondary); transition: color 0.3s ease; }
+.date-idea-details span { display: flex; align-items: center; gap: 5px; }
+.date-idea-details svg { width: 14px; height: 14px; color: var(--icon-color); transition: color 0.3s ease; }
+
+/* --- Item Actions --- */
+.finish-button, .edit-button { background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.finish-button svg { width: 24px; height: 24px; color: var(--border-color); transition: all 0.2s ease; }
+.finish-button:hover svg { transform: scale(1.1); color: var(--primary-hover); }
+.date-idea-actions { margin-left: auto; padding-left: 10px; }
+.edit-button { opacity: 0.5; transition: all 0.2s ease; }
+.date-idea-item:hover .edit-button { opacity: 1; }
+.edit-button:hover { transform: scale(1.1); }
+.edit-button svg { width: 18px; height: 18px; color: var(--icon-color); }
+
+/* --- Finished State --- */
+.date-idea-item.finished { opacity: 0.6; background-color: #f7f9fb; }
+.date-idea-item.finished:hover { opacity: 0.8; }
+.date-idea-item.finished .finish-button svg { color: var(--primary-color); }
+.date-idea-item.finished .date-idea-title,
+.date-idea-item.finished .date-idea-description {
+    text-decoration: line-through;
+}
+.date-idea-item.finished .date-idea-details, .date-idea-item.finished .date-idea-actions { display: none; }
+
+/* --- Skeleton Loader Styles --- */
+.date-idea-item.skeleton { pointer-events: none; }
+.skeleton { background-color: #eef7ff; position: relative; overflow: hidden; }
+.skeleton-icon { width: 24px; height: 24px; border-radius: 50%; }
+.skeleton-content { flex-grow: 1; }
+.skeleton-text { height: 1em; border-radius: 4px; background-color: #e1f0ff; }
+.skeleton-title { width: 60%; height: 18px; margin-bottom: 12px; }
+.skeleton-details { width: 40%; height: 14px; }
+.skeleton::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent); animation: shimmer 1.5s infinite; }
+@keyframes shimmer { 0% { left: -100%; } 100% { left: 100%; } }
+
+/* --- Polished Empty State Styles --- */
+.empty-state { text-align: center; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.empty-state-icon { width: 60px; height: 60px; background-color: var(--background-start); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary-color); margin-bottom: 15px; }
+.empty-state-icon svg { width: 32px; height: 32px; }
+.empty-state h2 { font-size: 18px; font-weight: 600; color: var(--text-primary); margin: 0; }
+.empty-state p { font-size: 15px; color: var(--text-secondary); margin: 0; max-width: 250px; }
+
+/* --- Modal Styles --- */
+.modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; animation: fadeIn 0.3s ease; }
+.modal-content { background-color: var(--background-end); border-radius: 28px; width: 100%; max-width: 370px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); animation: slideUp 0.4s ease-out; margin: 20px; }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 25px; border-bottom: 1px solid var(--border-color); }
+.modal-header h2 { margin: 0; font-size: 18px; font-weight: 600; }
+.close-modal-button { background: none; border: none; cursor: pointer; padding: 5px; opacity: 0.6; }
+.close-modal-button:hover { opacity: 1; }
+.close-modal-button svg { width: 20px; height: 20px; }
+.modal-body { padding: 25px; display: flex; flex-direction: column; gap: 15px; }
+.modal-body .input-field { padding-left: 16px; }
+.modal-body textarea.input-field { padding-top: 14px; resize: vertical; min-height: 80px; }
+.modal-footer { display: flex; justify-content: flex-end; gap: 10px; padding: 0 25px 25px; }
+.delete-idea-button { background-color: var(--error-background); color: var(--error-color); box-shadow: none; margin-right: auto; }
+.delete-idea-button:hover { background-color: var(--error-color); color: #fff; box-shadow: none; }
+.save-idea-button { min-width: 100px; }
