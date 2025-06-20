@@ -8,6 +8,7 @@ import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import MovieWatchList from './components/MovieWatchList';
 import DateIdeas from './components/DateIdeas'; // Assuming you have a DateIdeas component
+import Reminders from './components/Reminders';
 
 function App() {
   const { user } = useAuth();
@@ -53,6 +54,15 @@ function App() {
         element={
           <ProtectedRoute>
             <DateIdeas />
+          </ProtectedRoute>
+        }
+        />
+
+        <Route
+        path="/reminders"
+        element={
+          <ProtectedRoute>
+            <Reminders />
           </ProtectedRoute>
         }
         />

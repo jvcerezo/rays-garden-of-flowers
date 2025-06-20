@@ -1,0 +1,191 @@
+/* --- Reminders Page Layout --- */
+.reminders-page { 
+    justify-content: flex-start; 
+    padding: 15px;
+    background: #F7F9FB;
+    min-height: 100vh;
+    box-sizing: border-box; 
+}
+
+/* --- HEADER FIX --- */
+/* These styles were missing, causing the misalignment. */
+.tracker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 5px 15px;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto 10px; /* Added margin-bottom */
+    flex-shrink: 0;
+}
+.header-title { 
+    font-size: 18px; 
+    font-weight: 600; 
+    color: var(--text-primary); 
+    margin: 0;
+    /* The title will now correctly center itself in the available space */
+}
+/* This is a standard back button style */
+.back-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    color: var(--primary-color);
+    background-color: transparent;
+    transition: all 0.2s ease;
+}
+.back-button:hover { background-color: #e1f0ff; }
+.back-button svg { width: 22px; height: 22px; }
+
+.add-reminder-button {
+    width: 38px; height: 38px; border-radius: 12px;
+    background-color: var(--background-start);
+    color: var(--primary-color);
+    border: none; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s ease;
+}
+.add-reminder-button:hover { background-color: #e1f0ff; transform: scale(1.05); }
+.add-reminder-button svg { width: 22px; height: 22px; }
+
+
+/* --- List Container & Sections --- */
+.reminders-list-container { width: 100%; max-width: 420px; margin: 20px auto 0; }
+.list-section { margin-bottom: 10px; }
+.section-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: none;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+.section-header h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+.section-header svg { color: var(--text-secondary); width: 20px; height: 20px; transition: transform 0.2s ease; }
+.section-content { padding-top: 5px; }
+
+/* --- Today Section --- */
+.today-section {
+    margin-bottom: 25px;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 8px 30px -10px rgba(0,0,0,0.08);
+    padding: 10px;
+}
+.section-title.today-title {
+    padding-left: 15px;
+    margin-bottom: 5px;
+    color: var(--primary-hover);
+}
+.today-section .reminder-item {
+    margin-bottom: 0;
+    box-shadow: none;
+    border-radius: 12px;
+    padding-left: 15px;
+}
+.today-section .reminder-item:hover { background-color: var(--background-start); }
+
+/* --- Reminder Item --- */
+.reminder-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #fff;
+    padding: 15px 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px -5px rgba(0,0,0,0.04);
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+}
+.reminder-info { flex-grow: 1; }
+.reminder-info h4 { margin: 0 0 4px; font-size: 16px; font-weight: 600; color: var(--text-primary); }
+.reminder-info p { margin: 0; font-size: 13px; color: var(--text-secondary); font-weight: 500; }
+.reminder-info p.due-soon { color: var(--primary-hover); font-weight: 600; }
+
+.reminder-accent-bar {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 70%;
+    width: 4px;
+    background: var(--primary-color);
+    border-radius: 0 4px 4px 0;
+}
+
+.delete-button {
+    background: none; border: none; padding: 8px;
+    color: var(--icon-color); cursor: pointer; border-radius: 50%;
+    transition: all 0.2s ease;
+    opacity: 0.5;
+}
+.reminder-item:hover .delete-button { opacity: 1; }
+.delete-button:hover { color: var(--error-color); background-color: var(--error-background); }
+.delete-button svg { width: 18px; height: 18px; }
+
+/* Past Reminders */
+.reminder-item.past { opacity: 0.7; }
+.reminder-item.past .reminder-info h4 { text-decoration: line-through; }
+
+/* --- Empty State --- */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    opacity: 0.7;
+}
+.empty-state svg { width: 48px; height: 48px; color: var(--primary-color); opacity: 0.5; margin-bottom: 10px; }
+.empty-state h2 { font-size: 18px; font-weight: 600; color: var(--text-primary); margin: 0; }
+.empty-state p { font-size: 15px; color: var(--text-secondary); margin: 0; max-width: 250px; }
+
+/* --- Modal Styles --- */
+.log-day-modal-backdrop { position: fixed; inset: 0; background-color: rgba(31, 41, 55, 0.6); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: flex-end; justify-content: center; }
+.log-day-modal-content {
+    position: relative;
+    width: 100%;
+    max-width: 450px;
+    background: #F4F7FC;
+    border-radius: 32px 32px 0 0;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
+    padding: 10px 20px 40px;
+    box-sizing: border-box;
+}
+.modal-handle-bar { width: 40px; height: 5px; background-color: #dbeafe; border-radius: 2.5px; margin: 0 auto 20px; }
+.log-day-modal-content .modal-header { padding: 0; margin-bottom: 25px; text-align: center; }
+.log-day-modal-content .modal-header h2 { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+.log-day-modal-content .modal-body { display: flex; flex-direction: column; gap: 15px; }
+.log-day-modal-content .input-field {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background-color: #fff;
+    box-sizing: border-box;
+}
+.log-day-modal-content .modal-footer { display: flex; gap: 10px; margin-top: 25px; }
+
+.button-log { width: 100%; padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s ease; }
+.button-log.primary { background: linear-gradient(135deg, var(--primary-color), var(--primary-hover)); color: #fff; box-shadow: 0 4px 15px -2px rgba(93, 173, 236, 0.4); }
+.button-log.secondary { background-color: #fff; color: var(--text-primary); border: 1px solid var(--border-color); box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03); }
+.button-log:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px -5px rgba(93, 173, 236, 0.4); }
+.button-log.secondary:hover:not(:disabled) { border-color: #d1e0ee; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
+.button-log:disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; box-shadow: none; }
