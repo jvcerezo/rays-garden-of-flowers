@@ -9,6 +9,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import MovieWatchList from './components/MovieWatchList';
 import DateIdeas from './components/DateIdeas'; // Assuming you have a DateIdeas component
 import Reminders from './components/Reminders';
+import CalorieTracker from './components/CalorieTracker';
 
 function App() {
   const { user } = useAuth();
@@ -67,6 +68,15 @@ function App() {
         }
         />
 
+        <Route
+        path="/calorie-tracker"
+        element={
+          <ProtectedRoute>
+            <CalorieTracker />
+          </ProtectedRoute>
+        }
+        />
+        
         {/*
           Route 3: Root Path
           This will be the default page. It redirects to the dashboard if logged in,
