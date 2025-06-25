@@ -1,13 +1,34 @@
-/* --- Main Page & Card Layout --- */
-.movie-page-container {
-    justify-content: flex-start;
-    padding: 40px 20px;
+/* --- Core Variables --- */
+:root {
+    --primary-color: #007aff;
+    --primary-hover: #0056b3;
+    --danger-color: #ff3b30;
+    --danger-hover: #c70000;
+    --success-color: #34c759;
+    --text-primary: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --border-color: #e5e5ea;
+    --background-light: #f5f5f7;
+    --background-white: #ffffff;
+    --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.06);
+    --shadow-strong: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
+
+/* --- General Layout --- */
+.movie-page-container {
+    padding: 40px 20px;
+    background-color: var(--background-light);
+    min-height: 100vh;
+}
+
 .movie-list-card {
-    width: 100%;
-    max-width: 393px;
-    padding: 25px;
-    animation: fadeIn 0.5s ease-out forwards;
+    background: var(--background-white);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: var(--shadow-light);
+    animation: fadeIn 0.5s ease-out;
+    max-width: 420px;
+    margin: 0 auto;
 }
 
 /* --- Header --- */
@@ -15,170 +36,100 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-bottom: 20px;
-    margin-bottom: 25px;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
 }
-.back-button {
+.header-title-container {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    color: var(--primary-color);
-    background-color: transparent;
-    transition: all 0.2s ease;
-}
-.back-button:hover {
-    background-color: #eef7ff;
-    transform: scale(1.05);
-}
-.back-button svg {
-    width: 24px;
-    height: 24px;
-}
-.header-text-container { text-align: center; }
-.header-title { font-size: 20px; font-weight: 600; color: var(--text-primary); margin: 0; }
-.header-spacer { width: 38px; height: 38px; }
-
-/* --- Add Movie Form & Action Feedback --- */
-.add-movie-form {
-    display: flex;
     gap: 10px;
 }
-.add-movie-input {
-    flex-grow: 1;
-    padding-left: 16px;
-    background-color: #fff;
-    border: 1px solid var(--border-color);
-}
-.add-movie-button {
-    flex-shrink: 0;
-    margin-top: 0;
-    padding: 10px 20px;
-    font-size: 16px;
-    box-shadow: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 80px; /* Fixed width to prevent size change */
-}
-.add-movie-button:disabled {
-    background-color: #a0cff2;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-.spinner {
-    animation: rotate 2s linear infinite;
-    width: 22px;
-    height: 22px;
-}
-.spinner .path {
-    stroke: #fff;
-    stroke-linecap: round;
-    animation: dash 1.5s ease-in-out infinite;
-}
-@keyframes rotate { 100% { transform: rotate(360deg); } }
-@keyframes dash {
-  0% { stroke-dasharray: 1, 150; stroke-dashoffset: 0; }
-  50% { stroke-dasharray: 90, 150; stroke-dashoffset: -35; }
-  100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; }
-}
-
-/* --- List Segmentation --- */
-.movie-list-container {
-    width: 100%;
-    margin-top: 30px;
-}
-.list-section {
-    width: 100%;
-    margin-bottom: 25px;
-}
-.list-section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 5px 10px 5px;
-    border-bottom: 1px solid var(--border-color);
-    margin-bottom: 15px;
-}
-.list-section-header h3 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text-primary);
-}
-.movie-count-badge {
-    font-size: 12px;
-    font-weight: 600;
-    background-color: var(--background-start);
+.header-icon {
+    width: 28px;
+    height: 28px;
     color: var(--primary-color);
-    padding: 3px 8px;
-    border-radius: 12px;
 }
+.header-title { 
+    font-size: 22px; 
+    font-weight: 700; 
+    color: var(--text-primary); 
+    margin: 0; 
+}
+.back-button { color: var(--text-secondary); transition: color 0.2s ease; background: none; border: none; padding: 0; cursor: pointer; }
+.back-button:hover { color: var(--primary-color); }
+.back-button svg { width: 24px; height: 24px; }
+.header-spacer { width: 28px; }
+
+
+/* --- Add Movie Form --- */
+.add-movie-form { display: flex; gap: 10px; margin-bottom: 24px; }
+.add-movie-input { flex-grow: 1; background-color: var(--background-light); border: 1px solid var(--background-light); border-radius: 12px; padding: 12px 16px; font-size: 16px; transition: border-color 0.2s, box-shadow 0.2s; }
+.add-movie-input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2); }
+.add-movie-button { flex-shrink: 0; width: 48px; height: 48px; background-color: var(--primary-color); color: white; display: flex; align-items: center; justify-content: center; }
+.add-movie-button:hover:not(:disabled) { background-color: var(--primary-hover); transform: scale(1.05); }
+.add-movie-button:disabled { background-color: #a0cff2; }
+.add-movie-button svg { width: 24px; height: 24px; }
 
 /* --- Movie List & Items --- */
-.movie-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-.movie-item {
-    display: flex;
-    align-items: center;
-    background-color: #fff;
-    border-radius: 16px;
-    padding: 12px 15px;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.03);
-    transition: all 0.25s ease-out, opacity 0.3s ease;
-    animation: slideInFadeIn 0.4s ease-out forwards;
-}
-@keyframes slideInFadeIn {
-    from { opacity: 0; transform: translateX(-10px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-.movie-item:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--card-shadow);
-    border-color: #c8e4fa;
-}
-.movie-title { flex-grow: 1; margin: 0 12px; font-weight: 500; color: var(--text-primary); transition: color 0.3s ease; }
-
-/* --- Item Buttons & States --- */
-.watched-toggle-button {
-    width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--border-color); background-color: transparent; flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; transition: all 0.2s ease-in-out;
-}
-.watched-toggle-button svg { width: 16px; height: 16px; color: white; opacity: 0; transform: scale(0.5); transition: all 0.2s ease-in-out; }
-.movie-item:hover .watched-toggle-button { border-color: var(--primary-hover); }
-.movie-item.watched { background-color: #f7f9fb; }
-.movie-item.watched .watched-toggle-button { background-color: var(--primary-color); border-color: var(--primary-color); }
+.list-section { margin-bottom: 20px; }
+.list-section-header { display: flex; align-items: center; gap: 8px; padding: 0 8px 8px; margin-bottom: 12px; }
+.list-section-header h3 { font-size: 18px; font-weight: 600; margin: 0; color: var(--text-primary); }
+.movie-count-badge { font-size: 12px; font-weight: 600; background-color: var(--border-color); color: var(--text-secondary); padding: 4px 10px; border-radius: 12px; }
+.movie-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.movie-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--background-white); border-radius: 16px; border: 1px solid var(--border-color); transition: all 0.2s ease; animation: popIn 0.3s ease-out forwards; overflow: hidden; }
+.movie-item.watched { opacity: 0.7; }
+.movie-item.editing { border-color: var(--primary-color); background-color: #f8faff; }
+.edit-input { flex-grow: 1; font-size: 16px; font-weight: 500; color: var(--text-primary); border: none; background: transparent; padding: 2px; margin: 0; outline: none; border-bottom: 2px solid var(--primary-color); }
+.movie-details { flex-grow: 1; overflow: hidden; }
+.movie-title { font-weight: 500; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color 0.2s ease; }
+.movie-item.watched .movie-title { text-decoration: line-through; color: var(--text-secondary); }
+.movie-adder { font-size: 12px; color: var(--text-secondary); }
+.watched-toggle-button { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); background-color: var(--background-light); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.watched-toggle-button svg { color: white; opacity: 0; transform: scale(0); transition: all 0.2s ease; }
+.movie-item.watched .watched-toggle-button { background-color: var(--success-color); border-color: var(--success-color); }
 .movie-item.watched .watched-toggle-button svg { opacity: 1; transform: scale(1); }
-.movie-item.watched .movie-title { color: var(--text-secondary); text-decoration: line-through; }
 
-/* Safer Deletion UX */
-.delete-button, .confirm-delete-button {
-    background: none; border: none; cursor: pointer; padding: 5px; flex-shrink: 0; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; border-radius: 50%;
-}
-.delete-button { opacity: 0.4; transition: opacity 0.2s ease, transform 0.2s ease; }
-.movie-item:hover .delete-button { opacity: 1; }
-.delete-button:hover { transform: scale(1.15); }
-.delete-button svg { width: 20px; height: 20px; color: var(--icon-color); }
-.delete-button:hover svg { color: var(--error-color); }
+/* --- Item Actions --- */
+.item-actions, .edit-actions { display: flex; align-items: center; gap: 4px; }
+.button-icon { background: none; border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); cursor: pointer; transition: all 0.2s ease; }
+.button-icon:hover { background-color: var(--background-light); transform: scale(1.1); }
+.edit-button:hover { color: var(--primary-color); }
+.delete-button:hover { color: var(--danger-color); }
+.save-button { color: var(--success-color); }
+.cancel-button { color: var(--text-secondary); }
 
-.confirm-delete-button { background-color: var(--error-background); }
-.confirm-delete-button svg { color: var(--error-color); width: 16px; height: 16px; }
-.movie-item.pending-delete { background-color: var(--error-background); border-color: var(--error-color); }
+/* --- Modal --- */
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; animation: fadeIn 0.3s ease; }
+.modal-content { background: var(--background-white); padding: 24px; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: var(--shadow-strong); animation: slideUp 0.4s ease-out; text-align: center; }
+.modal-content h2 { margin-top: 0; font-size: 20px; }
+.modal-content p { color: var(--text-secondary); margin: 12px 0 24px; }
+.modal-actions { display: flex; gap: 12px; }
+.modal-actions .button { width: 100%; padding: 12px; font-weight: 600; }
+.secondary-button { background-color: var(--border-color); color: var(--text-primary); }
+.danger-button { background-color: var(--danger-color); color: white; }
 
-/* --- Empty/Loading States --- */
-.loading-text, .empty-list-message {
-    text-align: center;
-    color: var(--text-secondary);
-    font-size: 14px;
-    padding: 10px 0;
-}
+/* --- Toasts --- */
+.toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1001; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.toast { padding: 12px 20px; border-radius: 12px; color: white; font-weight: 500; box-shadow: var(--shadow-strong); animation: slideUpFadeIn 0.5s ease-out forwards; }
+.toast-success { background-color: var(--success-color); }
+.toast-error { background-color: var(--danger-color); }
+
+/* --- Empty State, Loading, Feedback & Animations --- */
+.button { border: none; font-size: 16px; border-radius: 12px; cursor: pointer; transition: all 0.2s ease; }
+.centered-feedback { padding: 40px 20px; text-align: center; color: var(--text-secondary); }
+.error-text { color: var(--danger-color); }
+.empty-list-message { color: var(--text-secondary); font-size: 14px; text-align: center; padding: 10px 0; }
+.empty-state-container { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center; transition: opacity 0.3s ease-in-out; }
+.empty-state-container p { font-size: 20px; font-weight: 600; color: var(--text-primary); margin: 0 0 8px; }
+.empty-state-container span { color: var(--text-secondary); font-size: 16px; }
+
+.spinner { animation: rotate 1.5s linear infinite; width: 32px; height: 32px; }
+.spinner .path { stroke: var(--primary-color); stroke-linecap: round; animation: dash 1.5s ease-in-out infinite; }
+.add-movie-button .spinner .path { stroke: white; }
+@keyframes rotate { 100% { transform: rotate(360deg); } }
+@keyframes dash { 0% { stroke-dasharray: 1, 150; stroke-dashoffset: 0; } 50% { stroke-dasharray: 90, 150; stroke-dashoffset: -35; } 100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUpFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
