@@ -93,6 +93,7 @@
     flex-direction: column;
     align-items: center;
     gap: 15px;
+    box-sizing: border-box; /* Add this line to fix the overflow */
 }
 
 .calorie-dial-container {
