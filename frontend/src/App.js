@@ -13,6 +13,7 @@ import Reminders from './components/Reminders';
 import CalorieTracker from './components/CalorieTracker';
 import CurrentGoals from './components/CurrentGoals';
 import PeriodTracker from './components/PeriodTracker'; // Assuming you have a PeriodTracker component
+import HashPage from './components/HashPage';
 
 function App() {
   const { user } = useAuth();
@@ -96,6 +97,12 @@ function App() {
             <CurrentGoals />
           </ProtectedRoute>
         }
+        />
+        <Route
+          path="/hash"
+          element={
+              <HashPage />
+          }
         />
         
         {/*

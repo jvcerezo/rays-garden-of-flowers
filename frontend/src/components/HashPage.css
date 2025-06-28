@@ -1,0 +1,110 @@
+/* --- Hash Page Container & Card --- */
+.hash-page-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f4f8;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.hash-card {
+    width: 100%;
+    max-width: 420px;
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border-radius: 28px;
+    padding: 40px 30px;
+    box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    text-align: center;
+}
+
+.hash-card-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    color: #4338ca; /* Indigo color for the header */
+}
+
+.hash-card-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #3730a3;
+}
+
+/* --- Form Elements --- */
+.hash-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.hash-input {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 12px;
+    border: 1px solid #dbeafe;
+    background-color: #f8fbff;
+    box-sizing: border-box;
+    transition: all 0.2s ease-in-out;
+}
+.hash-input:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+.hash-button {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #ffffff;
+    background: #4f46e5;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
+}
+.hash-button:hover {
+    background: #4338ca;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(79, 70, 229, 0.3);
+}
+
+/* --- Messages --- */
+.hash-error {
+    color: #be123c;
+    background-color: #fee2e2;
+    padding: 12px;
+    border-radius: 10px;
+    margin-top: 20px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.hash-success {
+    margin-top: 30px;
+    padding: 25px;
+    background: linear-gradient(135deg, #fbcfe8, #f5d0fe); /* Pink/purple gradient */
+    border-radius: 20px;
+    color: #9d174d;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.hash-success h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #86198f;
+    margin: 0;
+}
