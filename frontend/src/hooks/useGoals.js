@@ -12,7 +12,7 @@ import {
   updateDoc,
   orderBy,
   serverTimestamp,
-  increment, // <-- Import Firestore's increment operator
+  increment,
 } from 'firebase/firestore';
 import { useAuth } from '../context/AuthContext';
 
@@ -24,12 +24,7 @@ export const useGoals = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) {
-      setGoals([]);
-      setLoading(false);
-      return;
-    }
-
+    if (!user) { setGoals([]); setLoading(false); return; }
     setLoading(true);
     const q = query(goalsCollectionRef, orderBy('createdAt', 'desc'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -37,19 +32,21 @@ export const useGoals = () => {
       fetchedGoals.sort((a, b) => a.isComplete - b.isComplete);
       setGoals(fetchedGoals);
       setLoading(false);
-    }, (err) => {
-      console.error("Firestore snapshot error:", err);
-      setLoading(false);
-    });
-
+    }, (err) => { console.error("Firestore snapshot error:", err); setLoading(false); });
     return () => unsubscribe();
   }, [user]);
 
   const addGoal = useCallback(async (goalData) => {
     if (!user) throw new Error("Authentication required.");
     const newGoal = {
-      ...goalData,
-      currentAmount: 0,
+      title: goalData.title,
+      description: goalData.description || '',
+      deadline: goalData.deadline || '',
+      goalType: goalData.goalType,
+      targetValue: goalData.targetValue || 0,
+      // Set unit to ₱ by default for financial, otherwise use what's provided.
+      unit: goalData.goalType === 'financial' ? '₱' : (goalData.unit || ''),
+      currentValue: 0,
       isComplete: false,
       createdAt: serverTimestamp(),
       addedBy: user.displayName || user.email,
@@ -60,20 +57,20 @@ export const useGoals = () => {
 
   const updateGoal = useCallback(async (id, updatedData) => {
     const goalDocRef = doc(db, 'goals', id);
-    await updateDoc(goalDocRef, updatedData);
+    const { id: goalId, ...dataToUpdate } = updatedData;
+    await updateDoc(goalDocRef, dataToUpdate);
   }, []);
 
   const addProgress = useCallback(async (id, amountToAdd) => {
     const goalDocRef = doc(db, 'goals', id);
-    // Use Firestore's increment for safe, atomic updates
-    await updateDoc(goalDocRef, {
-        currentAmount: increment(amountToAdd)
-    });
+    await updateDoc(goalDocRef, { currentValue: increment(amountToAdd) });
   }, []);
 
+  // FIXED: A dedicated, robust function for toggling completion.
   const toggleComplete = useCallback(async (id, currentStatus) => {
-    await updateGoal(id, { isComplete: !currentStatus });
-  }, [updateGoal]);
+    const goalDocRef = doc(db, 'goals', id);
+    await updateDoc(goalDocRef, { isComplete: !currentStatus });
+  }, []);
 
   const deleteGoal = useCallback(async (id) => {
     const goalDocRef = doc(db, 'goals', id);
