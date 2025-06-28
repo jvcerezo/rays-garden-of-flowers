@@ -53,11 +53,63 @@
 .target-amount { color: var(--text-secondary); }
 .goal-deadline { font-size: 13px; color: var(--text-secondary); margin: 8px 0 0; }
 
-/* --- Goal Footer Actions --- */
-.goal-footer { margin-top: auto; display: flex; justify-content: space-between; align-items: center; }
-.add-progress-button { background-color: var(--primary-color); color: white; padding: 8px 16px; border-radius: 10px; font-weight: 600; font-size: 14px; border: none; cursor: pointer; transition: all 0.2s ease; }
-.add-progress-button:hover { background-color: var(--primary-hover); transform: scale(1.02); }
-.goal-item.complete .add-progress-button { display: none; } /* Hide add progress on complete goals */
+.goal-footer {
+    margin-top: auto;
+    padding-top: 12px; /* Add some space above the actions */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-actions-left {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.add-progress-button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.add-progress-button:hover {
+    background-color: var(--primary-hover);
+    transform: scale(1.02);
+}
+.goal-item.complete .add-progress-button {
+    display: none;
+}
+
+/* --- ADD/UPDATE THESE STYLES for the action buttons --- */
+.button-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+}
+.button-icon:hover {
+    background-color: var(--background-light);
+    transform: scale(1.1);
+}
+.edit-button:hover {
+    color: var(--primary-color);
+}
+.delete-button:hover {
+    color: var(--danger-color);
+}
 
 /* --- Modals and Forms --- */
 .modal-body .form-row { display: flex; gap: 16px; }
