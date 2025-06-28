@@ -1,0 +1,113 @@
+/* --- Core Variables --- */
+:root {
+    --primary-color: #007aff;
+    --primary-hover: #0056b3;
+    --danger-color: #ff3b30;
+    --danger-hover: #c70000;
+    --success-color: #34c759;
+    --text-primary: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --border-color: #e5e5ea;
+    --background-light: #f5f5f7;
+    --background-white: #ffffff;
+    --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.06);
+    --shadow-strong: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Page Layout --- */
+.goals-page { padding: 20px; background-color: var(--background-light); }
+.goals-card { background: var(--background-white); border-radius: 20px; padding: 20px; max-width: 1000px; margin: 0 auto; box-shadow: var(--shadow-light); }
+
+/* --- Header --- */
+.goals-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); }
+.header-title-container { display: flex; align-items: center; gap: 12px; }
+.header-icon { width: 32px; height: 32px; color: var(--primary-color); }
+.header-title { font-size: 24px; font-weight: 700; margin: 0; }
+.add-idea-button { background-color: var(--primary-color); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; transition: all 0.2s ease; }
+.add-idea-button:hover { background-color: var(--primary-hover); transform: scale(1.05); }
+
+/* --- List & Grid Layout --- */
+.list-section { margin-bottom: 30px; }
+.list-section h3 { font-size: 20px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+.count-badge { font-size: 14px; font-weight: 600; background-color: var(--border-color); color: var(--text-secondary); padding: 4px 12px; border-radius: 16px; }
+.goals-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+
+/* --- Goal Item Card --- */
+.goal-item { background: var(--background-white); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; transition: all 0.2s ease; }
+.goal-item:hover { transform: translateY(-4px); box-shadow: var(--shadow-light); }
+.goal-item.complete { border-left: 4px solid var(--success-color); background-color: #f6fff8; }
+.goal-item.complete .goal-title { text-decoration: line-through; }
+.goal-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.goal-title { font-size: 18px; font-weight: 600; margin: 0; color: var(--text-primary); flex-grow: 1; cursor: pointer; }
+.goal-title:hover { color: var(--primary-color); }
+.complete-button { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); background-color: var(--background-light); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; flex-shrink: 0; }
+.complete-button svg { color: transparent; transition: all 0.2s ease; }
+.goal-item.complete .complete-button { background-color: var(--success-color); border-color: var(--success-color); }
+.goal-item.complete .complete-button svg { color: white; }
+
+/* --- Progress Bar & Stats --- */
+.goal-body { margin: 16px 0; }
+.progress-bar-container { width: 100%; height: 8px; background-color: var(--background-light); border-radius: 4px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary-color) 0%, #4da3ff 100%); border-radius: 4px; transition: width 0.5s ease-out; }
+.goal-item.complete .progress-bar-fill { background: var(--success-color); }
+.goal-stats { display: flex; justify-content: space-between; margin-top: 8px; font-size: 13px; font-weight: 500; }
+.goal-deadline { font-size: 13px; color: var(--text-secondary); margin: 8px 0 0; }
+.goal-description { font-size: 14px; color: var(--text-secondary); margin-top: 8px; font-style: italic; }
+
+/* --- Checkbox Grid --- */
+.checkbox-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.checkbox-limit-message { font-size: 12px; color: var(--text-secondary); font-style: italic; margin-top: 12px; }
+.progress-checkbox { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); background-color: var(--background-light); cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; }
+.progress-checkbox:hover { border-color: var(--primary-color); }
+.progress-checkbox.checked { background-color: var(--primary-color); border-color: var(--primary-color); }
+.progress-checkbox.checked svg { color: white; width: 18px; height: 18px; }
+.progress-checkbox:not(.checked) svg { display: none; }
+
+/* --- Goal Footer Actions --- */
+.goal-footer { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--background-light); display: flex; justify-content: space-between; align-items: center; }
+.delete-button { margin-left: auto; /* Pushes delete button to the right if add progress isn't there */ }
+.add-progress-button { background-color: var(--primary-color); color: white; padding: 8px 16px; border-radius: 10px; font-weight: 600; font-size: 14px; border: none; cursor: pointer; transition: all 0.2s ease; }
+.add-progress-button:hover { background-color: var(--primary-hover); transform: scale(1.02); }
+.goal-item.complete .add-progress-button { display: none; }
+
+/* --- Modals and Forms --- */
+.goal-type-selector { display: flex; gap: 10px; margin-bottom: 16px; border: 1px solid var(--border-color); border-radius: 12px; padding: 4px; }
+.goal-type-selector button { flex: 1; padding: 10px; font-size: 16px; font-weight: 600; border: none; background-color: transparent; border-radius: 8px; cursor: pointer; color: var(--text-secondary); transition: all 0.2s ease; }
+.goal-type-selector button.active { background-color: var(--primary-color); color: white; box-shadow: 0 4px 10px rgba(0, 122, 255, 0.2); }
+.modal-body .form-row { display: flex; gap: 16px; }
+.modal-body .form-row > * { flex: 1; }
+.modal-body .form-row > input[placeholder*="Unit"] { flex-grow: 0.7; }
+.modal-footer { display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 24px; }
+.delete-goal-button { background-color: transparent; color: var(--danger-color); padding: 10px 0; font-weight: 600; border: none; cursor: pointer; margin-right: auto; }
+.delete-goal-button:hover { text-decoration: underline; }
+
+/* --- Generic Reused Styles --- */
+.input-field { width: 100%; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px; font-size: 16px; background-color: var(--background-light); }
+.input-field.error { border-color: var(--danger-color) !important; background-color: #fff5f5 !important; }
+.input-field.error:focus { box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.2) !important; }
+.validation-error { font-size: 13px; color: var(--danger-color); padding-top: 4px; display: block; }
+.form-group { display: flex; flex-direction: column; }
+.button { border: none; font-size: 16px; border-radius: 12px; padding: 10px 20px; cursor: pointer; transition: all 0.2s ease; }
+.secondary-button { background-color: var(--border-color); color: var(--text-primary); }
+.danger-button { background-color: var(--danger-color); color: white; }
+.save-goal-button { background-color: var(--primary-color); color: white; }
+.button-icon { background: none; border: none; cursor: pointer; transition: all 0.2s ease; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); }
+.button-icon:hover { background-color: var(--background-light); transform: scale(1.1); }
+.edit-button:hover, .goal-footer .delete-button:hover { color: var(--primary-color); }
+.modal-backdrop { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; animation: fadeIn 0.3s ease; }
+.modal-content { background: white; padding: 24px; border-radius: 16px; width: 90%; max-width: 450px; box-shadow: var(--shadow-strong); animation: slideUp 0.4s ease-out; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.modal-header h2 { margin: 0; }
+.close-modal-button { background: none; border: none; cursor: pointer; padding: 5px; }
+.modal-body { display: flex; flex-direction: column; gap: 16px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 12px; }
+.toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1001; }
+.toast { padding: 12px 20px; border-radius: 12px; color: white; font-weight: 500; box-shadow: var(--shadow-strong); animation: slideUpFadeIn 0.5s ease-out forwards; }
+.empty-state-container { padding: 60px 20px; text-align: center; }
+.empty-state-svg { width: 100px; height: 100px; color: var(--border-color); margin-bottom: 24px; }
+.empty-state-container p { font-size: 20px; font-weight: 600; color: var(--text-primary); margin: 0 0 8px; }
+.empty-state-container span { color: var(--text-secondary); font-size: 16px; }
+.centered-feedback, .spinner { text-align: center; padding: 40px; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes slideUpFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
