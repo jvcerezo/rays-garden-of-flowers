@@ -1,0 +1,105 @@
+/* --- Period Tracker Page --- */
+.period-tracker-page {
+    justify-content: flex-start;
+    background-color: #f8fafc;
+    padding-bottom: 100px; /* Space for FAB */
+}
+.period-tracker-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+    max-width: 420px;
+    margin: 20px auto 0;
+}
+
+/* --- Cycle Display & FAB --- */
+.cycle-display-container { position: relative; width: 260px; height: 260px; }
+.cycle-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.cycle-track { fill: none; stroke: #f1f5f9; stroke-width: 16; }
+.cycle-progress { fill: none; stroke-width: 16; stroke-linecap: round; }
+.fab {
+    position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
+    border-radius: 50%; background: #4f46e5; border: none; color: white;
+    box-shadow: 0 8px 25px -5px rgba(79, 70, 229, 0.4); display: flex;
+    align-items: center; justify-content: center; cursor: pointer; z-index: 999;
+}
+.fab svg { width: 28px; height: 28px; }
+
+/* Phase Colors & Info Text */
+.phase-initial, .phase-luteal, .phase-follicular { stroke: #a78bfa; }
+.phase-fertile-window, .phase-ovulation-day { stroke: #60a5fa; }
+.phase-period { stroke: #f472b6; }
+.cycle-info { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.cycle-primary-text { font-size: 44px; font-weight: 700; color: #1e293b; line-height: 1.1; }
+.cycle-secondary-text { font-size: 16px; color: #64748b; margin-top: 4px; }
+
+/* --- Embedded Calendar Container --- */
+.calendar-container {
+    width: 100%;
+    background: #fff;
+    border-radius: 24px;
+    padding: 20px 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+.react-calendar { width: 100%; border: none; font-family: 'Poppins', sans-serif; }
+.react-calendar__tile { height: 42px; display: flex; align-items: center; justify-content: center; font-size: 13px; border-radius: 8px; position: relative; overflow: hidden; }
+.react-calendar__tile--now { border: 2px solid #4f46e5; }
+.react-calendar__tile.day-period { background-color: #fce7f3; color: #be185d; font-weight: 700; }
+.react-calendar__tile.day-predicted-period { background-color: rgba(252, 231, 243, 0.5); color: #9d174d; }
+.react-calendar__tile.day-fertile { background-color: #e0f2fe; color: #0369a1; }
+.react-calendar__tile.day-ovulation { background-color: #dbeafe; color: #1d4ed8; font-weight: 700; }
+.calendar-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 15px; margin-top: 20px; font-size: 12px; }
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-color { width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.1); }
+.legend-color.day-period { background-color: #fce7f3; border-color: #f9a8d4; }
+.legend-color.day-predicted-period { background-color: rgba(252, 231, 243, 0.5); border-color: #fbcfe8; }
+.legend-color.day-fertile { background-color: #e0f2fe; border-color: #bae6fd; }
+.legend-color.day-ovulation { background-color: #dbeafe; border-color: #bfdbfe; }
+
+/* --- Log Action Menu --- */
+.log-action-menu {
+    position: relative; width: 100%; max-width: 480px; background: #f9fafb;
+    border-radius: 28px 28px 0 0; box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+    padding: 10px 25px 40px; box-sizing: border-box;
+    display: flex; flex-direction: column; gap: 10px;
+}
+.button.full-width { width: 100%; flex: none; }
+
+/* --- Unauthorized Message --- */
+.unauthorized-message { text-align: center; padding: 60px 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.unauthorized-message h2 { font-size: 20px; font-weight: 700; color: #1f2937; }
+.unauthorized-message p { font-size: 15px; color: #6b7280; }
+
+/* --- Confirmation Toast --- */
+.confirmation-toast { background-color: #fff; color: #1f2937; padding: 15px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); text-align: center; max-width: 320px; }
+.confirmation-toast h4 { font-size: 16px; font-weight: 700; margin: 0 0 5px; }
+.confirmation-toast p { font-size: 14px; color: #6b7280; margin: 0 0 15px; }
+.toast-buttons { display: flex; gap: 10px; }
+.toast-buttons button { flex: 1; padding: 8px 12px; border-radius: 8px; font-size: 14px; font-weight: 600; border: 1px solid transparent; cursor: pointer; transition: background-color 0.2s; }
+.toast-buttons .button-confirm { background-color: #ef4444; color: #fff; border-color: #ef4444; }
+.toast-buttons .button-confirm:hover { background-color: #dc2626; }
+.toast-buttons .button-cancel { background-color: #e5e7eb; color: #4b5563; }
+.toast-buttons .button-cancel:hover { background-color: #d1d5db; }
+
+/* --- Shared Modal, Form, Danger Zone Styles --- */
+.reminders-modal-backdrop { position: fixed; inset: 0; background-color: rgba(17, 24, 39, 0.6); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: flex-end; justify-content: center; }
+.reminders-modal-content { position: relative; width: 100%; max-width: 480px; background: #f9fafb; border-radius: 28px 28px 0 0; box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2); padding: 10px 25px 40px; box-sizing: border-box; }
+.modal-handle-bar { width: 40px; height: 5px; background-color: #e5e7eb; border-radius: 2.5px; margin: 0 auto 20px; }
+.modal-title { text-align: center; font-size: 18px; font-weight: 600; color: #1f2937; margin-bottom: 25px; }
+.new-reminder-form { display: flex; flex-direction: column; gap: 20px; }
+.form-group { display: flex; flex-direction: column; }
+.form-group label { font-size: 14px; font-weight: 500; color: #4b5563; margin-bottom: 8px; }
+.form-group input { width: 100%; padding: 14px; font-size: 16px; font-family: 'Poppins', sans-serif; border-radius: 12px; border: 1px solid #d1d5db; background-color: #fff; box-sizing: border-box; transition: all 0.2s ease; }
+.form-group input:focus { outline: none; border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2); }
+.modal-footer { display: flex; gap: 10px; margin-top: 15px; }
+.button { flex: 1; padding: 16px; border-radius: 14px; font-size: 16px; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s ease; }
+.button.primary { background: #4f46e5; color: #fff; }
+.button.secondary { background-color: #fff; color: #4b5563; border: 1px solid #d1d5db; }
+.button:disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; }
+.danger-zone { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; text-align: center; }
+.danger-zone-title { color: #be123c; font-size: 16px; font-weight: 600; margin-bottom: 5px; }
+.danger-zone p { font-size: 13px; color: #4b5563; max-width: 300px; margin: 0 auto 15px; }
+.button.danger { width: 100%; background: #fee2e2; color: #be123c; border: 1px solid #fecaca; }
+.button.danger:hover { background: #fecaca; color: #9f1239; }

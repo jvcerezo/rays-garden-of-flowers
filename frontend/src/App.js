@@ -12,6 +12,7 @@ import DateIdeas from './components/DateIdeas'; // Assuming you have a DateIdeas
 import Reminders from './components/Reminders';
 import CalorieTracker from './components/CalorieTracker';
 import CurrentGoals from './components/CurrentGoals';
+import PeriodTracker from './components/PeriodTracker'; // Assuming you have a PeriodTracker component
 
 function App() {
   const { user } = useAuth();
@@ -48,6 +49,15 @@ function App() {
           element={
             <ProtectedRoute>
               <MovieWatchList />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/period-tracker"
+          element={
+            <ProtectedRoute>
+              <PeriodTracker />
             </ProtectedRoute>
           }
         />
