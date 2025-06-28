@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom'; // Import Link for navigation
+import { Link } from 'react-router-dom'; 
 
 import { ReactComponent as MovieIcon } from '../assets/movie-watch-list.svg';
 import { ReactComponent as DateIcon } from '../assets/date-ideas.svg';
@@ -28,10 +28,25 @@ function Dashboard() {
     return 'Good Evening';
   };
 
-  const userName = user ? user.email.split('@')[0] : '';
+  const getUserDisplayName = () => {
+    if (!user || !user.email) {
+      return '';
+    }
+
+    const email = user.email.toLowerCase();
+
+    if (email === 'jetjetcerezo@gmail.com') {
+      return 'Tajie';
+    } else if (email === 'rheanamindo@gmail.com') {
+      return 'Ray';
+    }
+
+    return email.split('@')[0];
+  };
+
+  const userName = getUserDisplayName();
 
   return (
-    // Use the generic page-container for layout, with a specific dashboard class for custom styling
     <div className="page-container dashboard-page">
       <header className="dashboard-header">
         <div>
