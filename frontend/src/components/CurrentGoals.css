@@ -1,0 +1,76 @@
+/* --- Core Variables (Same as other components for consistency) --- */
+:root {
+    --primary-color: #007aff;
+    --primary-hover: #0056b3;
+    --danger-color: #ff3b30;
+    --danger-hover: #c70000;
+    --success-color: #34c759;
+    --text-primary: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --border-color: #e5e5ea;
+    --background-light: #f5f5f7;
+    --background-white: #ffffff;
+    --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.06);
+    --shadow-strong: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Page Layout --- */
+.goals-page { padding: 20px; background-color: var(--background-light); }
+.goals-card { background: var(--background-white); border-radius: 20px; padding: 20px; max-width: 1000px; margin: 0 auto; box-shadow: var(--shadow-light); }
+
+/* --- Header --- */
+.goals-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); }
+.header-title-container { display: flex; align-items: center; gap: 12px; }
+.header-icon { width: 32px; height: 32px; color: var(--primary-color); }
+.header-title { font-size: 24px; font-weight: 700; margin: 0; }
+.add-idea-button { background-color: var(--primary-color); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; transition: all 0.2s ease; }
+.add-idea-button:hover { background-color: var(--primary-hover); transform: scale(1.05); }
+
+/* --- List & Grid Layout --- */
+.list-section { margin-bottom: 30px; }
+.list-section h3 { font-size: 20px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+.count-badge { font-size: 14px; font-weight: 600; background-color: var(--border-color); color: var(--text-secondary); padding: 4px 12px; border-radius: 16px; }
+.goals-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+
+/* --- Goal Item Card --- */
+.goal-item { background: var(--background-white); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; transition: all 0.2s ease; }
+.goal-item:hover { transform: translateY(-4px); box-shadow: var(--shadow-light); }
+.goal-item.complete { border-left: 4px solid var(--success-color); }
+.goal-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.goal-title { font-size: 18px; font-weight: 600; margin: 0; color: var(--text-primary); flex-grow: 1; }
+.complete-button { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-color); background-color: var(--background-light); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; flex-shrink: 0; }
+.complete-button svg { color: transparent; }
+.complete .complete-button { background-color: var(--success-color); border-color: var(--success-color); }
+.complete .complete-button svg { color: white; }
+
+/* --- Progress Bar & Stats --- */
+.goal-body { margin: 16px 0; }
+.progress-bar-container { width: 100%; height: 8px; background-color: var(--background-light); border-radius: 4px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background-color: var(--primary-color); border-radius: 4px; transition: width 0.5s ease-out; }
+.goal-item.complete .progress-bar-fill { background-color: var(--success-color); }
+.goal-stats { display: flex; justify-content: space-between; margin-top: 8px; font-size: 13px; font-weight: 500; }
+.current-amount { color: var(--text-primary); }
+.target-amount { color: var(--text-secondary); }
+.goal-deadline { font-size: 13px; color: var(--text-secondary); margin: 8px 0 0; }
+
+/* --- Goal Footer Actions --- */
+.goal-footer { margin-top: auto; display: flex; justify-content: space-between; align-items: center; }
+.add-progress-button { background-color: var(--primary-color); color: white; padding: 8px 16px; border-radius: 10px; font-weight: 600; font-size: 14px; border: none; cursor: pointer; transition: all 0.2s ease; }
+.add-progress-button:hover { background-color: var(--primary-hover); transform: scale(1.02); }
+.goal-item.complete .add-progress-button { display: none; } /* Hide add progress on complete goals */
+
+/* --- Modals and Forms --- */
+.modal-body .form-row { display: flex; gap: 16px; }
+.modal-body .form-row > * { flex: 1; }
+/* (All other modal, toast, empty state, and generic styles can be reused from DateIdeas.css) */
+/* It is recommended to pull shared styles into a global `index.css` or `App.css` */
+.button { border: none; font-size: 16px; border-radius: 12px; padding: 10px 20px; cursor: pointer; transition: all 0.2s ease; }
+.secondary-button { background-color: var(--border-color); color: var(--text-primary); }
+.save-idea-button { background-color: var(--primary-color); color: white; }
+.modal-backdrop, .modal-content, .modal-header, .modal-body, .modal-footer, .toast-container, .toast, .empty-state-container, .centered-feedback, .spinner { /* Copy from DateIdeas.css */ }
+.back-button { color: var(--text-secondary); transition: color 0.2s ease; background: none; border: none; padding: 0; cursor: pointer; }
+.back-button:hover { color: var(--primary-color); }
+.button-icon { background: none; border: none; cursor: pointer; transition: all 0.2s ease; }
+.edit-button { color: var(--text-secondary); }
+.edit-button:hover { color: var(--primary-color); }
+.input-field { width: 100%; box-sizing: border-box; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px; font-size: 16px; background-color: var(--background-light); }
