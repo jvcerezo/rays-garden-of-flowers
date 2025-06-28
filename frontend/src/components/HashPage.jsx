@@ -87,6 +87,8 @@ function HashPage() {
                             transition={{ type: 'spring', damping: 15, stiffness: 300 }}
                         >
                             <h2>Happy 1st Anniversary</h2>
+                            <p>Here's to many more years of love and happiness!</p>
+                            <p>The password is: YouWillNeverGuessThis</p>
                         </motion.div>
                     )}
                 </AnimatePresence>
