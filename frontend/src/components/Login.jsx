@@ -1,52 +1,73 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase/firebase'; // Make sure this path is correct
+import { auth } from '../firebase/firebase';
 
-// Import your local SVG files
 import { ReactComponent as TitleFlowerIcon } from '../assets/login-title.svg';
 import { ReactComponent as EmailFlowerIcon } from '../assets/login-username.svg';
 import { ReactComponent as PasswordFlowerIcon } from '../assets/login-password.svg';
 
-// The component no longer needs the onLogin prop because AuthContext handles the state
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  
+  const wrongPasswordCountRef = useRef(0);
 
   const allowedEmails = [
     'jetjetcerezo@gmail.com',
     'rheanamindo@gmail.com'
   ];
 
-  // The login handler is now an async function to work with Firebase
+  // Reset the counter if the email changes
+  useEffect(() => {
+    if (email.toLowerCase().trim() !== 'rheanamindo@gmail.com') {
+      wrongPasswordCountRef.current = 0;
+    }
+  }, [email]);
+
+  // --- NEW: Function to get the correct error message ---
+  const getHintErrorMessage = (count) => {
+    switch (count) {
+      case 2:
+        return 'sure ka ba?';
+      case 3:
+        return 'alam mo ba yung password?';
+      case 4:
+        return 'malay mo nasa ibang URL';
+      case 5:
+        return 'clue: MD5';
+      case 6:
+        return 'the-url/hash';
+      default:
+        return 'Invalid email or password.';
+    }
+  };
+
   const handleLogin = async (event) => {
     event.preventDefault();
     setError('');
 
-    // 1. First, check if the email is in the allowed list
     if (!allowedEmails.includes(email.toLowerCase().trim())) {
       setError('This email address is not authorized.');
-      return; // Stop the function if not allowed
+      return;
     }
 
-    // 2. If allowed, try to sign in with Firebase
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      // If login is successful, the onAuthStateChanged listener in your AuthContext will do the rest.
-      console.log('Firebase login successful:', userCredential.user);
+      await signInWithEmailAndPassword(auth, email, password);
+      wrongPasswordCountRef.current = 0;
+      console.log('Firebase login successful');
     } catch (err) {
-      // Handle specific Firebase errors for a better user experience
-      switch (err.code) {
-        case 'auth/user-not-found':
-        case 'auth/wrong-password':
+      if (err.code === 'auth/invalid-credentials' || err.code === 'auth/too-many-requests') {
+        if (email.toLowerCase().trim() === 'rheanamindo@gmail.com') {
+          wrongPasswordCountRef.current += 1;
+          setError(getHintErrorMessage(wrongPasswordCountRef.current));
+        } else {
           setError('Invalid email or password.');
-          break;
-        case 'auth/invalid-email':
-          setError('Please enter a valid email address.');
-          break;
-        default:
-          setError('Failed to log in. Please try again.');
-          break;
+        }
+      } else if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found') {
+        setError('Invalid email or password.');
+      } else {
+        setError('Failed to log in. Please try again.');
       }
       console.error('Firebase login error:', err);
     }
