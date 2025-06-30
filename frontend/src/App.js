@@ -14,6 +14,7 @@ import CalorieTracker from './components/CalorieTracker';
 import CurrentGoals from './components/CurrentGoals';
 import PeriodTracker from './components/PeriodTracker'; // Assuming you have a PeriodTracker component
 import HashPage from './components/HashPage';
+import RayConnect from './components/RayConnect'; // Assuming you have a RayConnect component
 
 function App() {
   const { user } = useAuth();
@@ -97,6 +98,14 @@ function App() {
             <CurrentGoals />
           </ProtectedRoute>
         }
+        />
+        <Route
+          path="/ray-connect"
+          element={
+            <ProtectedRoute>
+              <RayConnect />
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/hash"
