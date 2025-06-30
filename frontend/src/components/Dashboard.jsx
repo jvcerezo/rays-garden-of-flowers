@@ -8,6 +8,7 @@ import { ReactComponent as PeriodIcon } from '../assets/period-tracker.svg';
 import { ReactComponent as BellIcon } from '../assets/reminders.svg';
 import { ReactComponent as CalorieIcon } from '../assets/calorie-tracker.svg';
 import { ReactComponent as GoalIcon } from '../assets/current-goals.svg';
+import { ReactComponent as SecretMissionIcon } from '../assets/secret-mission.svg';
 
 function Dashboard() {
   const { user, logout } = useAuth();
@@ -19,6 +20,7 @@ function Dashboard() {
     { title: 'Reminders', icon: <BellIcon />, path: '/reminders' },
     { title: 'Calorie Tracker', icon: <CalorieIcon />, path: '/calorie-tracker' },
     { title: 'Current Goals', icon: <GoalIcon />, path: '/current-goals' },
+    { title: 'Operation Ray-connect', icon: <SecretMissionIcon />, path: '/ray-connect' }
   ];
 
   const getGreeting = () => {
