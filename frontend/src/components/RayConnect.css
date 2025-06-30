@@ -196,7 +196,12 @@ body {
 .task-card.completed h3 { text-decoration: line-through; }
 
 /* --- View Task Modal --- */
-.view-task-content { padding: 0 10px; }
+.view-task-content {
+    /* --- THE FIX --- */
+    max-height: 50vh; /* Set a maximum height (e.g., 50% of the viewport height) */
+    overflow-y: auto;   /* Add a vertical scrollbar only when the content overflows */
+    padding-right: 15px; /* Add padding to prevent text from touching the scrollbar */
+}
 .view-task-content p { font-size: 15px; line-height: 1.6; color: #334155; margin-bottom: 25px; }
 .task-rewards-modal { margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
 .task-rewards-modal h4 { font-size: 14px; font-weight: 600; color: #64748b; text-align: center; margin: 0 0 15px; text-transform: uppercase; letter-spacing: 0.5px; }
