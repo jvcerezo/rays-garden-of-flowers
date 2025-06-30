@@ -9,6 +9,7 @@ import { toast } from 'react-hot-toast';
 import { PlayerStats } from './PlayerStats';
 import { TaskList } from './TaskList';
 import { AddTaskModal } from './AddTaskModal';
+import { ViewTaskModal } from './ViewTaskModal';
 import './RayConnect.css';
 
 // --- Icon Components ---
@@ -34,7 +35,8 @@ function RayConnect() {
     const [viewingPlayer, setViewingPlayer] = useState(PLAYER_IDS.rheanamindo);
     const [playerData, setPlayerData] = useState({ rheanamindo: null, jetjetcerezo: null });
     const [tasks, setTasks] = useState({ rheanamindo: [], jetjetcerezo: [] });
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [viewingTask, setViewingTask] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
     const loggedInPlayerId = useMemo(() => {
@@ -46,27 +48,20 @@ function RayConnect() {
 
     useEffect(() => {
         if (!user) return;
-
-        // This function now only checks and creates the logged-in user's document
         const initializeSelf = async () => {
             if (!loggedInPlayerId) return;
             const playerRef = doc(db, 'rayConnect', loggedInPlayerId);
             const docSnap = await getDoc(playerRef);
             if (!docSnap.exists()) {
-                console.log(`Creating document for ${loggedInPlayerId}`);
                 await setDoc(playerRef, DEFAULT_STATS);
             }
         };
-        
         initializeSelf();
 
-        // Separate useEffect for subscriptions
         const unsubRheana = onSnapshot(doc(db, 'rayConnect', PLAYER_IDS.rheanamindo), (doc) => setPlayerData(prev => ({ ...prev, rheanamindo: doc.data() })));
         const unsubJet = onSnapshot(doc(db, 'rayConnect', PLAYER_IDS.jetjetcerezo), (doc) => setPlayerData(prev => ({ ...prev, jetjetcerezo: doc.data() })));
-        
         const qRheana = query(collection(db, 'rayConnect', PLAYER_IDS.rheanamindo, 'tasks'), orderBy('createdAt', 'desc'));
         const unsubTasksRheana = onSnapshot(qRheana, (snapshot) => setTasks(prev => ({ ...prev, rheanamindo: snapshot.docs.map(d => ({ id: d.id, ...d.data() })) })));
-        
         const qJet = query(collection(db, 'rayConnect', PLAYER_IDS.jetjetcerezo, 'tasks'), orderBy('createdAt', 'desc'));
         const unsubTasksJet = onSnapshot(qJet, (snapshot) => {
             setTasks(prev => ({ ...prev, jetjetcerezo: snapshot.docs.map(d => ({ id: d.id, ...d.data() })) }));
@@ -75,7 +70,6 @@ function RayConnect() {
 
         return () => { unsubRheana(); unsubJet(); unsubTasksRheana(); unsubTasksJet(); };
     }, [user, loggedInPlayerId]);
-
 
     const handleAddTask = async (taskData) => {
         if (!loggedInPlayerId || loggedInPlayerId === viewingPlayer) return;
@@ -89,7 +83,7 @@ function RayConnect() {
             success: <b>Quest assigned!</b>,
             error: <b>Could not assign quest.</b>,
         });
-        setIsModalOpen(false);
+        setIsAddModalOpen(false);
     };
 
     const handleMarkAsDone = async (taskId, rewards) => {
@@ -173,22 +167,29 @@ function RayConnect() {
                             tasks={tasks[viewingPlayer]} 
                             onMarkDone={handleMarkAsDone}
                             canComplete={loggedInPlayerId === viewingPlayer}
+                            onViewTask={setViewingTask}
                         />
                     </>
                 )}
             </div>
 
             {canAddTask && (
-                 <motion.button className="fab" onClick={() => setIsModalOpen(true)} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                 <motion.button className="fab" onClick={() => setIsAddModalOpen(true)} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                     <PlusIcon />
                 </motion.button>
             )}
 
             <AnimatePresence>
-                {isModalOpen && (
+                {isAddModalOpen && (
                     <AddTaskModal 
-                        onClose={() => setIsModalOpen(false)}
+                        onClose={() => setIsAddModalOpen(false)}
                         onAdd={handleAddTask}
+                    />
+                )}
+                {viewingTask && (
+                    <ViewTaskModal 
+                        task={viewingTask}
+                        onClose={() => setViewingTask(null)}
                     />
                 )}
             </AnimatePresence>

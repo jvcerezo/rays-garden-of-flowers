@@ -1,8 +1,20 @@
+/* --- Global Layout Fix --- */
+html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f8fafc;
+}
+
 /* --- Ray-Connect Page --- */
 .ray-connect-page {
     justify-content: flex-start;
-    background-color: #f8fafc;
-    padding-bottom: 100px;
+    padding: 15px 15px 120px 15px; 
+    box-sizing: border-box;
+    width: 100%;
 }
 
 /* --- Loading State --- */
@@ -137,6 +149,10 @@
 .task-content { flex-grow: 1; }
 .task-content h3 { margin: 0 0 5px; font-size: 16px; font-weight: 600; color: #1e293b; }
 .task-content p { margin: 0 0 12px; font-size: 14px; color: #64748b; line-height: 1.5; }
+.task-description-preserved {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
 .task-rewards { display: flex; gap: 10px; }
 .task-rewards span {
     display: inline-flex;
@@ -175,33 +191,14 @@
 .complete-button svg { width: 24px; height: 24px; }
 .completed-tasks-section { margin-top: 20px; }
 .completed-tasks-section h4 { text-align: center; color: #9ca3af; font-size: 14px; margin-bottom: 10px; }
+.task-card.completed { opacity: 0.7; padding: 15px 20px; cursor: pointer; transition: all 0.2s ease; }
+.task-card.completed:hover { opacity: 1; background-color: #f9fafb; transform: translateY(-1px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+.task-card.completed h3 { text-decoration: line-through; }
 
-.task-card.completed {
-    opacity: 0.7;
-    padding: 15px 20px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-.task-card.completed:hover {
-    opacity: 1;
-    background-color: #f9fafb;
-    transform: translateY(-1px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-}
-.task-card.completed h3 {
-    text-decoration: line-through;
-}
-.completed-task-details {
-    overflow: hidden; /* Important for the animation */
-}
-.completed-task-details p {
-    color: #64748b;
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 12px;
-}
-.completed-task-details .task-rewards {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px dashed #e5e7eb;
-}
+/* --- View Task Modal --- */
+.view-task-content { padding: 0 10px; }
+.view-task-content p { font-size: 15px; line-height: 1.6; color: #334155; margin-bottom: 25px; }
+.task-rewards-modal { margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+.task-rewards-modal h4 { font-size: 14px; font-weight: 600; color: #64748b; text-align: center; margin: 0 0 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+.rewards-list { display: flex; justify-content: center; gap: 15px; }
+.rewards-list span { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; padding: 8px 12px; border-radius: 8px; }
