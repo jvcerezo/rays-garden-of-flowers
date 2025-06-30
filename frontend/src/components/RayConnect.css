@@ -169,11 +169,39 @@
     box-sizing: border-box;
 }
 
-/* Other styles (buttons, completed tasks, etc.) */
+/* --- Completed Task Styling --- */
 .complete-button { flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; border: 2px solid #e5e7eb; background: #fff; color: #9ca3af; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
 .complete-button:hover { background: #f0fdf4; border-color: #86efac; color: #16a34a; }
 .complete-button svg { width: 24px; height: 24px; }
 .completed-tasks-section { margin-top: 20px; }
 .completed-tasks-section h4 { text-align: center; color: #9ca3af; font-size: 14px; margin-bottom: 10px; }
-.task-card.completed { opacity: 0.6; padding: 15px 20px; }
-.task-card.completed h3 { text-decoration: line-through; }
+
+.task-card.completed {
+    opacity: 0.7;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.task-card.completed:hover {
+    opacity: 1;
+    background-color: #f9fafb;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+.task-card.completed h3 {
+    text-decoration: line-through;
+}
+.completed-task-details {
+    overflow: hidden; /* Important for the animation */
+}
+.completed-task-details p {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+.completed-task-details .task-rewards {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #e5e7eb;
+}
