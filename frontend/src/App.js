@@ -15,6 +15,8 @@ import CurrentGoals from './components/CurrentGoals';
 import PeriodTracker from './components/PeriodTracker'; // Assuming you have a PeriodTracker component
 import HashPage from './components/HashPage';
 import RayConnect from './components/RayConnect'; // Assuming you have a RayConnect component
+import Playbook from './components/Playbook';
+import PlaybookNote from './components/PlaybookNote';
 
 function App() {
   const { user } = useAuth();
@@ -108,6 +110,22 @@ function App() {
           }
         />
         <Route
+          path="/playbook"
+          element={
+            <ProtectedRoute>
+              <Playbook />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/playbook/note/:noteId"
+          element={
+            <ProtectedRoute>
+              <PlaybookNote />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/hash"
           element={
               <HashPage />
@@ -125,6 +143,19 @@ function App() {
         />
         
       </Routes>
+      <Toaster 
+        position="top-center"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: 'white',
+            color: 'var(--text-primary)',
+            border: '1px solid var(--border-color)',
+            borderRadius: '12px',
+            boxShadow: 'var(--card-shadow)',
+          },
+        }}
+      />
     </BrowserRouter>
     </div>
   </div>
