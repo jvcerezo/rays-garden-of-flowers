@@ -17,7 +17,7 @@ const PencilIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
 const SaveIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.052-.143z" clipRule="evenodd" /></svg> );
 const CancelIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" /></svg> );
 
-// --- Child Components ---
+// Enhanced Movie Item Component with better structure
 const MovieItem = React.memo(({ movie, isEditing, onToggle, onDelete, onEdit, onSave, onCancel }) => {
   const [editedTitle, setEditedTitle] = useState(movie.title);
 
@@ -29,6 +29,7 @@ const MovieItem = React.memo(({ movie, isEditing, onToggle, onDelete, onEdit, on
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
+      e.preventDefault();
       handleSave();
     } else if (e.key === 'Escape') {
       onCancel();
@@ -52,24 +53,55 @@ const MovieItem = React.memo(({ movie, isEditing, onToggle, onDelete, onEdit, on
             onChange={(e) => setEditedTitle(e.target.value)}
             onKeyDown={handleKeyDown}
             autoFocus
+            placeholder="Enter movie title..."
           />
           <div className="edit-actions">
-            <button className="button-icon save-button" onClick={handleSave}><SaveIcon /></button>
-            <button className="button-icon cancel-button" onClick={onCancel}><CancelIcon /></button>
+            <button
+              className="button-icon save-button"
+              onClick={handleSave}
+              aria-label="Save changes"
+            >
+              <SaveIcon />
+            </button>
+            <button
+              className="button-icon cancel-button"
+              onClick={onCancel}
+              aria-label="Cancel editing"
+            >
+              <CancelIcon />
+            </button>
           </div>
         </>
       ) : (
         <>
-          <button className="watched-toggle-button" onClick={() => onToggle(movie.id, movie.watched)}>
+          <button
+            className="watched-toggle-button"
+            onClick={() => onToggle(movie.id, movie.watched)}
+            aria-label={movie.watched ? 'Mark as unwatched' : 'Mark as watched'}
+          >
             <CheckIcon />
           </button>
           <div className="movie-details">
-            <span className="movie-title">{movie.title}</span>
-            {movie.addedBy && <span className="movie-adder">Added by {movie.addedBy}</span>}
+            <h4 className="movie-title">{movie.title}</h4>
+            {movie.addedBy && (
+              <p className="movie-adder">Added by {movie.addedBy}</p>
+            )}
           </div>
           <div className="item-actions">
-            <button className="button-icon edit-button" onClick={() => onEdit(movie.id)}><PencilIcon /></button>
-            <button className="button-icon delete-button" onClick={() => onDelete(movie)}><TrashIcon /></button>
+            <button
+              className="button-icon edit-button"
+              onClick={() => onEdit(movie.id)}
+              aria-label="Edit movie title"
+            >
+              <PencilIcon />
+            </button>
+            <button
+              className="button-icon delete-button"
+              onClick={() => onDelete(movie)}
+              aria-label="Delete movie"
+            >
+              <TrashIcon />
+            </button>
           </div>
         </>
       )}
@@ -77,8 +109,42 @@ const MovieItem = React.memo(({ movie, isEditing, onToggle, onDelete, onEdit, on
   );
 });
 
-const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, children }) => { if (!isOpen) return null; return ( <div className="modal-overlay" onClick={onClose}> <div className="modal-content" onClick={(e) => e.stopPropagation()}> <h2>{title}</h2> <p>{children}</p> <div className="modal-actions"> <button className="button secondary-button" onClick={onClose}>Cancel</button> <button className="button danger-button" onClick={onConfirm}>Confirm</button> </div> </div> </div> ); };
-const Toast = ({ message, type, onDismiss }) => { useEffect(() => { const timer = setTimeout(() => { onDismiss(); }, 4000); return () => clearTimeout(timer); }, [onDismiss]); return ( <div className={`toast toast-${type}`}> {message} </div> ); };
+// Enhanced Components with better structure
+const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, children }) => {
+  if (!isOpen) return null;
+  
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <h2>{title}</h2>
+        <p>{children}</p>
+        <div className="modal-actions">
+          <button className="button secondary-button" onClick={onClose}>
+            Cancel
+          </button>
+          <button className="button danger-button" onClick={onConfirm}>
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Toast = ({ message, type, onDismiss }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onDismiss();
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, [onDismiss]);
+
+  return (
+    <div className={`toast toast-${type}`}>
+      {message}
+    </div>
+  );
+};
 
 function MovieWatchList() {
   const { user } = useAuth();
@@ -90,56 +156,173 @@ function MovieWatchList() {
   const [movieToDelete, setMovieToDelete] = useState(null);
   const [editingMovieId, setEditingMovieId] = useState(null);
 
-  const addToast = (message, type = 'success') => { const id = Date.now(); setToasts(prev => [...prev, { id, message, type }]); };
-  const handleAddMovie = async (e) => { e.preventDefault(); if (newMovieTitle.trim() === '' || isAdding) return; setIsAdding(true); try { await addMovie(newMovieTitle); setNewMovieTitle(''); addToast('Movie added successfully!'); } catch (err) { addToast(err.message || 'Failed to add movie.', 'error'); } finally { setIsAdding(false); } };
-  const handleToggleWatched = async (id, currentStatus) => { try { await toggleWatched(id, currentStatus); } catch (err) { addToast(err.message, 'error'); } };
-  const handleDeleteRequest = (movie) => { setMovieToDelete(movie); setIsModalOpen(true); };
-  const handleConfirmDelete = async () => { if (!movieToDelete) return; try { await deleteMovie(movieToDelete.id); addToast('Movie deleted.'); } catch(err) { addToast(err.message, 'error'); } finally { setIsModalOpen(false); setMovieToDelete(null); } };
-  const handleUpdateMovie = async (id, newTitle) => { if (editingMovieId !== id) return; try { await updateMovieTitle(id, newTitle); addToast('Movie updated!'); } catch (err) { addToast(err.message, 'error'); } finally { setEditingMovieId(null); } };
+  // Toast management
+  const addToast = (message, type = 'success') => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, message, type }]);
+  };
 
+  // Movie operations
+  const handleAddMovie = async (e) => {
+    e.preventDefault();
+    if (newMovieTitle.trim() === '' || isAdding) return;
+    
+    setIsAdding(true);
+    try {
+      await addMovie(newMovieTitle);
+      setNewMovieTitle('');
+      addToast('Movie added successfully!');
+    } catch (err) {
+      addToast(err.message || 'Failed to add movie.', 'error');
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
+  const handleToggleWatched = async (id, currentStatus) => {
+    try {
+      await toggleWatched(id, currentStatus);
+    } catch (err) {
+      addToast(err.message, 'error');
+    }
+  };
+
+  const handleDeleteRequest = (movie) => {
+    setMovieToDelete(movie);
+    setIsModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!movieToDelete) return;
+    
+    try {
+      await deleteMovie(movieToDelete.id);
+      addToast('Movie deleted.');
+    } catch (err) {
+      addToast(err.message, 'error');
+    } finally {
+      setIsModalOpen(false);
+      setMovieToDelete(null);
+    }
+  };
+
+  const handleUpdateMovie = async (id, newTitle) => {
+    if (editingMovieId !== id) return;
+    
+    try {
+      await updateMovieTitle(id, newTitle);
+      addToast('Movie updated!');
+    } catch (err) {
+      addToast(err.message, 'error');
+    } finally {
+      setEditingMovieId(null);
+    }
+  };
+
+  // Computed values
   const toWatchMovies = useMemo(() => movies.filter(m => !m.watched), [movies]);
   const watchedMovies = useMemo(() => movies.filter(m => m.watched), [movies]);
   const isListCompletelyEmpty = !loading && movies.length === 0;
 
-  const renderMovieList = (list) => ( <ul className="movie-list"> {list.map((movie) => ( <MovieItem key={movie.id} movie={movie} isEditing={editingMovieId === movie.id} onToggle={handleToggleWatched} onDelete={handleDeleteRequest} onEdit={setEditingMovieId} onSave={handleUpdateMovie} onCancel={() => setEditingMovieId(null)} /> ))} </ul> );
+  // Render helper
+  const renderMovieList = (list) => (
+    <ul className="movie-list">
+      {list.map((movie) => (
+        <MovieItem
+          key={movie.id}
+          movie={movie}
+          isEditing={editingMovieId === movie.id}
+          onToggle={handleToggleWatched}
+          onDelete={handleDeleteRequest}
+          onEdit={setEditingMovieId}
+          onSave={handleUpdateMovie}
+          onCancel={() => setEditingMovieId(null)}
+        />
+      ))}
+    </ul>
+  );
 
   return (
     <>
-      <div className="page-container movie-page-container">
-        <div className="card movie-list-card">
+      <div className="movie-page-container">
+        <div className="movie-list-card">
+          {/* Header */}
           <div className="movie-list-header">
-            <Link to="/dashboard" className="back-button"><BackIcon /></Link>
+            <Link to="/dashboard" className="back-button">
+              <BackIcon />
+            </Link>
             <div className="header-title-container">
               <FlowerSvg className="header-icon" />
               <h1 className="header-title">Shared Watchlist</h1>
             </div>
             <div className="header-spacer"></div>
           </div>
+
           {user ? (
             <>
+              {/* Add Movie Form */}
               <form onSubmit={handleAddMovie} className="add-movie-form">
-                <input type="text" className="input-field add-movie-input" value={newMovieTitle} onChange={(e) => setNewMovieTitle(e.target.value)} placeholder="e.g., The Matrix" />
-                <button type="submit" className="button add-movie-button" disabled={!newMovieTitle.trim() || isAdding}>
+                <input
+                  type="text"
+                  className="add-movie-input"
+                  value={newMovieTitle}
+                  onChange={(e) => setNewMovieTitle(e.target.value)}
+                  placeholder="Add a movie title..."
+                  autoComplete="off"
+                />
+                <button
+                  type="submit"
+                  className="add-movie-button"
+                  disabled={!newMovieTitle.trim() || isAdding}
+                  aria-label="Add movie"
+                >
                   {isAdding ? <SpinnerIcon /> : <PlusIcon />}
                 </button>
               </form>
+
+              {/* Movie Lists Container */}
               <div className="movie-list-container">
-                {loading ? ( <div className="centered-feedback"><SpinnerIcon /></div> ) : error ? ( <div className="centered-feedback error-text">{error}</div> ) : (
+                {loading ? (
+                  <div className="centered-feedback">
+                    <SpinnerIcon />
+                  </div>
+                ) : error ? (
+                  <div className="centered-feedback error-text">
+                    {error}
+                  </div>
+                ) : (
                   <>
                     {isListCompletelyEmpty ? (
                       <div className="empty-state-container">
                         <p>Your watchlist is a blank canvas.</p>
-                        <span>Add a movie to begin.</span>
+                        <span>Add a movie to begin your journey.</span>
                       </div>
                     ) : (
                       <>
+                        {/* To Watch Section */}
                         <div className="list-section">
-                           <div className="list-section-header"><h3>To Watch</h3><span className="movie-count-badge">{toWatchMovies.length}</span></div>
-                           {toWatchMovies.length > 0 ? renderMovieList(toWatchMovies) : <p className="empty-list-message">No movies to watch.</p>}
+                          <div className="list-section-header">
+                            <h3>To Watch</h3>
+                            <span className="movie-count-badge">{toWatchMovies.length}</span>
+                          </div>
+                          {toWatchMovies.length > 0 ? (
+                            renderMovieList(toWatchMovies)
+                          ) : (
+                            <p className="empty-list-message">No movies to watch yet.</p>
+                          )}
                         </div>
+
+                        {/* Watched Section */}
                         <div className="list-section">
-                           <div className="list-section-header"><h3>Watched</h3><span className="movie-count-badge">{watchedMovies.length}</span></div>
-                           {watchedMovies.length > 0 ? renderMovieList(watchedMovies) : <p className="empty-list-message">Mark a movie as watched.</p>}
+                          <div className="list-section-header">
+                            <h3>Watched</h3>
+                            <span className="movie-count-badge">{watchedMovies.length}</span>
+                          </div>
+                          {watchedMovies.length > 0 ? (
+                            renderMovieList(watchedMovies)
+                          ) : (
+                            <p className="empty-list-message">Mark a movie as watched to see it here.</p>
+                          )}
                         </div>
                       </>
                     )}
@@ -147,11 +330,35 @@ function MovieWatchList() {
                 )}
               </div>
             </>
-          ) : ( <p className="centered-feedback">Please <Link to="/login">log in</Link> to use the watchlist.</p> )}
+          ) : (
+            <div className="centered-feedback">
+              Please <Link to="/login">log in</Link> to use the watchlist.
+            </div>
+          )}
         </div>
       </div>
-      <ConfirmationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onConfirm={handleConfirmDelete} title="Delete Movie?"> Are you sure you want to permanently delete <strong>{movieToDelete?.title}</strong>? This action cannot be undone. </ConfirmationModal>
-      <div className="toast-container"> {toasts.map(toast => ( <Toast key={toast.id} {...toast} onDismiss={() => setToasts(prev => prev.filter(t => t.id !== toast.id))} /> ))} </div>
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Movie?"
+      >
+        Are you sure you want to permanently delete{' '}
+        <strong>{movieToDelete?.title}</strong>? This action cannot be undone.
+      </ConfirmationModal>
+
+      {/* Toast Notifications */}
+      <div className="toast-container">
+        {toasts.map(toast => (
+          <Toast
+            key={toast.id}
+            {...toast}
+            onDismiss={() => setToasts(prev => prev.filter(t => t.id !== toast.id))}
+          />
+        ))}
+      </div>
     </>
   );
 }
