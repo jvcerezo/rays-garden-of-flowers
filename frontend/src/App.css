@@ -1,20 +1,23 @@
 /* --- Google Font Import --- */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
 
-/* --- CSS Variables for Powder Blue Theme --- */
+/* --- CSS Variables for Modern Pastel Theme --- */
 :root {
-  --primary-color: #5dadec; /* Powder Blue */
-  --primary-hover: #4a9dcf; /* Deeper Powder Blue */
-  --background-start: #eef7ff; /* Very light blue */
-  --background-end: #f7f9fb;   /* Off-white with a hint of blue */
-  --card-background: rgba(255, 255, 255, 0.7); /* Frosted Glass Effect */
-  --text-primary: #1f2937;
-  --text-secondary: #4b5563;
-  --icon-color: #9ca3af;
-  --error-color: #d9534f;
-  --error-background: #fdf3f2;
-  --border-color: #dbeafe;
-  --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --primary-color: #a78bfa; /* Pastel Purple */
+  --secondary-color: #86efac; /* Pastel Green */
+  --accent-color: #fca5a5; /* Pastel Red */
+  --primary-hover: #c4b5fd; /* Lighter Purple */
+  --background-start: #faf8ff; /* Very light purple tint */
+  --background-end: #f8fafc;   /* Off-white with subtle coolness */
+  --card-background: rgba(255, 255, 255, 0.85); /* Enhanced frosted glass */
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --icon-color: #94a3b8;
+  --error-color: #fca5a5; /* Using pastel red */
+  --error-background: #fef2f2;
+  --border-color: #e2e8f0;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.06);
+  --card-shadow-hover: 0 8px 25px rgba(167, 139, 250, 0.12), 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 /* --- General Body and Container Styles --- */
@@ -24,8 +27,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--background-start);
-  background-image: linear-gradient(135deg, var(--background-start), var(--background-end));
+  background: linear-gradient(135deg, var(--background-start) 0%, var(--background-end) 100%);
+  min-height: 100vh;
 }
 
 .container {
@@ -65,11 +68,31 @@ body {
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
   }
 }
 
@@ -183,128 +206,361 @@ body {
 /* --- Improved Dashboard Styles --- */
 
 .dashboard-page {
-  /* This is the main container inside the app frame */
   display: flex;
   flex-direction: column;
-  padding: 30px 20px; /* Increased top padding for a better feel */
+  padding: 1.5rem 1rem;
   box-sizing: border-box;
-  height: 100%;
+  min-height: 100vh;
+  max-width: 500px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.dashboard-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(167, 139, 250, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(134, 239, 172, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dashboard-header,
+.dashboard-grid {
+  position: relative;
+  z-index: 1;
 }
 
 .dashboard-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; /* Align header content to the top */
-  margin-bottom: 30px;
+  align-items: flex-start;
+  margin-bottom: 2rem;
   width: 100%;
   flex-shrink: 0;
+  animation: fadeIn 0.8s ease-out;
 }
 
 .dashboard-greeting {
-  font-size: 20px;
-  font-weight: 400;
+  font-size: 1rem;
+  font-weight: 500;
   color: var(--text-secondary);
-  margin: 0;
+  margin: 0 0 0.125rem 0;
+  letter-spacing: 0.01em;
+  animation: fadeIn 0.6s ease-out;
+  opacity: 0.8;
 }
 
 .dashboard-username {
-  font-size: 26px;
-  font-weight: 700;
+  font-size: 2.25rem;
+  font-weight: 800;
   color: var(--text-primary);
   margin: 0;
   text-transform: capitalize;
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+  animation: fadeIn 0.8s ease-out 0.2s both;
 }
 
 .logout-button {
-  background-color: #eef7ff; /* Lighter blue for a softer look */
+  background: white;
   color: var(--primary-color);
-  border: none;
-  padding: 8px 16px;
-  border-radius: 12px;
+  border: 2px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 0.875rem;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  flex-shrink: 0; /* Prevent the button from shrinking */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .logout-button:hover {
-  background-color: var(--primary-color);
-  color: #fff;
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(167, 139, 250, 0.25);
 }
 
 .dashboard-grid {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  gap: 15px;
-  grid-template-columns: 1fr 1fr; /* Two equal columns */
+  gap: 0.875rem;
+  max-width: 100%;
+  margin: 0;
+}
+
+/* Enhanced Mobile Responsiveness */
+@media (max-width: 768px) {
+  .dashboard-page {
+    padding: 1rem 0.75rem;
+    max-width: 100%;
+  }
+  
+  .dashboard-header {
+    margin-bottom: 1.25rem;
+    padding: 0 0.25rem;
+  }
+  
+  .dashboard-grid {
+    gap: 0.75rem;
+    max-width: 100%;
+  }
+  
+  .dashboard-card {
+    padding: 1rem;
+    min-height: 75px;
+    border-radius: 0.875rem;
+  }
+  
+  .card-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-right: 1rem;
+  }
+  
+  .card-title {
+    font-size: 1.0625rem;
+  }
+  
+  .card-subtitle {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-page {
+    padding: 0.875rem 0.5rem;
+    min-height: 100vh;
+  }
+  
+  .dashboard-header {
+    margin-bottom: 1rem;
+    padding: 0 0.125rem;
+    gap: 0.5rem;
+  }
+  
+  .dashboard-greeting {
+    font-size: 0.9375rem;
+  }
+  
+  .dashboard-username {
+    font-size: 1.625rem;
+    line-height: 1;
+  }
+  
+  .logout-button {
+    padding: 0.375rem 0.625rem;
+    font-size: 0.8125rem;
+    border-radius: 0.625rem;
+  }
+  
+  .dashboard-grid {
+    gap: 0.625rem;
+  }
+  
+  .dashboard-card {
+    padding: 0.875rem;
+    min-height: 65px;
+    border-radius: 0.75rem;
+  }
+  
+  .dashboard-card:hover {
+    transform: translateX(2px);
+  }
+  
+  .card-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-right: 0.875rem;
+    border-radius: 0.625rem;
+  }
+  
+  .card-title {
+    font-size: 1rem;
+    margin-bottom: 0.125rem;
+    line-height: 1.2;
+  }
+  
+  .card-subtitle {
+    font-size: 0.8125rem;
+    line-height: 1.3;
+  }
+}
+
+@media (max-width: 350px) {
+  .dashboard-page {
+    padding: 0.75rem 0.375rem;
+  }
+  
+  .dashboard-header {
+    margin-bottom: 0.875rem;
+  }
+  
+  .dashboard-username {
+    font-size: 1.5rem;
+  }
+  
+  .logout-button {
+    padding: 0.3125rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .dashboard-grid {
+    gap: 0.5rem;
+  }
+  
+  .dashboard-card {
+    min-height: 60px;
+    padding: 0.75rem;
+    border-radius: 0.625rem;
+  }
+  
+  .card-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    margin-right: 0.75rem;
+    border-radius: 0.5rem;
+  }
+  
+  .card-title {
+    font-size: 0.9375rem;
+    line-height: 1.2;
+  }
+  
+  .card-subtitle {
+    font-size: 0.75rem;
+    line-height: 1.2;
+  }
 }
 
 .dashboard-card {
-  background-color: #ffffff;
-  border-radius: 20px;
-  padding: 20px;
+  background: white;
+  border-radius: 0.875rem;
+  padding: 1rem 1.25rem;
   box-shadow: var(--card-shadow);
   display: flex;
-  flex-direction: column;
-  justify-content: space-between; /* Pushes title to the bottom */
+  flex-direction: row;
+  align-items: center;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--border-color);
   color: inherit;
   text-decoration: none;
-  min-height: 120px; /* Give cards a minimum height */
+  min-height: 70px;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  animation: slideInUp 0.6s ease-out both;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Staggered animation delays for cards */
+.dashboard-card:nth-child(1) { animation-delay: 0.1s; }
+.dashboard-card:nth-child(2) { animation-delay: 0.2s; }
+.dashboard-card:nth-child(3) { animation-delay: 0.3s; }
+.dashboard-card:nth-child(4) { animation-delay: 0.4s; }
+.dashboard-card:nth-child(5) { animation-delay: 0.5s; }
+.dashboard-card:nth-child(6) { animation-delay: 0.6s; }
+.dashboard-card:nth-child(7) { animation-delay: 0.7s; }
+.dashboard-card:nth-child(8) { animation-delay: 0.8s; }
+
+.dashboard-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.dashboard-card:hover::before {
+  opacity: 1;
 }
 
 .dashboard-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px -5px rgba(93, 173, 236, 0.15);
+  transform: translateX(4px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: rgba(167, 139, 250, 0.3);
 }
 
-/* This makes the first card span the full width of the grid */
-.dashboard-card.featured {
-  grid-column: 1 / -1; /* Span from the first to the last column line */
-  flex-direction: row;
-  align-items: center;
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
-  color: #fff;
+.dashboard-card:active {
+  transform: translateX(2px) scale(0.98);
 }
 
-.card-content {
-  text-align: left;
+.dashboard-card:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2);
+}
+
+.logout-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2);
 }
 
 .card-icon {
-  width: 32px;
-  height: 32px;
+  width: 2.75rem;
+  height: 2.75rem;
   color: var(--primary-color);
+  margin-right: 1.125rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(167, 139, 250, 0.08);
+  border-radius: 0.625rem;
+  flex-shrink: 0;
 }
 
-.dashboard-card.featured .card-icon {
-  width: 48px;
-  height: 48px;
-  color: #fff;
-  margin-right: 15px;
+.dashboard-card:hover .card-icon {
+  transform: scale(1.1);
+  background: rgba(167, 139, 250, 0.15);
 }
 
 .card-icon svg {
   width: 100%;
   height: 100%;
+  filter: drop-shadow(0 2px 4px rgba(167, 139, 250, 0.2));
+}
+
+.card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .card-title {
-  font-size: 14px;
-  font-weight: 600; /* Bolder titles for better readability */
+  font-size: 1.125rem;
+  font-weight: 600;
   color: var(--text-primary);
-  margin: 0;
-  text-align: left; /* Align text left */
+  margin: 0 0 0.25rem 0;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
 }
 
-.dashboard-card.featured .card-title {
-  font-size: 20px;
-  color: #fff;
+.card-subtitle {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin: 0;
+  opacity: 0.8;
 }
+
 
 /* --- Phone Simulation Styles --- */
 .phone-simulation-container {

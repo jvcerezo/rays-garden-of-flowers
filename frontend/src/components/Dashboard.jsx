@@ -15,14 +15,14 @@ function Dashboard() {
   const { user, logout } = useAuth();
 
   const dashboardItems = [
-    { title: 'Movie Watch List', icon: <MovieIcon />, path: '/movie-watch-list' },
-    { title: 'Date Ideas', icon: <DateIcon />, path: '/date-ideas' },
-    { title: 'Period Tracker', icon: <PeriodIcon />, path: '/period-tracker' },
-    { title: 'Reminders', icon: <BellIcon />, path: '/reminders' },
-    { title: 'Calorie Tracker', icon: <CalorieIcon />, path: '/calorie-tracker' },
-    { title: 'Current Goals', icon: <GoalIcon />, path: '/current-goals' },
-    { title: 'Operation Ray-connect', icon: <SecretMissionIcon />, path: '/ray-connect' },
-    { title: "Our Shared Playbook", icon: <PlaybookIcon />, path: '/playbook' }
+    { title: 'Movie Watch List', subtitle: 'Movies we have to watch!!!', icon: <MovieIcon />, path: '/movie-watch-list' },
+    { title: 'Date Ideas', subtitle: 'What should me and my favy do next?', icon: <DateIcon />, path: '/date-ideas' },
+    { title: 'Period Tracker', subtitle: 'How is my favy feeling?', icon: <PeriodIcon />, path: '/period-tracker' },
+    { title: 'Reminders', subtitle: '(WORK IN PROGRESS)', icon: <BellIcon />, path: '/reminders' },
+    { title: 'Calorie Tracker', subtitle: 'Caldef check!', icon: <CalorieIcon />, path: '/calorie-tracker' },
+    { title: 'Current Goals', subtitle: 'Things we want to achieve!', icon: <GoalIcon />, path: '/current-goals' },
+    { title: 'Operation Ray-connect', subtitle: 'Whats our current quest?', icon: <SecretMissionIcon />, path: '/ray-connect' },
+    { title: "Our Shared Playbook", subtitle: 'So that we would never forget!', icon: <PlaybookIcon />, path: '/playbook' }
   ];
 
   const getGreeting = () => {
@@ -64,7 +64,10 @@ function Dashboard() {
         {dashboardItems.map((item, index) => (
           <Link to={item.path} key={index} className="dashboard-card">
             <div className="card-icon">{item.icon}</div>
-            <h3 className="card-title">{item.title}</h3>
+            <div className="card-content">
+              <h3 className="card-title">{item.title}</h3>
+              <p className="card-subtitle">{item.subtitle}</p>
+            </div>
           </Link>
         ))}
       </div>
