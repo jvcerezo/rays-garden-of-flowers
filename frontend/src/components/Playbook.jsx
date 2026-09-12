@@ -178,30 +178,23 @@ function Playbook() {
 
   return (
     <div className="page-container playbook-page">
-      <div className="playbook-background">
-        <div className="floating-shapes">
-          <div className="shape shape-1"></div>
-          <div className="shape shape-2"></div>
-          <div className="shape shape-3"></div>
-        </div>
-      </div>
-      
-      <header className="page-header">
-        <Link to="/dashboard" className="back-button">
+      <header className="tracker-header playbook-header">
+        <Link to="/dashboard" className="back-button" title="Back to Dashboard">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
             <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </Link>
-        <div className="header-title-section">
-          <h1 className="page-title">Our Shared Playbook</h1>
-          <p className="page-subtitle">Thoughts, dreams & ideas together</p>
+        <div className="header-title-container">
+          <h1 className="header-title">Our Playbook</h1>
+          <span className="header-subtitle">Thoughts & Dreams Together 📖</span>
         </div>
         <button 
-          className="add-note-button"
+          className="add-note-header-btn"
           onClick={() => setShowAddModal(true)}
+          title="Create Entry"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </button>
       </header>

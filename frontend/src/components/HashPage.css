@@ -1,75 +1,104 @@
 /* --- Hash Page Container & Card --- */
 .hash-page-container {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
     background-color: transparent;
     min-height: 100%;
-    padding: 20px 16px;
+    padding: 0 16px 28px 16px;
     box-sizing: border-box;
     width: 100%;
 }
 
+.hash-header {
+    width: 100%;
+    max-width: 420px;
+    margin-bottom: 20px;
+}
+
 .hash-card {
     width: 100%;
-    max-width: 380px;
-    background-color: rgba(255, 255, 255, 0.88);
-    backdrop-filter: blur(12px);
+    max-width: 400px;
+    background-color: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     border-radius: 28px;
-    padding: 36px 24px;
-    box-shadow: 0 15px 35px -5px rgba(167, 139, 250, 0.15), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.9);
+    padding: 30px 22px;
+    box-shadow: 0 16px 36px -6px rgba(167, 139, 250, 0.18), 0 4px 10px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.95);
     text-align: center;
+    box-sizing: border-box;
 }
 
 .hash-card-header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 24px;
-    color: var(--primary-color, #a78bfa);
+    gap: 8px;
+    margin-bottom: 22px;
 }
 
-.hash-card-header h1 {
+.lock-icon-wrap {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.18), rgba(244, 114, 182, 0.22));
+    color: var(--primary-color, #a78bfa);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(167, 139, 250, 0.2);
+    margin-bottom: 4px;
+}
+
+.hash-card-header h2 {
     font-size: 20px;
     font-weight: 700;
     color: var(--text-primary, #1e293b);
     margin: 0;
 }
 
+.hash-hint {
+    font-size: 13px;
+    color: var(--text-secondary, #64748b);
+    margin: 0;
+    line-height: 1.4;
+}
+
 /* --- Form Elements --- */
 .hash-form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 14px;
 }
 
 .hash-input {
     width: 100%;
-    padding: 14px 16px;
-    font-size: 16px;
-    font-family: 'Poppins', sans-serif;
-    border-radius: 12px;
-    border: 1px solid #dbeafe;
-    background-color: #f8fbff;
+    padding: 13px 16px;
+    font-size: 15px;
+    font-family: inherit;
+    border-radius: 14px;
+    border: 1.5px solid rgba(167, 139, 250, 0.3);
+    background-color: #fdfcff;
     box-sizing: border-box;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease;
+    text-align: center;
 }
 .hash-input:focus {
     outline: none;
     border-color: var(--primary-color, #a78bfa);
+    background-color: #ffffff;
     box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2);
 }
 
 .hash-button {
     width: 100%;
     padding: 14px 16px;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
-    font-family: 'Poppins', sans-serif;
+    font-family: inherit;
     color: #ffffff;
-    background: linear-gradient(135deg, var(--primary-color, #a78bfa) 0%, #8b5cf6 100%);
+    background: linear-gradient(135deg, var(--primary-color, #a78bfa) 0%, #ec4899 100%);
     border: none;
     border-radius: 14px;
     cursor: pointer;
@@ -77,36 +106,119 @@
     box-shadow: 0 4px 14px rgba(167, 139, 250, 0.35);
 }
 .hash-button:hover {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
     box-shadow: 0 6px 18px rgba(167, 139, 250, 0.45);
+}
+.hash-button:active {
+    transform: scale(0.98);
 }
 
 /* --- Messages --- */
 .hash-error {
     color: #be123c;
     background-color: #fee2e2;
-    padding: 12px;
-    border-radius: 10px;
-    margin-top: 20px;
-    font-size: 14px;
+    padding: 11px 14px;
+    border-radius: 12px;
+    margin-top: 16px;
+    margin-bottom: 0;
+    font-size: 13px;
     font-weight: 500;
 }
 
 .hash-success {
-    margin-top: 30px;
-    padding: 25px;
-    background: linear-gradient(135deg, #fbcfe8, #f5d0fe); /* Pink/purple gradient */
+    margin-top: 22px;
+    padding: 22px 18px;
+    background: linear-gradient(135deg, #fce7f3 0%, #fae8ff 100%);
     border-radius: 20px;
+    border: 1px solid rgba(244, 114, 182, 0.35);
     color: #9d174d;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    box-shadow: 0 8px 20px rgba(244, 114, 182, 0.15);
 }
 
-.hash-success h2 {
-    font-size: 24px;
+.anniversary-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.95);
+    color: #db2777;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 9999px;
+    box-shadow: 0 2px 8px rgba(219, 39, 119, 0.15);
+    letter-spacing: 0.3px;
+}
+
+.hash-success h3 {
+    font-size: 17px;
     font-weight: 700;
     color: #86198f;
+    margin: 4px 0 0 0;
+}
+
+.hash-success p {
+    font-size: 13px;
+    line-height: 1.45;
+    color: #701a75;
     margin: 0;
+}
+
+.password-reveal-box {
+    margin-top: 8px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1.5px dashed rgba(219, 39, 119, 0.35);
+    border-radius: 14px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.password-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #9d174d;
+}
+
+.revealed-code {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: #be123c;
+    background: #ffe4e6;
+    padding: 6px 12px;
+    border-radius: 8px;
+    letter-spacing: 0.5px;
+    word-break: break-all;
+}
+
+.copy-password-button {
+    background: linear-gradient(135deg, #ec4899, #db2777);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(219, 39, 119, 0.25);
+    transition: all 0.2s ease;
+    width: 100%;
+    max-width: 190px;
+}
+
+.copy-password-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(219, 39, 119, 0.35);
+}
+
+.copy-password-button:active {
+    transform: scale(0.98);
 }

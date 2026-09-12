@@ -274,6 +274,43 @@
     box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
 }
 
+.reminder-presets-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.presets-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #64748b;
+}
+
+.presets-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.preset-chip {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+}
+
+.preset-chip:hover {
+    background: #ede9fe;
+    color: #6d28d9;
+    border-color: #ddd6fe;
+}
+
 .modal-footer {
     display: flex;
     gap: 10px;

@@ -141,6 +141,7 @@ function MovieWatchList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [movieToDelete, setMovieToDelete] = useState(null);
   const [editingMovieId, setEditingMovieId] = useState(null);
+  const [activeTab, setActiveTab] = useState('to-watch');
 
   // Movie operations
   const handleAddMovie = async (e) => {
@@ -225,19 +226,19 @@ function MovieWatchList() {
 
   return (
     <>
-      <div className="movie-page-container">
+      <div className="page-container movie-page-container">
         <div className="movie-list-card">
           {/* Header */}
-          <div className="movie-list-header">
-            <Link to="/dashboard" className="back-button">
+          <header className="tracker-header movie-list-header">
+            <Link to="/dashboard" className="back-button" title="Back">
               <BackIcon />
             </Link>
             <div className="header-title-container">
-              <FlowerSvg className="header-icon" />
               <h1 className="header-title">Shared Watchlist</h1>
+              <span className="header-subtitle">Movies We Have To Watch 🎬</span>
             </div>
             <div className="header-spacer"></div>
-          </div>
+          </header>
 
           {user ? (
             <>
@@ -261,6 +262,34 @@ function MovieWatchList() {
                 </button>
               </form>
 
+              {/* Filter Tabs */}
+              <div className="movie-filter-tabs">
+                <button
+                  type="button"
+                  className={`movie-tab ${activeTab === 'to-watch' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('to-watch')}
+                >
+                  <span>To Watch</span>
+                  <span className="tab-badge">{toWatchMovies.length}</span>
+                </button>
+                <button
+                  type="button"
+                  className={`movie-tab ${activeTab === 'watched' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('watched')}
+                >
+                  <span>Watched</span>
+                  <span className="tab-badge">{watchedMovies.length}</span>
+                </button>
+                <button
+                  type="button"
+                  className={`movie-tab ${activeTab === 'all' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('all')}
+                >
+                  <span>All</span>
+                  <span className="tab-badge">{movies.length}</span>
+                </button>
+              </div>
+
               {/* Movie Lists Container */}
               <div className="movie-list-container">
                 {loading ? (
@@ -273,36 +302,41 @@ function MovieWatchList() {
                   <>
                     {isListCompletelyEmpty ? (
                       <div className="empty-state-container">
+                        <FlowerSvg className="empty-state-svg" />
                         <p>Your watchlist is a blank canvas.</p>
-                        <span>Add a movie to begin your journey.</span>
+                        <span>Add a movie to begin your movie marathon!</span>
                       </div>
                     ) : (
                       <>
                         {/* To Watch Section */}
-                        <div className="list-section">
-                          <div className="list-section-header">
-                            <h3>To Watch</h3>
-                            <span className="movie-count-badge">{toWatchMovies.length}</span>
+                        {(activeTab === 'to-watch' || activeTab === 'all') && (
+                          <div className="list-section">
+                            <div className="list-section-header">
+                              <h3>To Watch</h3>
+                              <span className="movie-count-badge">{toWatchMovies.length}</span>
+                            </div>
+                            {toWatchMovies.length > 0 ? (
+                              renderMovieList(toWatchMovies)
+                            ) : (
+                              <p className="empty-list-message">No movies waiting to watch. Add one above!</p>
+                            )}
                           </div>
-                          {toWatchMovies.length > 0 ? (
-                            renderMovieList(toWatchMovies)
-                          ) : (
-                            <p className="empty-list-message">No movies to watch yet.</p>
-                          )}
-                        </div>
+                        )}
 
                         {/* Watched Section */}
-                        <div className="list-section">
-                          <div className="list-section-header">
-                            <h3>Watched</h3>
-                            <span className="movie-count-badge">{watchedMovies.length}</span>
+                        {(activeTab === 'watched' || activeTab === 'all') && (
+                          <div className="list-section">
+                            <div className="list-section-header">
+                              <h3>Watched</h3>
+                              <span className="movie-count-badge">{watchedMovies.length}</span>
+                            </div>
+                            {watchedMovies.length > 0 ? (
+                              renderMovieList(watchedMovies)
+                            ) : (
+                              <p className="empty-list-message">Mark a movie as watched to see it here.</p>
+                            )}
                           </div>
-                          {watchedMovies.length > 0 ? (
-                            renderMovieList(watchedMovies)
-                          ) : (
-                            <p className="empty-list-message">Mark a movie as watched to see it here.</p>
-                          )}
-                        </div>
+                        )}
                       </>
                     )}
                   </>

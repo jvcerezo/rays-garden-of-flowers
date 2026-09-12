@@ -1,14 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const CalorieDial = ({ progress, consumed, remaining }) => {
+const CalorieDial = ({ progress, consumed, remaining, target }) => {
     const radius = 85;
     const circumference = 2 * Math.PI * radius;
     // Ensure progress is never negative for the stroke offset calculation
-    const safeProgress = Math.max(0, progress);
+    const safeProgress = Math.min(100, Math.max(0, progress));
     const offset = circumference - (safeProgress / 100) * circumference;
-    const remainingText = remaining >= 0 ? `${remaining} remaining` : `${Math.abs(remaining)} over`;
-    const remainingColor = remaining >= 0 ? '#059669' : '#ef4444'; // Green if remaining, red if over
+    const isOver = remaining < 0;
+    const remainingText = isOver ? `${Math.abs(remaining)} cal over` : `${remaining} cal left`;
+    const dialStrokeColor = isOver ? '#f43f5e' : '#10b981';
+    const pillBg = isOver ? '#fff1f2' : '#ecfdf5';
+    const pillColor = isOver ? '#e11d48' : '#059669';
 
     return (
         <div className="calorie-dial-container">
@@ -17,6 +20,7 @@ const CalorieDial = ({ progress, consumed, remaining }) => {
                 <motion.circle 
                     className="dial-progress"
                     cx="100" cy="100" r={radius}
+                    stroke={dialStrokeColor}
                     strokeDasharray={`${circumference} ${circumference}`}
                     initial={{ strokeDashoffset: circumference }}
                     animate={{ 
@@ -29,9 +33,12 @@ const CalorieDial = ({ progress, consumed, remaining }) => {
             <div className="dial-info">
                 <span className="dial-value">{consumed}</span>
                 <span className="dial-label">Calories Eaten</span>
-                <span className="dial-remaining" style={{ color: remainingColor, backgroundColor: remaining >= 0 ? '#f0fdf4' : '#fee2e2' }}>
+                <span className="dial-remaining" style={{ color: pillColor, backgroundColor: pillBg }}>
                     {remainingText}
                 </span>
+                {target > 0 && (
+                    <span className="dial-target-caption">Target: {target} cal</span>
+                )}
             </div>
         </div>
     );
@@ -49,21 +56,35 @@ const WeightStat = ({ label, value, unit }) => (
 
 export function CalorieStatusHub({ calorieData, goals }) {
     const { consumed, remaining, progress } = calorieData;
-    const { currentWeight, goalWeight } = goals;
+    const { currentWeight, goalWeight, dailyCalories } = goals;
+
+    const weightDifference = (currentWeight && goalWeight && currentWeight > goalWeight)
+        ? (currentWeight - goalWeight).toFixed(1)
+        : null;
 
     return (
         <motion.div 
             className="status-hub-card"
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.35 }}
         >
-            <CalorieDial progress={progress} consumed={consumed} remaining={remaining} />
+            <CalorieDial 
+                progress={progress} 
+                consumed={consumed} 
+                remaining={remaining} 
+                target={dailyCalories} 
+            />
             <div className="weight-panel">
-                <WeightStat label="Current" value={currentWeight || 'N/A'} unit="kg" />
+                <WeightStat label="Current" value={currentWeight || '—'} unit="kg" />
                 <div className="weight-divider" />
-                <WeightStat label="Goal" value={goalWeight || 'N/A'} unit="kg" />
+                <WeightStat label="Goal" value={goalWeight || '—'} unit="kg" />
             </div>
+            {weightDifference && (
+                <div className="weight-delta-pill">
+                    <span>🎯 {weightDifference} kg to reach target weight</span>
+                </div>
+            )}
         </motion.div>
     );
 }

@@ -50,6 +50,19 @@ const CheckCircleIcon = () => (
     </svg>
 );
 
+const PencilIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+        <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" />
+        <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" />
+    </svg>
+);
+
+const TrashIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clipRule="evenodd" />
+    </svg>
+);
+
 // --- HELPER FUNCTIONS ---
 const formatBudget = (budgetStr) => {
     if (!budgetStr || budgetStr.trim() === '') return '';
@@ -176,15 +189,19 @@ const DateIdeaItem = React.memo(({ idea, isEditing, onToggleFinished, onDelete, 
                 {idea.description && <p className="date-idea-description">{idea.description}</p>}
                 <div className="date-idea-details">
                     {idea.location && <span><LocationIcon /> {idea.location}</span>}
-                    {idea.budget && <span><BudgetIcon /> {formatBudget(idea.budget)}</span>}
+                    {idea.budget && <span className="budget-tag"><BudgetIcon /> {formatBudget(idea.budget)}</span>}
                 </div>
             </div>
-            {!idea.finished && (
-                <div className="item-actions">
-                    <button type="button" className="button-icon edit-button" onClick={() => onEdit(idea.id)}>Edit</button>
-                    <button type="button" className="button-icon delete-button" onClick={() => onDelete(idea)}>Delete</button>
-                </div>
-            )}
+            <div className="item-actions">
+                {!idea.finished && (
+                    <button type="button" className="button-icon edit-button" onClick={() => onEdit(idea.id)} title="Edit date idea">
+                        <PencilIcon />
+                    </button>
+                )}
+                <button type="button" className="button-icon delete-button" onClick={() => onDelete(idea)} title="Delete date idea">
+                    <TrashIcon />
+                </button>
+            </div>
         </div>
     );
 });
@@ -348,26 +365,63 @@ function DateIdeas() {
         }
     };
 
+    const [activeTab, setActiveTab] = useState('all');
+
     const unFinishedIdeas = useMemo(() => ideas.filter(idea => !idea.finished), [ideas]);
     const finishedIdeas = useMemo(() => ideas.filter(idea => idea.finished), [ideas]);
     const isListCompletelyEmpty = !loading && ideas.length === 0;
 
+    const displayedIdeas = useMemo(() => {
+        if (activeTab === 'upcoming') return unFinishedIdeas;
+        if (activeTab === 'completed') return finishedIdeas;
+        return ideas;
+    }, [activeTab, ideas, unFinishedIdeas, finishedIdeas]);
+
     return (
         <>
-            <div className="date-ideas-page">
+            <div className="page-container date-ideas-page">
                 <div className="date-ideas-card">
-                    <div className="date-ideas-header">
+                    <header className="tracker-header date-ideas-header">
                         <Link to="/dashboard" className="back-button" title="Back">
                             <BackIcon />
                         </Link>
                         <div className="header-title-container">
-                            <DateIdeasSvg className="header-icon" />
                             <h1 className="header-title">Date Night Ideas</h1>
+                            <span className="header-subtitle">What should we do next? 💕</span>
                         </div>
                         <button type="button" className="add-idea-button" onClick={() => setIsAddModalOpen(true)} title="Add Idea">
                             <PlusIcon />
                         </button>
+                    </header>
+
+                    {/* Filter Tabs */}
+                    <div className="date-filter-tabs">
+                        <button 
+                            type="button"
+                            className={`date-tab ${activeTab === 'all' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('all')}
+                        >
+                            <span>All</span>
+                            <span className="tab-badge">{ideas.length}</span>
+                        </button>
+                        <button 
+                            type="button"
+                            className={`date-tab ${activeTab === 'upcoming' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('upcoming')}
+                        >
+                            <span>Upcoming</span>
+                            <span className="tab-badge">{unFinishedIdeas.length}</span>
+                        </button>
+                        <button 
+                            type="button"
+                            className={`date-tab ${activeTab === 'completed' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('completed')}
+                        >
+                            <span>Done</span>
+                            <span className="tab-badge">{finishedIdeas.length}</span>
+                        </button>
                     </div>
+
                     <div className="date-ideas-content">
                         {loading ? ( 
                             <LoadingSpinner text="Loading date ideas..." />
@@ -377,50 +431,25 @@ function DateIdeas() {
                                 <p>No date ideas yet.</p>
                                 <span>Add your first idea to start planning amazing dates!</span>
                             </div>
+                        ) : displayedIdeas.length === 0 ? (
+                            <div className="empty-tab-container">
+                                <p>No {activeTab} date ideas found.</p>
+                            </div>
                         ) : (
-                            <>
-                                {unFinishedIdeas.length > 0 && (
-                                    <div className="list-section">
-                                        <h3>
-                                            Upcoming Ideas
-                                            <span className="count-badge">{unFinishedIdeas.length}</span>
-                                        </h3>
-                                        <div className="date-ideas-grid">
-                                            {unFinishedIdeas.map(idea => ( 
-                                                <DateIdeaItem 
-                                                    key={idea.id} 
-                                                    idea={idea} 
-                                                    isEditing={editingIdeaId === idea.id} 
-                                                    onToggleFinished={toggleFinished} 
-                                                    onDelete={handleDeleteRequest} 
-                                                    onEdit={setEditingIdeaId} 
-                                                    onSave={handleUpdateIdea} 
-                                                    onCancel={() => setEditingIdeaId(null)} 
-                                                /> 
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                                {finishedIdeas.length > 0 && (
-                                    <div className="list-section">
-                                        <h3>
-                                            Completed
-                                            <span className="count-badge">{finishedIdeas.length}</span>
-                                        </h3>
-                                        <div className="date-ideas-grid">
-                                            {finishedIdeas.map(idea => ( 
-                                                <DateIdeaItem 
-                                                    key={idea.id} 
-                                                    idea={idea} 
-                                                    isEditing={false}
-                                                    onToggleFinished={toggleFinished} 
-                                                    onDelete={handleDeleteRequest} 
-                                                /> 
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </>
+                            <div className="date-ideas-grid">
+                                {displayedIdeas.map(idea => ( 
+                                    <DateIdeaItem 
+                                        key={idea.id} 
+                                        idea={idea} 
+                                        isEditing={editingIdeaId === idea.id} 
+                                        onToggleFinished={toggleFinished} 
+                                        onDelete={handleDeleteRequest} 
+                                        onEdit={setEditingIdeaId} 
+                                        onSave={handleUpdateIdea} 
+                                        onCancel={() => setEditingIdeaId(null)} 
+                                    /> 
+                                ))}
+                            </div>
                         )}
                     </div>
                 </div>

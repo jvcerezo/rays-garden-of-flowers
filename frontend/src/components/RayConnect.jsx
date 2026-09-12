@@ -142,8 +142,11 @@ function RayConnect() {
         <>
             <div className="page-container ray-connect-page">
                 <header className="tracker-header">
-                    <Link to="/dashboard" className="back-button"><BackIcon /></Link>
-                    <h1 className="header-title">Ray-Connect</h1>
+                    <Link to="/dashboard" className="back-button" title="Back"><BackIcon /></Link>
+                    <div className="header-title-container">
+                        <h1 className="header-title">Ray-Connect</h1>
+                        <span className="header-subtitle">Shared RPG Quests ⚔️</span>
+                    </div>
                     <div style={{ width: '38px' }} />
                 </header>
 

@@ -11,6 +11,22 @@ export const AddReminderModal = ({ onClose, onAdd }) => {
         onAdd({ title, scheduledAt: new Date(dateTime) });
     };
 
+    const setPresetTime = (hoursFromNow = null, targetHour = null, daysToAdd = 0) => {
+        const target = new Date();
+        if (hoursFromNow !== null) {
+            target.setHours(target.getHours() + hoursFromNow);
+        } else if (targetHour !== null) {
+            target.setDate(target.getDate() + daysToAdd);
+            target.setHours(targetHour, 0, 0, 0);
+        }
+        const year = target.getFullYear();
+        const month = String(target.getMonth() + 1).padStart(2, '0');
+        const day = String(target.getDate()).padStart(2, '0');
+        const hours = String(target.getHours()).padStart(2, '0');
+        const minutes = String(target.getMinutes()).padStart(2, '0');
+        setDateTime(`${year}-${month}-${day}T${hours}:${minutes}`);
+    };
+
     return (
         <div className="reminders-modal-backdrop" onClick={onClose}>
             <motion.div
@@ -29,12 +45,32 @@ export const AddReminderModal = ({ onClose, onAdd }) => {
                         <input
                             id="title"
                             type="text"
-                            placeholder="e.g., Water the plants"
+                            placeholder="e.g., Take vitamins, call Tajie..."
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             required
+                            autoFocus
                         />
                     </div>
+
+                    <div className="reminder-presets-row">
+                        <span className="presets-label">Quick time:</span>
+                        <div className="presets-chips">
+                            <button type="button" className="preset-chip" onClick={() => setPresetTime(1)}>
+                                +1 Hour
+                            </button>
+                            <button type="button" className="preset-chip" onClick={() => setPresetTime(null, 20, 0)}>
+                                Tonight 8PM
+                            </button>
+                            <button type="button" className="preset-chip" onClick={() => setPresetTime(null, 9, 1)}>
+                                Tomorrow 9AM
+                            </button>
+                            <button type="button" className="preset-chip" onClick={() => setPresetTime(null, 20, 1)}>
+                                Tomorrow 8PM
+                            </button>
+                        </div>
+                    </div>
+
                     <div className="form-group">
                         <label htmlFor="datetime">When?</label>
                         <input

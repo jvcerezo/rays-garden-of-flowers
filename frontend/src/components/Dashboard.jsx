@@ -17,61 +17,77 @@ function Dashboard() {
 
   const dashboardItems = [
     { 
+      id: 'period',
       title: 'Period Tracker', 
       subtitle: 'Cycle insights & predictions', 
       icon: <PeriodIcon />, 
       path: '/period-tracker',
-      badge: 'Updated'
+      badge: 'Smart Avg',
+      theme: 'card-theme-rose'
     },
     { 
+      id: 'movies',
       title: 'Movie Watch List', 
-      subtitle: 'Movies we have to watch!!!', 
+      subtitle: 'Movies we have to watch together', 
       icon: <MovieIcon />, 
-      path: '/movie-watch-list' 
+      path: '/movie-watch-list',
+      theme: 'card-theme-purple'
     },
     { 
+      id: 'dates',
       title: 'Date Ideas', 
       subtitle: 'What should me and my favy do next?', 
       icon: <DateIcon />, 
-      path: '/date-ideas' 
+      path: '/date-ideas',
+      theme: 'card-theme-pink'
     },
     { 
+      id: 'reminders',
       title: 'Reminders', 
       subtitle: 'Never miss our sweet moments', 
       icon: <BellIcon />, 
-      path: '/reminders' 
+      path: '/reminders',
+      theme: 'card-theme-amber'
     },
     { 
+      id: 'calories',
       title: 'Calorie Tracker', 
       subtitle: 'Caldef check & daily meals', 
       icon: <CalorieIcon />, 
-      path: '/calorie-tracker' 
+      path: '/calorie-tracker',
+      theme: 'card-theme-emerald'
     },
     { 
+      id: 'goals',
       title: 'Current Goals', 
-      subtitle: 'Things we want to achieve!', 
+      subtitle: 'Shared dreams we want to achieve!', 
       icon: <GoalIcon />, 
-      path: '/current-goals' 
+      path: '/current-goals',
+      theme: 'card-theme-blue'
     },
     { 
+      id: 'quests',
       title: 'Operation Ray-connect', 
-      subtitle: 'Whats our current quest?', 
+      subtitle: 'What is our current quest?', 
       icon: <SecretMissionIcon />, 
-      path: '/ray-connect' 
+      path: '/ray-connect',
+      theme: 'card-theme-indigo'
     },
     { 
+      id: 'playbook',
       title: "Our Shared Playbook", 
-      subtitle: 'So that we would never forget!', 
+      subtitle: 'Memories and lessons together', 
       icon: <PlaybookIcon />, 
-      path: '/playbook' 
+      path: '/playbook',
+      theme: 'card-theme-violet'
     }
   ];
 
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return 'Good Morning';
-    if (hour < 18) return 'Good Afternoon';
-    return 'Good Evening';
+    if (hour < 12) return { text: 'Good Morning', icon: '☀️' };
+    if (hour < 18) return { text: 'Good Afternoon', icon: '🌤️' };
+    return { text: 'Good Evening', icon: '🌙' };
   };
 
   const getUserDisplayName = () => {
@@ -90,6 +106,7 @@ function Dashboard() {
     return email.split('@')[0];
   };
 
+  const greetingInfo = getGreeting();
   const userName = getUserDisplayName();
   const todayFormatted = new Date().toLocaleDateString('en-US', {
     weekday: 'short',
@@ -97,25 +114,52 @@ function Dashboard() {
     day: 'numeric'
   });
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.04
+      }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 12 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.3, ease: 'easeOut' }
+    }
+  };
+
   return (
     <div className="page-container dashboard-page">
       <header className="dashboard-header">
         <div className="header-greeting-container">
           <span className="dashboard-greeting-tag">{todayFormatted} • Ray's Garden 🌸</span>
-          <h1 className="dashboard-greeting">{getGreeting()},</h1>
+          <h1 className="dashboard-greeting">
+            <span>{greetingInfo.text},</span>
+            <span className="greeting-emoji">{greetingInfo.icon}</span>
+          </h1>
           <h2 className="dashboard-username">{userName}</h2>
         </div>
-        <button onClick={logout} className="logout-button" title="Sign out">
-          Logout
-        </button>
+        <div className="header-user-actions">
+          <div className="user-avatar-badge" title={user?.email || 'Logged in'}>
+            <span>{userName.charAt(0)}</span>
+          </div>
+          <button onClick={logout} className="logout-button" title="Sign out">
+            Logout
+          </button>
+        </div>
       </header>
 
       {/* Hero Welcome Pill */}
       <motion.div 
         className="garden-hero-pill"
-        initial={{ opacity: 0, y: -10 }}
+        initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
+        transition={{ duration: 0.35 }}
       >
         <span className="garden-hero-emoji">🌷</span>
         <div className="garden-hero-text">
@@ -123,21 +167,34 @@ function Dashboard() {
         </div>
       </motion.div>
 
-      <div className="dashboard-grid">
-        {dashboardItems.map((item, index) => (
-          <Link to={item.path} key={index} className="dashboard-card">
-            <div className="card-icon">{item.icon}</div>
-            <div className="card-content">
-              <div className="card-title-row">
-                <h3 className="card-title">{item.title}</h3>
-                {item.badge && <span className="card-badge">{item.badge}</span>}
+      {/* Modern Staggered Cards List */}
+      <motion.div 
+        className="dashboard-grid"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {dashboardItems.map((item) => (
+          <motion.div
+            key={item.id}
+            variants={cardVariants}
+            whileTap={{ scale: 0.98 }}
+            className="dashboard-card-wrap"
+          >
+            <Link to={item.path} className={`dashboard-card ${item.theme}`}>
+              <div className="card-icon">{item.icon}</div>
+              <div className="card-content">
+                <div className="card-title-row">
+                  <h3 className="card-title">{item.title}</h3>
+                  {item.badge && <span className="card-badge">{item.badge}</span>}
+                </div>
+                <p className="card-subtitle">{item.subtitle}</p>
               </div>
-              <p className="card-subtitle">{item.subtitle}</p>
-            </div>
-            <span className="card-arrow">›</span>
-          </Link>
+              <span className="card-arrow">›</span>
+            </Link>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -132,9 +132,12 @@ function Reminders() {
         <>
             <div className="page-container reminders-page">
                 <header className="tracker-header">
-                    <Link to="/dashboard" className="back-button"><BackIcon /></Link>
-                    <h1 className="header-title">Reminders</h1>
-                    <button className="add-button" onClick={() => setIsModalOpen(true)}>
+                    <Link to="/dashboard" className="back-button" title="Back"><BackIcon /></Link>
+                    <div className="header-title-container">
+                        <h1 className="header-title">Reminders</h1>
+                        <span className="header-subtitle">Sweet Moments Together 🔔</span>
+                    </div>
+                    <button className="add-button" onClick={() => setIsModalOpen(true)} title="Add Reminder">
                         <PlusIcon />
                     </button>
                 </header>

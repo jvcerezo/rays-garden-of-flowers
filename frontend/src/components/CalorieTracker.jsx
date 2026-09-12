@@ -176,12 +176,27 @@ function CalorieTracker() {
         setIsCalendarOpen(false);
     };
     
+    const MEAL_ICONS = {
+        Breakfast: '🍳',
+        Lunch: '🥗',
+        Dinner: '🍲',
+        Snacks: '🍓'
+    };
+
     const MealSection = ({ mealName, foods = [] }) => {
         const totalCalories = foods.reduce((sum, item) => sum + (item.calories || 0), 0);
+        const icon = MEAL_ICONS[mealName] || '🍽️';
+
         return (
-            <div className="meal-section">
+            <div className={`meal-section meal-section-${mealName.toLowerCase()}`}>
                 <div className="meal-header">
-                    <h3>{mealName}</h3>
+                    <div className="meal-header-title-flex">
+                        <span className="meal-header-emoji">{icon}</span>
+                        <h3>{mealName}</h3>
+                        {foods.length > 0 && (
+                            <span className="meal-count-badge">{foods.length}</span>
+                        )}
+                    </div>
                     <div className="meal-summary">{totalCalories} Cal</div>
                 </div>
                 <div className="meal-items">

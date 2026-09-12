@@ -164,7 +164,7 @@ function PlaybookNote() {
   }
 
   return (
-    <div className="playbook-note-page">
+    <div className="page-container playbook-note-page">
       <header className="page-header">
         <Link to="/playbook" className="back-button">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">

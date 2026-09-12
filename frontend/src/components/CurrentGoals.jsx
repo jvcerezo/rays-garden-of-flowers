@@ -37,6 +37,13 @@ const TrashIcon = () => (
     </svg>
 );
 
+const PencilIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+        <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" />
+        <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" />
+    </svg>
+);
+
 // --- Helpers ---
 const formatValue = (value = 0) => new Intl.NumberFormat('en-US').format(value);
 
@@ -69,7 +76,8 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, children }) => {
 };
 
 const GoalItem = React.memo(({ goal, onAddProgress, onToggleComplete, onEdit, onDelete, onCheckboxToggle }) => {
-    const progress = goal.targetValue > 0 ? ((goal.currentValue || 0) / goal.targetValue) * 100 : 0;
+    const rawProgress = goal.targetValue > 0 ? ((goal.currentValue || 0) / goal.targetValue) * 100 : 0;
+    const progress = Math.min(100, Math.max(0, Math.round(rawProgress)));
     
     const renderCheckboxes = () => {
         if (!goal.targetValue || goal.targetValue > 30) return <p className='checkbox-limit-message'>({goal.targetValue} steps)</p>;
@@ -88,28 +96,45 @@ const GoalItem = React.memo(({ goal, onAddProgress, onToggleComplete, onEdit, on
     return (
         <div className={`goal-item ${goal.isComplete ? 'complete' : ''}`}>
             <div className="goal-header">
-                <h4 className="goal-title" onClick={() => onEdit(goal)}>{goal.title}</h4>
+                <div className="goal-title-wrap">
+                    <div className="goal-badges-row">
+                        <span className={`goal-type-badge ${goal.goalType === 'financial' ? 'type-financial' : 'type-general'}`}>
+                            {goal.goalType === 'financial' ? '💰 Savings' : '🎯 Quest'}
+                        </span>
+                        {goal.isComplete ? (
+                            <span className="goal-done-badge">Completed 🎉</span>
+                        ) : (
+                            <span className="goal-percent-badge">{progress}%</span>
+                        )}
+                    </div>
+                    <h4 className="goal-title" onClick={() => onEdit(goal)}>{goal.title}</h4>
+                </div>
                 <button type="button" className="complete-button" onClick={() => onToggleComplete(goal.id, goal.isComplete)} title="Toggle complete">
                     <CheckCircleIcon />
                 </button>
             </div>
             <div className="goal-body">
                 <div className="progress-bar-container">
-                    <div className="progress-bar-fill" style={{ width: `${Math.min(progress, 100)}%` }}></div>
+                    <div className="progress-bar-fill" style={{ width: `${progress}%` }}></div>
                 </div>
                 <div className="goal-stats">
-                    <span>{formatProgressText(goal.currentValue, goal.targetValue, goal.unit, goal.goalType)}</span>
+                    <span className="stat-progress-text">{formatProgressText(goal.currentValue, goal.targetValue, goal.unit, goal.goalType)}</span>
                 </div>
                 {goal.goalType === 'general' && !goal.isComplete && (
                     <div className="checkbox-grid">{renderCheckboxes()}</div>
                 )}
                 {goal.description && <p className="goal-description">{goal.description}</p>}
-                {goal.deadline && <p className="goal-deadline">Deadline: {goal.deadline}</p>}
+                {goal.deadline && <p className="goal-deadline">📅 Deadline: {goal.deadline}</p>}
             </div>
             <div className="goal-footer">
-                <button type="button" className="button-icon delete-button" onClick={() => onDelete(goal)} title="Delete goal">
-                    <TrashIcon />
-                </button>
+                <div className="goal-actions-left">
+                    <button type="button" className="button-icon edit-button" onClick={() => onEdit(goal)} title="Edit goal">
+                        <PencilIcon />
+                    </button>
+                    <button type="button" className="button-icon delete-button" onClick={() => onDelete(goal)} title="Delete goal">
+                        <TrashIcon />
+                    </button>
+                </div>
                 {goal.goalType === 'financial' && !goal.isComplete && (
                     <button type="button" className="button add-progress-button" onClick={() => onAddProgress(goal)}>
                         + Add Progress
@@ -398,21 +423,57 @@ function CurrentGoals() {
         }
     };
 
+    const [activeTab, setActiveTab] = useState('all');
+
     const inProgressGoals = useMemo(() => goals.filter(g => !g.isComplete), [goals]);
     const completedGoals = useMemo(() => goals.filter(g => g.isComplete), [goals]);
+
+    const displayedGoals = useMemo(() => {
+        if (activeTab === 'in-progress') return inProgressGoals;
+        if (activeTab === 'completed') return completedGoals;
+        return goals;
+    }, [activeTab, goals, inProgressGoals, completedGoals]);
 
     return (
         <>
             <div className="page-container goals-page">
                 <div className="goals-card">
-                    <div className="goals-header">
+                    <header className="tracker-header goals-header">
                         <Link to="/dashboard" className="back-button" title="Back"><BackIcon /></Link>
                         <div className="header-title-container">
-                            <GoalsSvg className="header-icon" />
                             <h1 className="header-title">Current Goals</h1>
+                            <span className="header-subtitle">Dreams & Milestones 🎯</span>
                         </div>
                         <button type="button" className="add-idea-button" onClick={() => handleOpenGoalModal()} title="Add Goal">
                             <PlusIcon/>
+                        </button>
+                    </header>
+
+                    {/* Filter Tabs */}
+                    <div className="goals-filter-tabs">
+                        <button 
+                            type="button"
+                            className={`goals-tab ${activeTab === 'all' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('all')}
+                        >
+                            <span>All</span>
+                            <span className="tab-badge">{goals.length}</span>
+                        </button>
+                        <button 
+                            type="button"
+                            className={`goals-tab ${activeTab === 'in-progress' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('in-progress')}
+                        >
+                            <span>Active</span>
+                            <span className="tab-badge">{inProgressGoals.length}</span>
+                        </button>
+                        <button 
+                            type="button"
+                            className={`goals-tab ${activeTab === 'completed' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('completed')}
+                        >
+                            <span>Done</span>
+                            <span className="tab-badge">{completedGoals.length}</span>
                         </button>
                     </div>
 
@@ -425,44 +486,24 @@ function CurrentGoals() {
                                 <p>No goals set yet.</p>
                                 <span>Click '+' to create your first shared goal!</span>
                             </div>
+                        ) : displayedGoals.length === 0 ? (
+                            <div className="empty-tab-container">
+                                <p>No {activeTab} goals found.</p>
+                            </div>
                         ) : (
-                            <>
-                                {inProgressGoals.length > 0 && (
-                                    <div className="list-section">
-                                        <h3>In Progress <span className="count-badge">{inProgressGoals.length}</span></h3>
-                                        <div className="goals-grid">
-                                            {inProgressGoals.map(goal => (
-                                                <GoalItem
-                                                    key={goal.id}
-                                                    goal={goal}
-                                                    onAddProgress={handleOpenProgressModal}
-                                                    onToggleComplete={handleToggleComplete}
-                                                    onEdit={handleOpenGoalModal}
-                                                    onDelete={handleDeleteRequest}
-                                                    onCheckboxToggle={handleCheckboxToggle}
-                                                />
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                                {completedGoals.length > 0 && (
-                                    <div className="list-section">
-                                        <h3>Completed <span className="count-badge">{completedGoals.length}</span></h3>
-                                        <div className="goals-grid">
-                                            {completedGoals.map(goal => (
-                                                <GoalItem
-                                                    key={goal.id}
-                                                    goal={goal}
-                                                    onToggleComplete={handleToggleComplete}
-                                                    onEdit={handleOpenGoalModal}
-                                                    onDelete={handleDeleteRequest}
-                                                    onCheckboxToggle={handleCheckboxToggle}
-                                                />
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </>
+                            <div className="goals-grid">
+                                {displayedGoals.map(goal => (
+                                    <GoalItem
+                                        key={goal.id}
+                                        goal={goal}
+                                        onAddProgress={handleOpenProgressModal}
+                                        onToggleComplete={handleToggleComplete}
+                                        onEdit={handleOpenGoalModal}
+                                        onDelete={handleDeleteRequest}
+                                        onCheckboxToggle={handleCheckboxToggle}
+                                    />
+                                ))}
+                            </div>
                         )}
                     </div>
                 </div>

@@ -148,6 +148,99 @@
     height: 1.25rem;
 }
 
+/* --- Filter Tabs --- */
+.date-filter-tabs {
+    display: flex;
+    background: #f1f5f9;
+    padding: 4px;
+    border-radius: 14px;
+    margin: 12px 14px 4px 14px;
+    gap: 4px;
+}
+
+.date-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.date-tab.active {
+    background: #ffffff;
+    color: var(--primary-color, #a78bfa);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.date-tab .tab-badge {
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 8px;
+    background: rgba(100, 116, 139, 0.12);
+}
+
+.date-tab.active .tab-badge {
+    background: rgba(167, 139, 250, 0.15);
+    color: var(--primary-color, #a78bfa);
+}
+
+.empty-tab-container {
+    padding: 36px 16px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.budget-tag {
+    color: #059669;
+    background: #ecfdf5;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 11px;
+}
+
+.date-idea-item .item-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.date-idea-item .button-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.date-idea-item .edit-button:hover {
+    background: #f1f5f9;
+    color: var(--primary-color, #a78bfa);
+}
+
+.date-idea-item .delete-button:hover {
+    background: #fee2e2;
+    color: #ef4444;
+    border-color: #fca5a5;
+}
+
 /* --- Content Section --- */
 .date-ideas-content {
     padding: 1rem;
