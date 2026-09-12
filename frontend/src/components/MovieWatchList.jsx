@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useMovies } from '../hooks/useMovies';
+import { toast } from 'react-hot-toast';
 import './MovieWatchList.css';
 import { ReactComponent as FlowerSvg } from '../assets/movie-watch-list.svg';
 
@@ -131,36 +132,14 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, children }) => {
   );
 };
 
-const Toast = ({ message, type, onDismiss }) => {
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      onDismiss();
-    }, 4000);
-    return () => clearTimeout(timer);
-  }, [onDismiss]);
-
-  return (
-    <div className={`toast toast-${type}`}>
-      {message}
-    </div>
-  );
-};
-
 function MovieWatchList() {
   const { user } = useAuth();
   const { movies, loading, error, addMovie, toggleWatched, deleteMovie, updateMovieTitle } = useMovies();
   const [newMovieTitle, setNewMovieTitle] = useState('');
   const [isAdding, setIsAdding] = useState(false);
-  const [toasts, setToasts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [movieToDelete, setMovieToDelete] = useState(null);
   const [editingMovieId, setEditingMovieId] = useState(null);
-
-  // Toast management
-  const addToast = (message, type = 'success') => {
-    const id = Date.now();
-    setToasts(prev => [...prev, { id, message, type }]);
-  };
 
   // Movie operations
   const handleAddMovie = async (e) => {
@@ -171,9 +150,9 @@ function MovieWatchList() {
     try {
       await addMovie(newMovieTitle);
       setNewMovieTitle('');
-      addToast('Movie added successfully!');
+      toast.success('Movie added successfully! 🎬');
     } catch (err) {
-      addToast(err.message || 'Failed to add movie.', 'error');
+      toast.error(err.message || 'Failed to add movie.');
     } finally {
       setIsAdding(false);
     }
@@ -182,8 +161,9 @@ function MovieWatchList() {
   const handleToggleWatched = async (id, currentStatus) => {
     try {
       await toggleWatched(id, currentStatus);
+      toast.success(currentStatus ? 'Marked as to-watch' : 'Marked as watched! 🍿');
     } catch (err) {
-      addToast(err.message, 'error');
+      toast.error(err.message || 'Failed to update status.');
     }
   };
 
@@ -197,9 +177,9 @@ function MovieWatchList() {
     
     try {
       await deleteMovie(movieToDelete.id);
-      addToast('Movie deleted.');
+      toast.success('Movie deleted.');
     } catch (err) {
-      addToast(err.message, 'error');
+      toast.error(err.message || 'Failed to delete movie.');
     } finally {
       setIsModalOpen(false);
       setMovieToDelete(null);
@@ -211,9 +191,9 @@ function MovieWatchList() {
     
     try {
       await updateMovieTitle(id, newTitle);
-      addToast('Movie updated!');
+      toast.success('Movie updated!');
     } catch (err) {
-      addToast(err.message, 'error');
+      toast.error(err.message || 'Failed to update title.');
     } finally {
       setEditingMovieId(null);
     }
@@ -348,17 +328,6 @@ function MovieWatchList() {
         Are you sure you want to permanently delete{' '}
         <strong>{movieToDelete?.title}</strong>? This action cannot be undone.
       </ConfirmationModal>
-
-      {/* Toast Notifications */}
-      <div className="toast-container">
-        {toasts.map(toast => (
-          <Toast
-            key={toast.id}
-            {...toast}
-            onDismiss={() => setToasts(prev => prev.filter(t => t.id !== toast.id))}
-          />
-        ))}
-      </div>
     </>
   );
 }

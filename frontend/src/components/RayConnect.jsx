@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase/firebase';
-import { doc, onSnapshot, collection, query, orderBy, addDoc, updateDoc, increment, writeBatch, getDoc, setDoc } from 'firebase/firestore';
+import { doc, onSnapshot, collection, query, orderBy, addDoc, increment, writeBatch, getDoc, setDoc } from 'firebase/firestore';
 import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 

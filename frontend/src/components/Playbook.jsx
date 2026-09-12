@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { collection, addDoc, getDocs, query, orderBy, serverTimestamp, where } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, orderBy, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase/firebase';
 import { useAuth } from '../context/AuthContext';
 import './Playbook.css';
 
 function Playbook() {
   const [notes, setNotes] = useState([]);
-  const [filteredNotes, setFilteredNotes] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newNote, setNewNote] = useState({ 
     title: '', 
@@ -41,15 +40,7 @@ function Playbook() {
     { id: 'neutral', label: 'Neutral', emoji: '😐', color: '#9ca3af' }
   ];
 
-  useEffect(() => {
-    fetchNotes();
-  }, [user]);
-
-  useEffect(() => {
-    filterNotes();
-  }, [notes, activeFilter, searchTerm]);
-
-  const fetchNotes = async () => {
+  const fetchNotes = useCallback(async () => {
     if (!user) return;
     
     try {
@@ -69,9 +60,13 @@ function Playbook() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
-  const filterNotes = () => {
+  useEffect(() => {
+    fetchNotes();
+  }, [fetchNotes]);
+
+  const filteredNotes = useMemo(() => {
     let filtered = notes;
 
     // Filter by category
@@ -88,8 +83,8 @@ function Playbook() {
       );
     }
 
-    setFilteredNotes(filtered);
-  };
+    return filtered;
+  }, [notes, activeFilter, searchTerm]);
 
   const handleAddNote = async (e) => {
     e.preventDefault();

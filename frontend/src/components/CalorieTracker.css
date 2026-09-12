@@ -15,11 +15,64 @@
     padding: 10px 5px;
 }
 
+.calorie-date-navigator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.day-nav-arrow {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid #e2e8f0;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.day-nav-arrow:hover {
+    background: #eff6ff;
+    color: #2563eb;
+    border-color: #bfdbfe;
+}
+
+.jump-today-banner {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto 12px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #1e40af;
+}
+
+.jump-today-banner button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
 .header-date-button {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 5px;
+    padding: 2px 8px;
     border-radius: 12px;
     transition: background-color 0.2s ease;
     text-align: center;
@@ -29,14 +82,14 @@
 }
 
 .header-title {
-    font-size: 22px;
+    font-size: 17px;
     font-weight: 700;
     margin: 0;
     color: #1f2937;
 }
 
 .header-date {
-    font-size: 14px;
+    font-size: 12px;
     color: #6b7280;
     margin: 0;
 }
@@ -390,10 +443,21 @@
     box-shadow: 0 10px 40px rgba(0,0,0,0.2);
 }
 
+.calendar-modal-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.calendar-modal-top h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
 .close-calendar-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
     background: #f1f5f9;
     border: none;
     border-radius: 50%;
@@ -404,7 +468,11 @@
     justify-content: center;
     cursor: pointer;
     color: #6b7280;
-    z-index: 10;
+    transition: background 0.15s;
+}
+
+.close-calendar-button:hover {
+    background: #e2e8f0;
 }
 .close-calendar-button svg { width: 16px; height: 16px; }
 

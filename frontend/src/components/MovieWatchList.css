@@ -54,23 +54,26 @@
 
 /* --- Main Layout --- */
 .movie-page-container {
-    min-height: 100vh;
-    background: var(--bg-gradient);
-    padding: 1rem;
+    min-height: 100%;
+    background: transparent;
+    padding: 12px 14px 40px 14px;
     display: flex;
     align-items: flex-start;
     justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .movie-list-card {
     width: 100%;
-    max-width: 28rem;
+    max-width: 393px;
     background: var(--bg-primary);
     border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-xl);
+    box-shadow: var(--shadow-lg);
     overflow: hidden;
-    animation: slideUp 0.5s ease-out;
-    border: none;
+    animation: slideUp 0.4s ease-out;
+    border: 1px solid var(--gray-200);
+    box-sizing: border-box;
 }
 
 /* --- Header Section --- */

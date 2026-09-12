@@ -1,13 +1,14 @@
 /* --- Reminders Page Layout & Theme --- */
 .reminders-page { 
     justify-content: flex-start; 
-    padding: 15px 15px 100px 15px;
-    background-color: #f8fafc;
+    padding: 12px 14px 100px 14px;
+    background: transparent;
+    width: 100%;
 }
 
 .reminders-content {
     width: 100%;
-    max-width: 600px;
+    max-width: 393px;
     margin: 0 auto;
 }
 
@@ -17,9 +18,9 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    max-width: 600px;
-    margin: 0 auto 15px;
-    padding: 10px 0;
+    max-width: 393px;
+    margin: 0 auto 12px;
+    padding: 6px 0;
 }
 .header-title { 
     font-size: 22px; 

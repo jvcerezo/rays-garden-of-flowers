@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { doc, getDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase/firebase';
@@ -59,11 +59,7 @@ function PlaybookNote() {
     }
   };
 
-  useEffect(() => {
-    fetchNote();
-  }, [noteId, user]);
-
-  const fetchNote = async () => {
+  const fetchNote = useCallback(async () => {
     if (!user || !noteId) return;
     
     try {
@@ -87,7 +83,11 @@ function PlaybookNote() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [noteId, user, navigate]);
+
+  useEffect(() => {
+    fetchNote();
+  }, [fetchNote]);
 
   const handleSave = async () => {
     if (!editedNote.title.trim()) {
