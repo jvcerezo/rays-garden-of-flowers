@@ -12,14 +12,17 @@ const CalorieDial = ({ progress, consumed, remaining }) => {
 
     return (
         <div className="calorie-dial-container">
-            <svg className="calorie-dial-svg">
+            <svg viewBox="0 0 200 200" className="calorie-dial-svg">
                 <circle className="dial-track" cx="100" cy="100" r={radius}></circle>
                 <motion.circle 
                     className="dial-progress"
                     cx="100" cy="100" r={radius}
-                    strokeDasharray={circumference}
+                    strokeDasharray={`${circumference} ${circumference}`}
                     initial={{ strokeDashoffset: circumference }}
-                    animate={{ strokeDashoffset: offset }}
+                    animate={{ 
+                        strokeDashoffset: offset,
+                        opacity: safeProgress > 0 ? 1 : 0
+                    }}
                     transition={{ type: 'spring', damping: 15, stiffness: 100 }}
                 ></motion.circle>
             </svg>

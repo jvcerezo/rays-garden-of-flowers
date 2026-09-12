@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useMovies } from '../hooks/useMovies';
 import { toast } from 'react-hot-toast';
+import { LoadingSpinner } from './LoadingSpinner';
 import './MovieWatchList.css';
 import { ReactComponent as FlowerSvg } from '../assets/movie-watch-list.svg';
 
@@ -263,9 +264,7 @@ function MovieWatchList() {
               {/* Movie Lists Container */}
               <div className="movie-list-container">
                 {loading ? (
-                  <div className="centered-feedback">
-                    <SpinnerIcon />
-                  </div>
+                  <LoadingSpinner text="Loading movies..." />
                 ) : error ? (
                   <div className="centered-feedback error-text">
                     {error}

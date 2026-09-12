@@ -4,6 +4,7 @@ import { doc, getDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/fir
 import { db } from '../firebase/firebase';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import { LoadingSpinner } from './LoadingSpinner';
 import './PlaybookNote.css';
 
 function PlaybookNote() {
@@ -149,7 +150,7 @@ function PlaybookNote() {
   if (loading) {
     return (
       <div className="page-container playbook-note-page">
-        <div className="loading-state">Loading note...</div>
+        <LoadingSpinner text="Loading note..." />
       </div>
     );
   }

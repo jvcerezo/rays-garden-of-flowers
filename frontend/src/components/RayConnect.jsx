@@ -10,6 +10,7 @@ import { PlayerStats } from './PlayerStats';
 import { TaskList } from './TaskList';
 import { AddTaskModal } from './AddTaskModal';
 import { ViewTaskModal } from './ViewTaskModal';
+import { LoadingSpinner } from './LoadingSpinner';
 import './RayConnect.css';
 
 // --- Icon Components ---
@@ -143,11 +144,11 @@ function RayConnect() {
                 <header className="tracker-header">
                     <Link to="/dashboard" className="back-button"><BackIcon /></Link>
                     <h1 className="header-title">Ray-Connect</h1>
-                    <div style={{ width: '40px' }} />
+                    <div style={{ width: '38px' }} />
                 </header>
 
                 {isLoading ? (
-                    <div className="loading-state">Loading Connect...</div>
+                    <LoadingSpinner text="Loading Connect..." />
                 ) : (
                     <>
                         <div className="player-switcher">

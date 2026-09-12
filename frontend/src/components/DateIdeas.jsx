@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useDateIdeas } from '../hooks/useDateIdeas';
 import { toast } from 'react-hot-toast';
+import { LoadingSpinner } from './LoadingSpinner';
 import './DateIdeas.css';
 import { ReactComponent as DateIdeasSvg } from '../assets/date-ideas.svg';
 
@@ -46,12 +47,6 @@ const SaveIcon = () => (
 const CheckCircleIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
-    </svg>
-);
-
-const SpinnerIcon = () => (
-    <svg className="spinner" viewBox="0 0 50 50">
-        <circle className="path" cx="25" cy="25" r="20" fill="none" strokeWidth="5"></circle>
     </svg>
 );
 
@@ -375,10 +370,7 @@ function DateIdeas() {
                     </div>
                     <div className="date-ideas-content">
                         {loading ? ( 
-                            <div className="centered-feedback">
-                                <SpinnerIcon/>
-                                <span>Loading your date ideas...</span>
-                            </div> 
+                            <LoadingSpinner text="Loading date ideas..." />
                         ) : isListCompletelyEmpty ? (
                             <div className="empty-state-container">
                                 <DateIdeasSvg className="empty-state-svg" />

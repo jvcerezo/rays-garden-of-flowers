@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { collection, addDoc, getDocs, query, orderBy, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase/firebase';
 import { useAuth } from '../context/AuthContext';
+import { LoadingSpinner } from './LoadingSpinner';
 import './Playbook.css';
 
 function Playbook() {
@@ -207,12 +208,7 @@ function Playbook() {
 
       <div className="playbook-content">
         {loading ? (
-          <div className="loading-state">
-            <div className="loading-spinner">
-              <div className="spinner"></div>
-            </div>
-            <p>Loading your journey...</p>
-          </div>
+          <LoadingSpinner text="Loading your journey..." />
         ) : (
           <>
             {/* Search and Filter Section */}

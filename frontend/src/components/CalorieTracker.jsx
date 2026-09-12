@@ -11,6 +11,7 @@ import { useCalorieData } from './useCalorieData';
 import { CalorieStatusHub } from './CalorieStatusHub';
 import { LogFoodModal } from './LogFoodModal';
 import { EditGoalsModal } from './EditGoalsModal';
+import { LoadingSpinner } from './LoadingSpinner';
 
 import 'react-calendar/dist/Calendar.css';
 import './CalorieTracker.css';
@@ -217,7 +218,7 @@ function CalorieTracker() {
     if (loading) {
         return (
             <div className="page-container calorie-tracker-page">
-                <div className="loading-container">Loading Tracker...</div>
+                <LoadingSpinner text="Loading meals..." />
             </div>
         );
     }

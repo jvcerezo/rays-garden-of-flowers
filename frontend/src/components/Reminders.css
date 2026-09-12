@@ -1,7 +1,7 @@
 /* --- Reminders Page Layout & Theme --- */
 .reminders-page { 
     justify-content: flex-start; 
-    padding: 12px 14px 100px 14px;
+    padding: 4px 14px 100px 14px;
     background: transparent;
     width: 100%;
 }
@@ -14,34 +14,40 @@
 
 /* --- Header --- */
 .tracker-header {
-    display: flex;
+    display: grid;
+    grid-template-columns: 38px 1fr 38px;
     align-items: center;
-    justify-content: space-between;
     width: 100%;
     max-width: 393px;
     margin: 0 auto 12px;
-    padding: 6px 0;
+    padding: 4px 0;
+    box-sizing: border-box;
 }
 .header-title { 
-    font-size: 22px; 
+    font-size: 18px; 
     font-weight: 700; 
-    color: #1f2937;
+    color: #1e293b;
     text-align: center;
-    flex-grow: 1;
+    margin: 0;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .back-button, .add-button {
-    background: #fff;
-    border: 1px solid #e5e7eb;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #e2e8f0;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #3b82f6;
+    color: #475569;
     transition: all 0.2s ease;
     cursor: pointer;
     flex-shrink: 0;
+    box-sizing: border-box;
 }
 .add-button {
     background: #eef2ff;

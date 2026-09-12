@@ -56,7 +56,7 @@
 .movie-page-container {
     min-height: 100%;
     background: transparent;
-    padding: 12px 14px 40px 14px;
+    padding: 4px 14px 40px 14px;
     display: flex;
     align-items: flex-start;
     justify-content: center;
@@ -78,58 +78,71 @@
 
 /* --- Header Section --- */
 .movie-list-header {
-    padding: 1.5rem 1.5rem 1rem;
+    padding: 10px 12px;
     background: var(--bg-primary);
     color: var(--gray-900);
-    display: flex;
+    display: grid;
+    grid-template-columns: 38px 1fr 38px;
     align-items: center;
-    justify-content: space-between;
+    gap: 8px;
     border-bottom: 1px solid var(--gray-200);
+    box-sizing: border-box;
 }
 
 .back-button {
-    background: rgba(75, 85, 99, 0.1);
-    border: none;
-    border-radius: var(--radius-md);
-    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--gray-200);
+    border-radius: 50%;
+    padding: 0;
     color: var(--gray-600);
     cursor: pointer;
     transition: var(--transition);
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 38px;
+    height: 38px;
+    box-sizing: border-box;
 }
 
 .back-button:hover {
-    background: rgba(75, 85, 99, 0.2);
-    transform: translateX(-2px);
+    background: #ffffff;
+    color: var(--primary, #a78bfa);
+    transform: scale(1.04);
 }
 
 .back-button svg {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 20px;
+    height: 20px;
 }
 
 .header-title-container {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    justify-content: center;
+    gap: 6px;
+    min-width: 0;
 }
 
 .header-icon {
-    width: 2rem;
-    height: 2rem;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
 }
 
 .header-title {
-    font-size: 1.5rem;
+    font-size: 18px;
     font-weight: 700;
     margin: 0;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .header-spacer {
-    width: 2.5rem;
+    width: 38px;
+    height: 38px;
 }
 
 

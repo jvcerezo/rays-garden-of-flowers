@@ -23,6 +23,7 @@ import { CycleDisplay } from './CycleDisplay';
 import { PeriodSettingsModal } from './PeriodSettingsModal';
 import { CycleHistoryModal } from './CycleHistoryModal';
 import { DayDetailDrawer } from './DayDetailDrawer';
+import { LoadingSpinner } from './LoadingSpinner';
 
 import 'react-calendar/dist/Calendar.css';
 import './PeriodTracker.css';
@@ -58,6 +59,7 @@ function PeriodTracker() {
     const { user } = useAuth();
     const [settings, setSettings] = useState({ cycleLength: 28, periodLength: 5, useSmartPredictions: true });
     const [cycles, setCycles] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [isSettingsModalOpen, setSettingsModalOpen] = useState(false);
     const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
     const [isLogMenuOpen, setIsLogMenuOpen] = useState(false);
@@ -79,7 +81,10 @@ function PeriodTracker() {
     const cycleInfo = usePeriodCycle(cycles, settings);
 
     useEffect(() => {
-        if (!permissions.canView) return;
+        if (!permissions.canView) {
+            setLoading(false);
+            return;
+        }
 
         const settingsRef = doc(db, 'periodTracker', 'shared');
         const cyclesRef = collection(db, 'periodTracker', 'shared', 'cycles');
@@ -99,6 +104,10 @@ function PeriodTracker() {
                 startDate: d.data().startDate.toDate(),
                 endDate: d.data().endDate ? d.data().endDate.toDate() : null
             })));
+            setLoading(false);
+        }, (err) => {
+            console.error('Error loading cycles:', err);
+            setLoading(false);
         });
 
         return () => {
@@ -280,7 +289,10 @@ function PeriodTracker() {
                     <Link to="/dashboard" className="back-button" title="Back to Dashboard">
                         <BackIcon />
                     </Link>
-                    <h1 className="header-title">Cycle Tracker</h1>
+                    <div className="header-title-container">
+                        <h1 className="header-title">Period Tracker</h1>
+                        <span className="header-subtitle">Cycle Insights</span>
+                    </div>
                     <div className="header-right-actions">
                         <button
                             type="button"
@@ -303,7 +315,9 @@ function PeriodTracker() {
                     </div>
                 </header>
 
-                {permissions.canView ? (
+                {loading ? (
+                    <LoadingSpinner text="Loading cycle insights..." />
+                ) : permissions.canView ? (
                     <div className="period-tracker-content">
                         {/* Main Interactive Cycle Display */}
                         <CycleDisplay cycleInfo={cycleInfo} />

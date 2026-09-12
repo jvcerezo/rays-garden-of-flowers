@@ -1,6 +1,6 @@
 /* --- Current Goals Page --- */
 .goals-page {
-    padding: 12px 14px 40px 14px;
+    padding: 4px 14px 40px 14px;
     background: transparent;
     width: 100%;
     min-height: 100%;
@@ -10,7 +10,7 @@
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(12px);
     border-radius: 24px;
-    padding: 18px 14px;
+    padding: 14px 12px;
     width: 100%;
     max-width: 393px;
     margin: 0 auto;
@@ -21,32 +21,40 @@
 
 /* --- Header --- */
 .goals-header {
-    display: flex;
+    display: grid;
+    grid-template-columns: 38px 1fr 38px;
     align-items: center;
-    justify-content: space-between;
-    padding-bottom: 12px;
-    margin-bottom: 16px;
+    gap: 8px;
+    padding-bottom: 10px;
+    margin-bottom: 14px;
     border-bottom: 1px solid #f1f5f9;
+    box-sizing: border-box;
 }
 
 .header-title-container {
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    gap: 6px;
+    min-width: 0;
 }
 
 .header-icon {
-    width: 26px;
-    height: 26px;
+    width: 22px;
+    height: 22px;
     color: #a78bfa;
+    flex-shrink: 0;
 }
 
 .header-title {
-    font-size: 19px;
+    font-size: 18px;
     font-weight: 700;
     margin: 0;
     color: #1e293b;
     letter-spacing: -0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .add-idea-button {
@@ -54,6 +62,7 @@
     color: white;
     width: 38px;
     height: 38px;
+    justify-self: end;
     border-radius: 50%;
     display: flex;
     align-items: center;

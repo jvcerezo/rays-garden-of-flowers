@@ -11,6 +11,7 @@ import { ReactComponent as RemindersEmptyIcon } from '../assets/reminders.svg';
 import { initializeFCM } from './firebase-messaging-init';
 import { AddReminderModal } from './AddReminderModal';
 import { ReminderList } from './ReminderList';
+import { LoadingSpinner } from './LoadingSpinner';
 import './Reminders.css';
 
 // --- Icon Components ---
@@ -139,7 +140,7 @@ function Reminders() {
                 </header>
 
                 <div className="reminders-content">
-                    {loading && <p>Loading reminders...</p>}
+                    {loading && <LoadingSpinner text="Loading reminders..." />}
                     
                     {!loading && reminders.length === 0 && (
                         <div className="empty-state">
