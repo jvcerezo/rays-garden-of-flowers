@@ -232,17 +232,40 @@ function PeriodTracker() {
     };
 
     const getTileClassName = ({ date, view }) => {
-        if (view !== 'month' || !cycleInfo.getDayType) return null;
-        const type = cycleInfo.getDayType(date);
-        return type ? `day-${type}` : null;
+        if (view !== 'month') return null;
+        const classes = [];
+
+        const today = new Date();
+        const isToday =
+            date.getDate() === today.getDate() &&
+            date.getMonth() === today.getMonth() &&
+            date.getFullYear() === today.getFullYear();
+
+        if (isToday) {
+            classes.push('day-today');
+        }
+
+        if (cycleInfo.getDayType) {
+            const type = cycleInfo.getDayType(date);
+            if (type) classes.push(`day-${type}`);
+        }
+
+        return classes.length > 0 ? classes.join(' ') : null;
     };
 
     const handleCalendarDayClick = (date) => {
         const info = cycleInfo.getDayDetail ? cycleInfo.getDayDetail(date) : null;
+        const today = new Date();
+        const isToday =
+            date.getDate() === today.getDate() &&
+            date.getMonth() === today.getMonth() &&
+            date.getFullYear() === today.getFullYear();
+
         setSelectedCalendarDay({
             date,
             type: cycleInfo.getDayType(date),
             info,
+            isToday,
         });
     };
 
@@ -303,6 +326,9 @@ function PeriodTracker() {
                                     <div className="selected-day-content">
                                         <div className="selected-day-date">
                                             {format(selectedCalendarDay.date, 'EEEE, MMM d, yyyy')}
+                                            {selectedCalendarDay.isToday && (
+                                                <span className="today-chip">Today ✨</span>
+                                            )}
                                         </div>
                                         <div className="selected-day-phase">
                                             {selectedCalendarDay.info || 'No cycle events on this date'}
@@ -328,6 +354,9 @@ function PeriodTracker() {
                             )}
 
                             <div className="calendar-legend">
+                                <div className="legend-item">
+                                    <span className="legend-color day-today-legend"></span>Today
+                                </div>
                                 <div className="legend-item">
                                     <span className="legend-color day-period"></span>Logged Period
                                 </div>
