@@ -8,7 +8,8 @@ jest.mock('react-router-dom', () => ({
   Navigate: () => <div>Navigate</div>,
   Link: ({ children, to }) => <a href={to}>{children}</a>,
   useNavigate: () => jest.fn(),
-  useParams: () => ({})
+  useParams: () => ({}),
+  useLocation: () => ({ pathname: '/', search: '' })
 }), { virtual: true });
 
 jest.mock('./context/AuthContext', () => ({

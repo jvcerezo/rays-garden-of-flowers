@@ -11,3 +11,7 @@ jest.mock('react-calendar', () => {
     return <div data-testid="react-calendar" />;
   };
 });
+
+if (typeof window !== 'undefined') {
+  window.scrollTo = jest.fn();
+}

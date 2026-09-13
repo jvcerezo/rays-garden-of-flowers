@@ -17,6 +17,7 @@ import HashPage from './components/HashPage';
 import RayConnect from './components/RayConnect'; // Assuming you have a RayConnect component
 import Playbook from './components/Playbook';
 import PlaybookNote from './components/PlaybookNote';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   const { user } = useAuth();
@@ -25,6 +26,7 @@ function App() {
     <div className="phone-simulation-container">
       <div className="app-frame">
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         {/*
           Route 1: Login Page
