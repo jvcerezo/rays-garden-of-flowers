@@ -61,6 +61,10 @@ function PeriodTracker() {
     const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
     const [isLogMenuOpen, setIsLogMenuOpen] = useState(false);
 
+    // End Period Modal State (Dedicated for Ray)
+    const [isEndModalOpen, setIsEndModalOpen] = useState(false);
+    const [customEndDate, setCustomEndDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+
     // Backtracking / Log Form State
     const [logStartDate, setLogStartDate] = useState(format(new Date(), 'yyyy-MM-dd'));
     const [isPeriodOngoing, setIsPeriodOngoing] = useState(true);
@@ -71,9 +75,10 @@ function PeriodTracker() {
         if (!user || !user.email) return { canView: false, canEdit: false };
         const editorEmail = 'rheanamindo@gmail.com';
         const viewerEmails = [editorEmail, 'jetjetcerezo@gmail.com'];
+        const userEmail = user.email.toLowerCase().trim();
         return {
-            canView: viewerEmails.includes(user.email.toLowerCase()),
-            canEdit: user.email.toLowerCase() === editorEmail,
+            canView: viewerEmails.includes(userEmail),
+            canEdit: userEmail === editorEmail,
         };
     }, [user]);
 
@@ -105,8 +110,8 @@ function PeriodTracker() {
         });
 
         return () => {
-            unsubSettings();
-            unsubCycles();
+            if (typeof unsubSettings === 'function') unsubSettings();
+            if (typeof unsubCycles === 'function') unsubCycles();
         };
     }, [permissions.canView]);
 
@@ -158,8 +163,20 @@ function PeriodTracker() {
         }
     };
 
-    // Quick log action: end currently active period
-    const handleQuickEndActive = async () => {
+    // Safe date formatting helper
+    const formatDateSafe = (dateVal, formatStr = 'MMM d, yyyy') => {
+        if (!dateVal) return '';
+        try {
+            const d = dateVal instanceof Date ? dateVal : (dateVal.toDate ? dateVal.toDate() : new Date(dateVal));
+            if (isNaN(d.getTime())) return '';
+            return format(d, formatStr);
+        } catch {
+            return '';
+        }
+    };
+
+    // Quick action: end currently active period today
+    const handleEndPeriodToday = async () => {
         if (!permissions.canEdit || !cycleInfo.activeCycleId) return;
 
         try {
@@ -167,10 +184,42 @@ function PeriodTracker() {
             await updateDoc(cycleDocRef, {
                 endDate: Timestamp.fromDate(new Date()),
             });
-            toast.success('Period ended today.');
+            toast.success('Period ended today! 🌸');
+            setIsEndModalOpen(false);
             setIsLogMenuOpen(false);
         } catch (error) {
             console.error('Error ending period:', error);
+            toast.error('Could not end period.');
+        }
+    };
+
+    // Action: end currently active period on custom date
+    const handleEndPeriodCustomDate = async (e) => {
+        e.preventDefault();
+        if (!permissions.canEdit || !cycleInfo.activeCycleId) return;
+
+        try {
+            if (!customEndDate) {
+                toast.error('Please choose an end date.');
+                return;
+            }
+            const endParts = customEndDate.split('-').map(Number);
+            const parsedEnd = new Date(endParts[0], endParts[1] - 1, endParts[2], 12, 0, 0);
+
+            if (cycleInfo.activeCycleStartDate && parsedEnd < cycleInfo.activeCycleStartDate) {
+                toast.error('End date cannot be earlier than start date');
+                return;
+            }
+
+            const cycleDocRef = doc(db, 'periodTracker', 'shared', 'cycles', cycleInfo.activeCycleId);
+            await updateDoc(cycleDocRef, {
+                endDate: Timestamp.fromDate(parsedEnd),
+            });
+            toast.success(`Period ended on ${format(parsedEnd, 'MMM d, yyyy')}! 🌸`);
+            setIsEndModalOpen(false);
+            setIsLogMenuOpen(false);
+        } catch (error) {
+            console.error('Error ending period on custom date:', error);
             toast.error('Could not end period.');
         }
     };
@@ -306,6 +355,41 @@ function PeriodTracker() {
                     <div className="period-tracker-content">
                         <CycleDisplay cycleInfo={cycleInfo} />
 
+                        {/* Ray's Period Action Button - STRICTLY ONLY for Ray (permissions.canEdit) */}
+                        {permissions.canEdit && (
+                            <div className="period-action-bar">
+                                {cycleInfo.activeCycleId || cycleInfo.isPeriod ? (
+                                    <button
+                                        type="button"
+                                        className="period-action-button end-period-button"
+                                        onClick={() => {
+                                            setCustomEndDate(format(new Date(), 'yyyy-MM-dd'));
+                                            setIsEndModalOpen(true);
+                                        }}
+                                        aria-label="End Current Period"
+                                    >
+                                        <span className="action-btn-icon">🌸</span>
+                                        <span className="action-btn-text">End Current Period</span>
+                                    </button>
+                                ) : (
+                                    <button
+                                        type="button"
+                                        className="period-action-button start-period-button"
+                                        onClick={() => {
+                                            setLogStartDate(format(new Date(), 'yyyy-MM-dd'));
+                                            setIsPeriodOngoing(true);
+                                            setLogEndDate('');
+                                            setIsLogMenuOpen(true);
+                                        }}
+                                        aria-label="Start New Period"
+                                    >
+                                        <span className="action-btn-icon">🩸</span>
+                                        <span className="action-btn-text">Start New Period</span>
+                                    </button>
+                                )}
+                            </div>
+                        )}
+
                         {/* Calendar Container */}
                         <div className="calendar-container">
                             <div className="calendar-header-meta">
@@ -397,6 +481,80 @@ function PeriodTracker() {
                 />
             )}
 
+            {/* Dedicated End Period Modal (ONLY FOR RAY) */}
+            {isEndModalOpen && permissions.canEdit && (
+                <div className="reminders-modal-backdrop" onClick={() => setIsEndModalOpen(false)}>
+                    <div
+                        className="reminders-modal-content end-period-modal"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="modal-handle-bar" />
+                        <div className="modal-header-row">
+                            <h2 className="modal-title" style={{ margin: 0 }}>End Period Cycle</h2>
+                            <button
+                                type="button"
+                                className="modal-close-icon-btn"
+                                onClick={() => setIsEndModalOpen(false)}
+                                aria-label="Close"
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        <div className="end-period-card">
+                            <div className="end-period-icon">🌸</div>
+                            <div className="end-period-details">
+                                <span className="end-period-label">Ongoing Period</span>
+                                <span className="end-period-dates">
+                                    Started: {cycleInfo.activeCycle?.startDate ? formatDateSafe(cycleInfo.activeCycle.startDate, 'MMMM d, yyyy') : 'Recently'}
+                                    {cycleInfo.currentDayInCycle ? ` (Day ${cycleInfo.currentDayInCycle})` : ''}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className="end-period-actions">
+                            <button
+                                type="button"
+                                className="button primary full-width end-today-btn"
+                                onClick={handleEndPeriodToday}
+                            >
+                                ✨ End Period Today ({format(new Date(), 'MMM d')})
+                            </button>
+
+                            <div className="end-period-divider">
+                                <span>or select past end date</span>
+                            </div>
+
+                            <form onSubmit={handleEndPeriodCustomDate} className="custom-end-form">
+                                <div className="form-group">
+                                    <label htmlFor="custom-end-date">End Date</label>
+                                    <input
+                                        id="custom-end-date"
+                                        type="date"
+                                        value={customEndDate}
+                                        min={cycleInfo.activeCycle?.startDate ? formatDateSafe(cycleInfo.activeCycle.startDate, 'yyyy-MM-dd') : undefined}
+                                        max={format(new Date(), 'yyyy-MM-dd')}
+                                        onChange={(e) => setCustomEndDate(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <button type="submit" className="button secondary full-width">
+                                    Save End Date
+                                </button>
+                            </form>
+                        </div>
+
+                        <button
+                            type="button"
+                            className="button text full-width end-modal-cancel"
+                            onClick={() => setIsEndModalOpen(false)}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
+
             {/* Backtracking & Period Log Modal */}
             {isLogMenuOpen && permissions.canEdit && (
                 <div className="reminders-modal-backdrop" onClick={() => setIsLogMenuOpen(false)}>
@@ -408,16 +566,16 @@ function PeriodTracker() {
                         <h2 className="modal-title">Log Period Cycle</h2>
 
                         {/* Quick action if period is active right now */}
-                        {cycleInfo.isPeriod && (
+                        {(cycleInfo.isPeriod || cycleInfo.activeCycleId) && (
                             <div className="quick-active-box">
                                 <div className="quick-active-text">
                                     <strong>Current period is ongoing.</strong>
-                                    <span>Started on {cycleInfo.activeCycleStartDate ? format(cycleInfo.activeCycleStartDate, 'MMM d, yyyy') : 'recently'}.</span>
+                                    <span>Started on {cycleInfo.activeCycle?.startDate ? formatDateSafe(cycleInfo.activeCycle.startDate, 'MMM d, yyyy') : 'recently'}.</span>
                                 </div>
                                 <button
                                     type="button"
                                     className="button primary quick-end-btn"
-                                    onClick={handleQuickEndActive}
+                                    onClick={handleEndPeriodToday}
                                 >
                                     End Period Today
                                 </button>

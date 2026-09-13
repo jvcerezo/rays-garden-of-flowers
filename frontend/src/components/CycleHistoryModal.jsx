@@ -12,6 +12,20 @@ export const CycleHistoryModal = ({ cycles, onClose, permissions }) => {
     // Sort descending (newest first)
     const sortedCycles = [...cycles].sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
 
+    const handleQuickEnd = async (cycleId) => {
+        if (!permissions.canEdit) return;
+        try {
+            const cycleDocRef = doc(db, 'periodTracker', 'shared', 'cycles', cycleId);
+            await updateDoc(cycleDocRef, {
+                endDate: Timestamp.fromDate(new Date()),
+            });
+            toast.success('Period ended today! 🌸');
+        } catch (err) {
+            console.error(err);
+            toast.error('Failed to end period');
+        }
+    };
+
     const handleDelete = async (cycleId) => {
         if (!permissions.canEdit) return;
         if (!window.confirm('Delete this logged cycle entry?')) return;
@@ -151,6 +165,16 @@ export const CycleHistoryModal = ({ cycles, onClose, permissions }) => {
                                                 </div>
                                                 {permissions.canEdit && (
                                                     <div className="cycle-actions">
+                                                        {isOngoing && (
+                                                            <button
+                                                                type="button"
+                                                                className="history-end-btn"
+                                                                title="End this period cycle today"
+                                                                onClick={() => handleQuickEnd(cycle.id)}
+                                                            >
+                                                                End Today
+                                                            </button>
+                                                        )}
                                                         <button
                                                             className="cycle-action-btn edit"
                                                             title="Edit"

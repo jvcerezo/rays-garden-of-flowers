@@ -25,6 +25,25 @@ describe('usePeriodCycle calculation and predictions', () => {
         expect(result.current.activeCycleId).toBe('cycle-1');
         expect(result.current.phaseKey).toBe('period');
         expect(result.current.primaryText).toBe('Day 3');
+        expect(result.current.activeCycleStartDate).toEqual(subDays(today, 2));
+    });
+
+    test('detects an ongoing active period even if started more than 21 days ago', () => {
+        const today = startOfDay(new Date());
+        const mockCycles = [
+            {
+                id: 'cycle-old-active',
+                startDate: subDays(today, 25),
+                endDate: null
+            }
+        ];
+
+        const { result } = renderHook(() => usePeriodCycle(mockCycles));
+        expect(result.current.isPeriod).toBe(true);
+        expect(result.current.activeCycleId).toBe('cycle-old-active');
+        expect(result.current.phaseKey).toBe('period');
+        expect(result.current.primaryText).toBe('Day 26');
+        expect(result.current.secondaryText).toBe('Period in progress');
     });
 
     test('calculates smart historical cycle and period averages', () => {

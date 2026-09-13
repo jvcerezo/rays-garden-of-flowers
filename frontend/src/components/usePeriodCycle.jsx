@@ -104,6 +104,7 @@ export function usePeriodCycle(cycles = [], settings = DEFAULT_SETTINGS) {
                 daysUntilNext: null,
                 activeCycleId: null,
                 activeCycle: null,
+                activeCycleStartDate: null,
                 stats,
                 effectiveCycleLength,
                 effectivePeriodLength,
@@ -124,13 +125,16 @@ export function usePeriodCycle(cycles = [], settings = DEFAULT_SETTINGS) {
         const today = startOfDay(new Date());
         const lastCycle = sortedCycles[0];
         const cycleStartDate = lastCycle.startDate;
-
-        const currentDayInCycle = differenceInDays(today, cycleStartDate) + 1;
-
         // Active period detection:
-        // Period is active if endDate is null and cycle started within reasonable time (< 21 days)
-        const isPeriodNow = lastCycle.endDate === null && currentDayInCycle > 0 && currentDayInCycle <= 21;
-        const activeCycleId = lastCycle.endDate === null ? lastCycle.id : null;
+        // Any cycle where endDate is null is currently ongoing until explicitly ended.
+        const activeCycle = sortedCycles.find(c => c.endDate === null) || null;
+        const isPeriodNow = Boolean(activeCycle);
+        const activeCycleId = activeCycle ? activeCycle.id : null;
+        const activeCycleStartDate = activeCycle ? activeCycle.startDate : null;
+
+        const currentDayInCycle = isPeriodNow
+            ? Math.max(1, differenceInDays(today, activeCycle.startDate) + 1)
+            : differenceInDays(today, cycleStartDate) + 1;
 
         // Predicted next period based on last cycle
         const predictedNextPeriodStart = addDays(cycleStartDate, effectiveCycleLength);
@@ -326,7 +330,8 @@ export function usePeriodCycle(cycles = [], settings = DEFAULT_SETTINGS) {
             daysLate,
             daysUntilNext: daysUntilNextPeriod,
             activeCycleId,
-            activeCycle: isPeriodNow ? lastCycle : null,
+            activeCycle,
+            activeCycleStartDate,
             currentDayInCycle,
             predictedNextPeriodStart,
             ovulationDay,

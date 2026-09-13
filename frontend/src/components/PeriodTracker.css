@@ -691,3 +691,216 @@
     font-size: 15px;
     color: #6b7280;
 }
+
+/* --- Ray's Period Action Button Bar (Only visible for Ray) --- */
+.period-action-bar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: -2px 0 4px;
+    padding: 0 4px;
+    box-sizing: border-box;
+}
+
+.period-action-button {
+    width: 100%;
+    max-width: 340px;
+    min-height: 48px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    font-family: inherit;
+    letter-spacing: -0.01em;
+}
+
+.period-action-button:active {
+    transform: scale(0.97);
+}
+
+.period-action-button.end-period-button {
+    background: #e11d48;
+    color: #ffffff;
+    border: 1.5px solid #be123c;
+    box-shadow: 0 4px 14px rgba(225, 29, 72, 0.24);
+}
+
+.period-action-button.end-period-button:hover {
+    background: #be123c;
+}
+
+.period-action-button.start-period-button {
+    background: #7c3aed;
+    color: #ffffff;
+    border: 1.5px solid #6d28d9;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.24);
+}
+
+.period-action-button.start-period-button:hover {
+    background: #6d28d9;
+}
+
+.period-action-button .action-btn-icon {
+    font-size: 18px;
+    line-height: 1;
+}
+
+.period-action-button .action-btn-text {
+    font-weight: 700;
+}
+
+/* --- Dedicated End Period Modal Styles --- */
+.end-period-modal {
+    max-width: 380px !important;
+}
+
+.modal-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.modal-close-icon-btn {
+    background: #f1f5f9;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+    color: #64748b;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease;
+}
+
+.modal-close-icon-btn:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+
+.end-period-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff1f2;
+    border: 1.5px solid #fecdd3;
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+}
+
+.end-period-icon {
+    font-size: 26px;
+    line-height: 1;
+}
+
+.end-period-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.end-period-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #be123c;
+}
+
+.end-period-dates {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.end-period-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.end-today-btn {
+    background: #e11d48 !important;
+    color: #ffffff !important;
+    font-size: 14.5px !important;
+    font-weight: 700 !important;
+    padding: 12px !important;
+    border-radius: 10px !important;
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(225, 29, 72, 0.22) !important;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.end-today-btn:hover {
+    background: #be123c !important;
+}
+
+.end-period-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 11.5px;
+    font-weight: 500;
+    margin: 2px 0;
+}
+
+.end-period-divider::before,
+.end-period-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.end-period-divider span {
+    padding: 0 8px;
+}
+
+.custom-end-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.end-modal-cancel {
+    margin-top: 6px;
+    color: #64748b !important;
+    font-size: 13.5px !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer;
+    padding: 8px !important;
+}
+
+.end-modal-cancel:hover {
+    color: #1e293b !important;
+}
+
+/* History quick-end button */
+.history-end-btn {
+    background: #e11d48 !important;
+    color: #ffffff !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    padding: 4px 8px !important;
+    border-radius: 6px !important;
+    border: none !important;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.history-end-btn:hover {
+    background: #be123c !important;
+}
