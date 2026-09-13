@@ -25,28 +25,30 @@ const StatBar = ({ label, color }) => {
 export const PlayerStats = ({ data, playerName }) => {
     const stats = data || { name: 'Player', level: 1, gold: 0, exp: 0, nextLevelExp: 1000 };
     const expPercentage = stats.nextLevelExp > 0 ? (stats.exp / stats.nextLevelExp) * 100 : 0;
+    const isRay = playerName === 'Ray';
 
     return (
         <div className="player-stats-card">
             <div className="player-info-header">
-                <div className="player-icon-placeholder">
-                    <span>{playerName?.charAt(0)}</span>
+                <div className={`player-icon-placeholder ${isRay ? 'avatar-ray' : 'avatar-taj'}`}>
+                    <span>{isRay ? '👑' : '⚔️'}</span>
                 </div>
                 <div className="player-details">
                     <div className="player-name-level">
                         <h2 className="player-name">{playerName}</h2>
-                        <span className="player-level">Lv. {stats.level || 1}</span>
+                        <span className="garden-badge garden-badge-purple">Lv. {stats.level || 1} Adventurer</span>
                     </div>
                     <div className="player-gold-display">
-                        <GoldIcon />
-                        <span>{stats.gold || 0}</span>
+                        <span className="garden-badge garden-badge-amber">
+                            <GoldIcon /> {stats.gold || 0} Gold
+                        </span>
                     </div>
                 </div>
             </div>
 
             <div className="player-stats-bars">
-                <StatBar label="HP" color="linear-gradient(90deg, #4ade80, #86efac)" />
-                <StatBar label="MP" color="linear-gradient(90deg, #60a5fa, #93c5fd)" />
+                <StatBar label="HP" color="linear-gradient(90deg, #34d399, #10b981)" />
+                <StatBar label="MP" color="linear-gradient(90deg, #60a5fa, #3b82f6)" />
                 <div className="stat-bar-container">
                     <div className="stat-label">
                         <span>EXP</span>
@@ -56,7 +58,7 @@ export const PlayerStats = ({ data, playerName }) => {
                         <div 
                             className="stat-bar-progress" 
                             style={{ 
-                                background: "linear-gradient(90deg, #facc15, #fde047)", 
+                                background: "linear-gradient(90deg, #f59e0b, #fbbf24)", 
                                 width: `${Math.min(expPercentage, 100)}%`,
                                 transition: 'width 0.4s ease-out'
                             }}

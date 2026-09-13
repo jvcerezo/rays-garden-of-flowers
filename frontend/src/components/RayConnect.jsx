@@ -180,14 +180,14 @@ function RayConnect() {
                         <BackIcon />
                     </Link>
                     <div className="header-title-container">
-                        <h1 className="header-title">Ray-Connect</h1>
-                        <span className="header-subtitle">Quests & Leveling</span>
+                        <h1 className="header-title">Ray-Connect ⚔️</h1>
+                        <span className="header-subtitle">Couple RPG & Daily Quests</span>
                     </div>
                     <div style={{ width: '38px' }} />
                 </header>
 
                 {isLoading ? (
-                    <LoadingSpinner text="Loading Connect..." />
+                    <LoadingSpinner text="Loading Quests..." />
                 ) : (
                     <>
                         <div className="player-switcher">
@@ -195,19 +195,19 @@ function RayConnect() {
                                 className={viewingPlayer === PLAYER_IDS.rheanamindo ? 'active' : ''}
                                 onClick={() => setViewingPlayer(PLAYER_IDS.rheanamindo)}
                             >
-                                Ray's Quests
+                                👑 Ray's Quests
                             </button>
                             <button
                                 className={viewingPlayer === PLAYER_IDS.jetjetcerezo ? 'active' : ''}
                                 onClick={() => setViewingPlayer(PLAYER_IDS.jetjetcerezo)}
                             >
-                                Taj's Quests
+                                ⚔️ Tajie's Quests
                             </button>
                         </div>
 
                         <PlayerStats
                             data={playerData[viewingPlayer]}
-                            playerName={viewingPlayer === PLAYER_IDS.rheanamindo ? 'Ray' : 'Taj'}
+                            playerName={viewingPlayer === PLAYER_IDS.rheanamindo ? 'Ray' : 'Tajie'}
                         />
                         <TaskList
                             tasks={tasks[viewingPlayer]}

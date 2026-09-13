@@ -158,9 +158,17 @@ function MovieWatchList() {
   const [editingMovieId, setEditingMovieId] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [movieToDelete, setMovieToDelete] = useState(null);
+  const [filter, setFilter] = useState('all'); // 'all', 'unwatched', 'watched'
+  const [pickedMovie, setPickedMovie] = useState(null);
 
   const unwatchedMovies = useMemo(() => movies.filter(m => !m.watched), [movies]);
   const watchedMovies = useMemo(() => movies.filter(m => m.watched), [movies]);
+
+  const handlePickRandomMovie = () => {
+    if (unwatchedMovies.length === 0) return;
+    const randomIndex = Math.floor(Math.random() * unwatchedMovies.length);
+    setPickedMovie(unwatchedMovies[randomIndex]);
+  };
 
   const handleAddMovie = async (e) => {
     e.preventDefault();
@@ -236,11 +244,11 @@ function MovieWatchList() {
             <BackIcon />
           </Link>
           <div className="header-title-container">
-            <h1 className="header-title">Shared Watchlist</h1>
-            <span className="header-subtitle">Movies to watch together</span>
+            <h1 className="header-title">Movie Watchlist 🎬</h1>
+            <span className="header-subtitle">Popcorn & cuddles tonight</span>
           </div>
           <div className="header-right-actions">
-            <span className="badge-movie-count">{unwatchedMovies.length} left</span>
+            <span className="garden-badge garden-badge-purple">{unwatchedMovies.length} to watch</span>
           </div>
         </header>
 
@@ -248,12 +256,13 @@ function MovieWatchList() {
           <>
             {/* Add Movie Form */}
             <form onSubmit={handleAddMovie} className="add-movie-form">
+              <span className="add-movie-icon">🎬</span>
               <input
                 type="text"
                 className="add-movie-input"
                 value={newMovieTitle}
                 onChange={(e) => setNewMovieTitle(e.target.value)}
-                placeholder="Add a movie title..."
+                placeholder="Add movie to watch together..."
                 autoComplete="off"
               />
               <button
@@ -266,6 +275,46 @@ function MovieWatchList() {
               </button>
             </form>
 
+            {/* Quick Actions: Random Picker & Filter Tabs */}
+            {!isListCompletelyEmpty && (
+              <div className="movie-actions-row">
+                <div className="garden-filter-bar">
+                  <button
+                    type="button"
+                    className={`garden-filter-pill ${filter === 'all' ? 'active' : ''}`}
+                    onClick={() => setFilter('all')}
+                  >
+                    All ({movies.length})
+                  </button>
+                  <button
+                    type="button"
+                    className={`garden-filter-pill ${filter === 'unwatched' ? 'active' : ''}`}
+                    onClick={() => setFilter('unwatched')}
+                  >
+                    To Watch ({unwatchedMovies.length})
+                  </button>
+                  <button
+                    type="button"
+                    className={`garden-filter-pill ${filter === 'watched' ? 'active' : ''}`}
+                    onClick={() => setFilter('watched')}
+                  >
+                    Watched ({watchedMovies.length})
+                  </button>
+                </div>
+
+                {unwatchedMovies.length > 0 && (
+                  <button
+                    type="button"
+                    className="random-pick-btn"
+                    onClick={handlePickRandomMovie}
+                    title="Pick a random movie for tonight"
+                  >
+                    🎲 Pick For Us!
+                  </button>
+                )}
+              </div>
+            )}
+
             {/* Movie Lists Container */}
             <div className="movie-list-container">
               {loading ? (
@@ -276,28 +325,41 @@ function MovieWatchList() {
                 <>
                   {isListCompletelyEmpty ? (
                     <div className="empty-state-container">
-                      <p>Your watchlist is a blank canvas.</p>
-                      <span>Add a movie above to begin your journey.</span>
+                      <div className="empty-state-emoji">🍿</div>
+                      <p>Your watchlist is cozy and empty.</p>
+                      <span>Add your first movie above for your next date night!</span>
                     </div>
                   ) : (
                     <>
-                      {unwatchedMovies.length > 0 && (
+                      {(filter === 'all' || filter === 'unwatched') && unwatchedMovies.length > 0 && (
                         <div className="list-section">
                           <h2 className="list-section-title">
-                            To Watch
+                            🎬 To Watch
                             <span className="count-badge">{unwatchedMovies.length}</span>
                           </h2>
                           {renderMovieList(unwatchedMovies)}
                         </div>
                       )}
 
-                      {watchedMovies.length > 0 && (
+                      {(filter === 'all' || filter === 'watched') && watchedMovies.length > 0 && (
                         <div className="list-section">
                           <h2 className="list-section-title">
-                            Watched
+                            🍿 Watched Together
                             <span className="count-badge">{watchedMovies.length}</span>
                           </h2>
                           {renderMovieList(watchedMovies)}
+                        </div>
+                      )}
+
+                      {filter === 'unwatched' && unwatchedMovies.length === 0 && (
+                        <div className="empty-filter-state">
+                          <p>All caught up! No unwatched movies 🌟</p>
+                        </div>
+                      )}
+
+                      {filter === 'watched' && watchedMovies.length === 0 && (
+                        <div className="empty-filter-state">
+                          <p>No watched movies yet. Time for movie night! 🍿</p>
                         </div>
                       )}
                     </>
@@ -312,6 +374,34 @@ function MovieWatchList() {
           </div>
         )}
       </div>
+
+      {/* Random Pick Winner Modal */}
+      {pickedMovie && (
+        <div className="modal-overlay" onClick={() => setPickedMovie(null)}>
+          <div className="modal-content random-winner-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="random-modal-icon">🎉🍿</div>
+            <span className="random-modal-tag">Tonight's Movie Pick!</span>
+            <h3 className="random-modal-title">{pickedMovie.title}</h3>
+            <p className="random-modal-desc">Get the snacks ready and cuddle up together! ✨</p>
+            <div className="modal-actions">
+              <button
+                type="button"
+                className="button button-secondary"
+                onClick={handlePickRandomMovie}
+              >
+                🎲 Spin Again
+              </button>
+              <button
+                type="button"
+                className="button button-primary"
+                onClick={() => setPickedMovie(null)}
+              >
+                Let's Watch! 🎬
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Confirmation Modal */}
       {movieToDelete && (

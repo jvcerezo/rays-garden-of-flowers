@@ -69,6 +69,15 @@ function Dashboard() {
         </div>
       </header>
 
+      {/* Cozy Garden Welcome Banner */}
+      <div className="garden-welcome-banner">
+        <div className="garden-banner-sparkle">🌷</div>
+        <div className="garden-banner-text">
+          <p className="garden-banner-title">Our Little Corner of Joy</p>
+          <p className="garden-banner-desc">Memories, adventures & sweet moments together ✨</p>
+        </div>
+      </div>
+
       <div className="dashboard-grid">
         {dashboardItems.map((item, index) => (
           <Link to={item.path} key={index} className={`dashboard-card ${item.theme}`}>
@@ -77,7 +86,9 @@ function Dashboard() {
               <h3 className="card-title">{item.title}</h3>
               <p className="card-subtitle">{item.subtitle}</p>
             </div>
-            <span className="card-arrow">›</span>
+            <div className="card-arrow-pill">
+              <span className="card-arrow">›</span>
+            </div>
           </Link>
         ))}
       </div>

@@ -40,9 +40,9 @@ const NextReminderHero = ({ reminder }) => {
         <div className="next-reminder-hero">
             <div className="hero-accent" />
             <div className="hero-content">
-                <span className="hero-label">Next Up</span>
+                <span className="garden-badge garden-badge-amber">⏰ Next Up</span>
                 <h3 className="hero-title">{reminder.title}</h3>
-                <p className="hero-time">{formatRelativeTime(reminder.scheduledAt)}</p>
+                <p className="hero-time">📅 {formatRelativeTime(reminder.scheduledAt)}</p>
             </div>
         </div>
     );
@@ -144,8 +144,8 @@ function Reminders() {
                         <BackIcon />
                     </Link>
                     <div className="header-title-container">
-                        <h1 className="header-title">Reminders</h1>
-                        <span className="header-subtitle">Stay synced & on time</span>
+                        <h1 className="header-title">Reminders 🔔</h1>
+                        <span className="header-subtitle">Never miss our sweet moments</span>
                     </div>
                     <div className="header-right-actions">
                         <button

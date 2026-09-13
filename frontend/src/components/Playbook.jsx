@@ -6,6 +6,26 @@ import { useAuth } from '../context/AuthContext';
 import { LoadingSpinner } from './LoadingSpinner';
 import './Playbook.css';
 
+const CATEGORIES = [
+  { id: 'promise', label: 'Promise to You', icon: '💝', theme: 'card-theme-rose', badge: 'garden-badge-rose', color: '#f43f5e' },
+  { id: 'reflection', label: 'Reflection', icon: '🤔', theme: 'card-theme-purple', badge: 'garden-badge-purple', color: '#8b5cf6' },
+  { id: 'growth', label: 'Personal Growth', icon: '🌱', theme: 'card-theme-emerald', badge: 'garden-badge-emerald', color: '#10b981' },
+  { id: 'gratitude', label: 'Gratitude', icon: '🙏', theme: 'card-theme-amber', badge: 'garden-badge-amber', color: '#f59e0b' },
+  { id: 'memory', label: 'Special Memory', icon: '💭', theme: 'card-theme-pink', badge: 'garden-badge-pink', color: '#ec4899' },
+  { id: 'lesson', label: 'Lesson Learned', icon: '📚', theme: 'card-theme-blue', badge: 'garden-badge-blue', color: '#3b82f6' }
+];
+
+const MOODS = [
+  { id: 'happy', label: 'Happy', emoji: '😊' },
+  { id: 'grateful', label: 'Grateful', emoji: '🙏' },
+  { id: 'peaceful', label: 'Peaceful', emoji: '😌' },
+  { id: 'hopeful', label: 'Hopeful', emoji: '🌟' },
+  { id: 'reflective', label: 'Reflective', emoji: '🤔' },
+  { id: 'determined', label: 'Determined', emoji: '💪' },
+  { id: 'sad', label: 'Sad', emoji: '😢' },
+  { id: 'neutral', label: 'Neutral', emoji: '🌸' }
+];
+
 function Playbook() {
   const [notes, setNotes] = useState([]);
   const [filteredNotes, setFilteredNotes] = useState([]);
@@ -17,30 +37,11 @@ function Playbook() {
     mood: 'neutral',
     tags: []
   });
+  const [currentTagInput, setCurrentTagInput] = useState('');
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const { user } = useAuth();
-
-  const categories = [
-    { id: 'promise', label: 'Promise to You', icon: '💝', color: '#0ea5e9' },
-    { id: 'reflection', label: 'Reflection', icon: '🤔', color: '#7c3aed' },
-    { id: 'growth', label: 'Personal Growth', icon: '🌱', color: '#059669' },
-    { id: 'gratitude', label: 'Gratitude', icon: '🙏', color: '#ea580c' },
-    { id: 'memory', label: 'Special Memory', icon: '💭', color: '#e11d48' },
-    { id: 'lesson', label: 'Lesson Learned', icon: '📚', color: '#8b5cf6' }
-  ];
-
-  const moods = [
-    { id: 'happy', label: 'Happy', emoji: '😊', color: '#fbbf24' },
-    { id: 'sad', label: 'Sad', emoji: '😢', color: '#3b82f6' },
-    { id: 'grateful', label: 'Grateful', emoji: '🙏', color: '#10b981' },
-    { id: 'hopeful', label: 'Hopeful', emoji: '🌟', color: '#8b5cf6' },
-    { id: 'reflective', label: 'Reflective', emoji: '🤔', color: '#6b7280' },
-    { id: 'determined', label: 'Determined', emoji: '💪', color: '#ef4444' },
-    { id: 'peaceful', label: 'Peaceful', emoji: '😌', color: '#06b6d4' },
-    { id: 'neutral', label: 'Neutral', emoji: '😐', color: '#9ca3af' }
-  ];
 
   useEffect(() => {
     fetchNotes();
@@ -77,17 +78,16 @@ function Playbook() {
   const filterNotes = () => {
     let filtered = notes;
 
-    // Filter by category
     if (activeFilter !== 'all') {
       filtered = filtered.filter(note => note.category === activeFilter);
     }
 
-    // Filter by search term
-    if (searchTerm) {
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
       filtered = filtered.filter(note => 
-        note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        note.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (note.tags && note.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())))
+        note.title?.toLowerCase().includes(term) ||
+        note.description?.toLowerCase().includes(term) ||
+        (note.tags && note.tags.some(tag => tag.toLowerCase().includes(term)))
       );
     }
 
@@ -99,12 +99,6 @@ function Playbook() {
     if (!newNote.title.trim() || !user) return;
 
     try {
-      // Debug: Check authentication status
-      console.log('User authenticated:', !!user);
-      console.log('User ID:', user?.uid);
-      console.log('User email:', user?.email);
-
-      // Get user display name for attribution
       const getUserDisplayName = () => {
         if (!user || !user.email) return 'Anonymous';
         const email = user.email.toLowerCase();
@@ -133,6 +127,7 @@ function Playbook() {
         mood: 'neutral',
         tags: []
       });
+      setCurrentTagInput('');
       setShowAddModal(false);
       fetchNotes();
     } catch (error) {
@@ -141,11 +136,13 @@ function Playbook() {
   };
 
   const addTag = (tagText) => {
-    if (tagText.trim() && !newNote.tags.includes(tagText.trim())) {
+    const cleaned = tagText.trim().replace(/^#/, '');
+    if (cleaned && !newNote.tags.includes(cleaned)) {
       setNewNote({
         ...newNote,
-        tags: [...newNote.tags, tagText.trim()]
+        tags: [...newNote.tags, cleaned]
       });
+      setCurrentTagInput('');
     }
   };
 
@@ -158,18 +155,18 @@ function Playbook() {
 
   const getPlaceholderText = () => {
     const placeholders = {
-      promise: "What promise are you making? How will you honor it? What steps will you take?",
-      reflection: "What are you thinking about? What insights have you gained?",
-      growth: "How are you growing? What are you learning about yourself?",
-      gratitude: "What are you grateful for today? Who or what brought you joy?",
-      memory: "Describe this special moment. How did it make you feel?",
-      lesson: "What did you learn? How will this change your approach?"
+      promise: "What promise are you making to us? How will you honor it?",
+      reflection: "What has been on your mind lately? What insights have you felt?",
+      growth: "How are we growing together? What are you learning?",
+      gratitude: "What are you especially grateful for with each other today?",
+      memory: "Describe this special moment so we remember it forever...",
+      lesson: "What did this moment teach you about love, patience, or life?"
     };
-    return placeholders[newNote.category] || "Share your thoughts and feelings...";
+    return placeholders[newNote.category] || "Share your heart and thoughts...";
   };
 
   const formatDate = (timestamp) => {
-    if (!timestamp) return '';
+    if (!timestamp) return 'Just now';
     const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
     return date.toLocaleDateString('en-US', {
       month: 'short',
@@ -178,299 +175,308 @@ function Playbook() {
     });
   };
 
-  const truncateDescription = (description, maxLength = 100) => {
+  const truncateDescription = (description, maxLength = 120) => {
+    if (!description) return '';
     if (description.length <= maxLength) return description;
     return description.substring(0, maxLength) + '...';
   };
 
   return (
     <div className="page-container playbook-page">
-      <div className="playbook-background">
-        <div className="floating-shapes">
-          <div className="shape shape-1"></div>
-          <div className="shape shape-2"></div>
-          <div className="shape shape-3"></div>
-        </div>
-      </div>
-      
+      {/* Header */}
       <header className="tracker-header">
-        <Link to="/dashboard" className="back-button" title="Back to Dashboard">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <Link to="/dashboard" className="back-button" aria-label="Back to Dashboard">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5M12 19L5 12L12 5"/>
           </svg>
         </Link>
         <div className="header-title-container">
-          <h1 className="header-title">Our Shared Playbook</h1>
-          <span className="header-subtitle">Thoughts, dreams & ideas</span>
+          <h1 className="header-title">Our Shared Playbook 📖</h1>
+          <span className="header-subtitle">Thoughts, promises & sweet memories</span>
         </div>
         <div className="header-right-actions">
           <button 
             className="header-icon-button"
             onClick={() => setShowAddModal(true)}
-            title="Add Note"
-            aria-label="Add Note"
+            title="Write Note"
+            aria-label="Write Note"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 5v14M5 12h14"/>
             </svg>
           </button>
         </div>
       </header>
 
-      <div className="playbook-content">
+      {/* Main Content Area */}
+      <main className="playbook-main">
         {loading ? (
-          <LoadingSpinner text="Loading your journey..." />
+          <LoadingSpinner text="Opening our playbook..." />
         ) : (
           <>
-            {/* Search and Filter Section */}
-            <div className="controls-section">
-              <div className="search-section">
-                <div className="search-box">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
-                    <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="2"/>
-                  </svg>
-                  <input
-                    type="text"
-                    placeholder="Search your journey..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="filter-section">
-                <div className="filter-tabs">
+            {/* Search Box */}
+            <div className="playbook-search-wrap">
+              <div className="playbook-search-box">
+                <svg className="playbook-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="m21 21-4.35-4.35"/>
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Search thoughts, memories, tags..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  aria-label="Search entries"
+                />
+                {searchTerm && (
                   <button 
-                    className={`filter-tab ${activeFilter === 'all' ? 'active' : ''}`}
-                    onClick={() => setActiveFilter('all')}
+                    type="button" 
+                    className="playbook-search-clear" 
+                    onClick={() => setSearchTerm('')}
+                    aria-label="Clear search"
                   >
-                    <span className="filter-icon">📖</span>
-                    <span>All Entries</span>
+                    ×
                   </button>
-                  {categories.map(category => (
-                    <button 
-                      key={category.id}
-                      className={`filter-tab ${activeFilter === category.id ? 'active' : ''}`}
-                      onClick={() => setActiveFilter(category.id)}
-                      style={{ '--category-color': category.color }}
-                    >
-                      <span className="filter-icon">{category.icon}</span>
-                      <span>{category.label}</span>
-                    </button>
-                  ))}
-                </div>
+                )}
               </div>
             </div>
 
+            {/* Filter Pills */}
+            <div className="garden-filter-bar">
+              <button 
+                className={`garden-filter-pill ${activeFilter === 'all' ? 'active' : ''}`}
+                onClick={() => setActiveFilter('all')}
+              >
+                <span>📖 All ({notes.length})</span>
+              </button>
+              {CATEGORIES.map(category => {
+                const count = notes.filter(n => n.category === category.id).length;
+                return (
+                  <button 
+                    key={category.id}
+                    className={`garden-filter-pill ${activeFilter === category.id ? 'active' : ''}`}
+                    onClick={() => setActiveFilter(category.id)}
+                  >
+                    <span>{category.icon} {category.label} {count > 0 && `(${count})`}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Notes List / Grid */}
             {filteredNotes.length === 0 ? (
-              <div className="empty-state">
-                <h3>No entries yet</h3>
-                <p>Start creating your entries.</p>
+              <div className="playbook-empty-state">
+                <div className="empty-icon-bubble">🌸</div>
+                <h3>No entries found</h3>
+                <p>
+                  {searchTerm 
+                    ? `No memories match "${searchTerm}". Try another search!`
+                    : "Start writing promises, reflections, or favorite memories together."}
+                </p>
                 <button 
-                  className="primary-button create-first-note"
+                  className="playbook-btn-primary"
                   onClick={() => setShowAddModal(true)}
                 >
-                  Create Entry
+                  Write Our First Note ✨
                 </button>
               </div>
             ) : (
-              <div className="notes-grid">{filteredNotes.map(note => {
-                    const category = categories.find(cat => cat.id === note.category) || categories[0];
-                    const mood = moods.find(m => m.id === note.mood) || moods[7];
-                    
-                    return (
-                      <Link 
-                        to={`/playbook/note/${note.id}`} 
-                        key={note.id} 
-                        className="note-card enhanced-note-card"
-                        style={{ '--category-color': category.color }}
-                      >
-                        <div className="note-category-badge">
-                          <span className="category-icon">{category.icon}</span>
-                          <span className="category-label">{category.label}</span>
+              <div className="playbook-cards-grid">
+                {filteredNotes.map(note => {
+                  const catConfig = CATEGORIES.find(c => c.id === note.category) || CATEGORIES[0];
+                  const moodConfig = MOODS.find(m => m.id === note.mood) || MOODS[7];
+                  const isRay = note.authorName?.toLowerCase().includes('ray');
+
+                  return (
+                    <Link 
+                      to={`/playbook/note/${note.id}`} 
+                      key={note.id} 
+                      className={`playbook-note-card ${catConfig.theme}`}
+                    >
+                      {/* Top Row: Category + Mood */}
+                      <div className="playbook-card-top">
+                        <span className={`garden-badge ${catConfig.badge}`}>
+                          {catConfig.icon} {catConfig.label}
+                        </span>
+                        <span className="playbook-mood-chip" title={moodConfig.label}>
+                          {moodConfig.emoji} {moodConfig.label}
+                        </span>
+                      </div>
+                      
+                      {/* Title */}
+                      <h2 className="playbook-card-title">{note.title}</h2>
+                      
+                      {/* Snippet Preview */}
+                      {note.description && (
+                        <p className="playbook-card-snippet">
+                          {truncateDescription(note.description, 130)}
+                        </p>
+                      )}
+                      
+                      {/* Tags */}
+                      {note.tags && note.tags.length > 0 && (
+                        <div className="playbook-tags-row">
+                          {note.tags.slice(0, 3).map((tag, idx) => (
+                            <span key={idx} className="playbook-tag-pill">#{tag}</span>
+                          ))}
+                          {note.tags.length > 3 && (
+                            <span className="playbook-tag-more">+{note.tags.length - 3}</span>
+                          )}
                         </div>
-                        
-                        <div className="note-header">
-                          <h3 className="note-title">{note.title}</h3>
-                          <div className="note-mood">
-                            <span className="mood-emoji">{mood.emoji}</span>
-                          </div>
+                      )}
+
+                      {/* Footer Row: Author + Date + Read indicator */}
+                      <div className="playbook-card-footer">
+                        <div className="playbook-author-meta">
+                          <span className="playbook-author-badge">
+                            {isRay ? '🌸 Ray' : '🌿 Tajie'}
+                          </span>
+                          <span className="playbook-date-chip">
+                            {formatDate(note.createdAt)}
+                          </span>
                         </div>
-                        
-                        <div className="note-author">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                          <span>by {note.authorName || 'Unknown'}</span>
-                          <span className="note-date">{formatDate(note.createdAt)}</span>
-                        </div>
-                        
-                        {note.description && (
-                          <p className="note-preview">
-                            {truncateDescription(note.description)}
-                          </p>
-                        )}
-                        
-                        {note.tags && note.tags.length > 0 && (
-                          <div className="note-tags">
-                            {note.tags.slice(0, 3).map((tag, index) => (
-                              <span key={index} className="note-tag">#{tag}</span>
-                            ))}
-                            {note.tags.length > 3 && (
-                              <span className="note-tag-more">+{note.tags.length - 3} more</span>
-                            )}
-                          </div>
-                        )}
-                      </Link>
-                    );
-                  })}
+                        <span className="playbook-read-arrow">
+                          Read <span>→</span>
+                        </span>
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             )}
           </>
         )}
-      </div>
+      </main>
 
-      {/* Enhanced Add Note Modal */}
+      {/* Add Note Modal */}
       {showAddModal && (
         <div className="modal-overlay" onClick={() => setShowAddModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <div className="modal-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <polyline points="14,2 14,8 20,8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <polyline points="10,9 9,9 8,9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+          <div className="playbook-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="playbook-modal-header">
+              <div className="playbook-modal-icon">✍️</div>
+              <div>
+                <h2 className="modal-title">Write a New Entry</h2>
+                <p className="modal-subtitle">Capture a promise, reflection, or sweet memory</p>
               </div>
-              <h3>Create New Note</h3>
-              <p>Capture your thoughts and ideas</p>
               <button 
-                className="close-button"
+                className="modal-close-btn"
                 onClick={() => setShowAddModal(false)}
+                aria-label="Close modal"
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                ✕
               </button>
             </div>
-            <form onSubmit={handleAddNote} className="add-note-form enhanced-form">
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="title">Entry Title</label>
+
+            <form onSubmit={handleAddNote} className="playbook-form">
+              {/* Title */}
+              <div className="form-group">
+                <label htmlFor="note-title">Title</label>
+                <input
+                  type="text"
+                  id="note-title"
+                  value={newNote.title}
+                  onChange={(e) => setNewNote({...newNote, title: e.target.value})}
+                  placeholder="What's on your heart?"
+                  required
+                  autoFocus
+                />
+              </div>
+
+              {/* Category Selector */}
+              <div className="form-group">
+                <label>Category</label>
+                <div className="playbook-category-grid">
+                  {CATEGORIES.map(cat => (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      className={`playbook-cat-option ${newNote.category === cat.id ? 'selected' : ''}`}
+                      onClick={() => setNewNote({...newNote, category: cat.id})}
+                    >
+                      <span className="cat-icon">{cat.icon}</span>
+                      <span className="cat-text">{cat.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Mood Selector */}
+              <div className="form-group">
+                <label>Current Mood</label>
+                <div className="playbook-mood-row">
+                  {MOODS.map(m => (
+                    <button
+                      key={m.id}
+                      type="button"
+                      className={`playbook-mood-btn ${newNote.mood === m.id ? 'selected' : ''}`}
+                      onClick={() => setNewNote({...newNote, mood: m.id})}
+                      title={m.label}
+                    >
+                      <span className="mood-emoji">{m.emoji}</span>
+                      <span className="mood-name">{m.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="form-group">
+                <label htmlFor="note-description">Your Thoughts</label>
+                <textarea
+                  id="note-description"
+                  value={newNote.description}
+                  onChange={(e) => setNewNote({...newNote, description: e.target.value})}
+                  placeholder={getPlaceholderText()}
+                  rows="5"
+                />
+              </div>
+
+              {/* Tags Input */}
+              <div className="form-group">
+                <label htmlFor="note-tags">Tags</label>
+                <div className="playbook-tags-input-box">
+                  {newNote.tags.map((tag, idx) => (
+                    <span key={idx} className="playbook-tag-pill active">
+                      #{tag}
+                      <button
+                        type="button"
+                        onClick={() => removeTag(tag)}
+                        className="playbook-tag-remove"
+                        aria-label={`Remove tag ${tag}`}
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
                   <input
+                    id="note-tags"
                     type="text"
-                    id="title"
-                    value={newNote.title}
-                    onChange={(e) => setNewNote({...newNote, title: e.target.value})}
-                    placeholder="What's this about?"
-                    required
-                    autoFocus
-                  />
-                </div>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="category">Category</label>
-                  <div className="category-selector">
-                    {categories.map(category => (
-                      <button
-                        key={category.id}
-                        type="button"
-                        className={`category-option ${newNote.category === category.id ? 'selected' : ''}`}
-                        onClick={() => setNewNote({...newNote, category: category.id})}
-                        style={{ '--category-color': category.color }}
-                      >
-                        <span className="category-icon">{category.icon}</span>
-                        <span className="category-label">{category.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="mood">How are you feeling?</label>
-                  <div className="mood-selector">
-                    {moods.map(mood => (
-                      <button
-                        key={mood.id}
-                        type="button"
-                        className={`mood-option ${newNote.mood === mood.id ? 'selected' : ''}`}
-                        onClick={() => setNewNote({...newNote, mood: mood.id})}
-                        title={mood.label}
-                      >
-                        <span className="mood-emoji">{mood.emoji}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="description">Your Thoughts</label>
-                  <textarea
-                    id="description"
-                    value={newNote.description}
-                    onChange={(e) => setNewNote({...newNote, description: e.target.value})}
-                    placeholder={getPlaceholderText()}
-                    rows="5"
-                  />
-                </div>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="tags">Tags (Press Enter to add)</label>
-                  <div className="tags-input-container">
-                    <div className="tags-display">
-                      {newNote.tags.map((tag, index) => (
-                        <span key={index} className="tag-pill">
-                          #{tag}
-                          <button
-                            type="button"
-                            onClick={() => removeTag(tag)}
-                            className="tag-remove"
-                          >
-                            ×
-                          </button>
-                        </span>
-                      ))}
-                    </div>
-                    <input
-                      type="text"
-                      placeholder="Add tags... (healing, promise, growth)"
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                          addTag(e.target.value);
-                          e.target.value = '';
+                    placeholder={newNote.tags.length === 0 ? "Type a tag & press Enter (e.g. promise, date)" : "Add more..."}
+                    value={currentTagInput}
+                    onChange={(e) => setCurrentTagInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ',') {
+                        e.preventDefault();
+                        if (currentTagInput.trim()) {
+                          addTag(currentTagInput);
                         }
-                      }}
-                    />
-                  </div>
+                      }
+                    }}
+                  />
                 </div>
               </div>
 
-              <div className="modal-actions">
+              {/* Actions */}
+              <div className="playbook-modal-actions">
                 <button 
                   type="button" 
-                  className="secondary-button"
+                  className="playbook-btn-secondary"
                   onClick={() => setShowAddModal(false)}
                 >
                   Cancel
                 </button>
-                <button type="submit" className="primary-button">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  Create Note
+                <button type="submit" className="playbook-btn-primary">
+                  Save Note ✨
                 </button>
               </div>
             </form>

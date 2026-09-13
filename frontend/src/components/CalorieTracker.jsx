@@ -170,17 +170,29 @@ function CalorieTracker() {
         await setDoc(logDocRef, updatedLog, { merge: true });
     };
 
+    const MEAL_CONFIG = {
+        breakfast: { label: 'Breakfast', emoji: '🍳', theme: 'meal-breakfast' },
+        lunch: { label: 'Lunch', emoji: '🥗', theme: 'meal-lunch' },
+        dinner: { label: 'Dinner', emoji: '🍲', theme: 'meal-dinner' },
+        snacks: { label: 'Snacks', emoji: '🍎', theme: 'meal-snacks' },
+    };
+
     const MealSection = ({ mealName, foods = [] }) => {
+        const key = mealName.toLowerCase();
+        const config = MEAL_CONFIG[key] || { label: mealName, emoji: '🍽️', theme: '' };
         const totalCalories = foods.reduce((sum, item) => sum + (item.calories || 0), 0);
         return (
-            <div className="meal-section">
+            <div className={`meal-section ${config.theme}`}>
                 <div className="meal-header">
-                    <h3>{mealName}</h3>
-                    <div className="meal-summary">{totalCalories} Cal</div>
+                    <div className="meal-title-group">
+                        <span className="meal-emoji">{config.emoji}</span>
+                        <h3>{config.label}</h3>
+                    </div>
+                    <div className="meal-summary">{totalCalories} kcal</div>
                 </div>
                 <div className="meal-items">
                     {foods.length === 0 ? (
-                        <p className="empty-meal-text">No food logged yet.</p>
+                        <p className="empty-meal-text">Nothing logged yet</p>
                     ) : (
                         foods.map((food, index) => (
                             <div
@@ -189,12 +201,13 @@ function CalorieTracker() {
                             >
                                 <div className="food-item-info">
                                     <span className="food-item-name">{food.name}</span>
-                                    <span className="food-item-calories">{food.calories} cal</span>
+                                    <span className="food-item-calories">{food.calories} kcal</span>
                                 </div>
                                 <button
                                     className="delete-food-button"
-                                    onClick={() => handleDeleteFood(mealName.toLowerCase(), index)}
+                                    onClick={() => handleDeleteFood(key, index)}
                                     title="Remove item"
+                                    aria-label="Remove item"
                                 >
                                     <CloseIcon />
                                 </button>

@@ -36,6 +36,13 @@ const TrashIcon = () => (
     </svg>
 );
 
+const PencilIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+        <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" />
+        <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" />
+    </svg>
+);
+
 // --- Helper & Child Component Definitions ---
 const formatValue = (value = 0) => new Intl.NumberFormat('en-US').format(value);
 
@@ -109,23 +116,34 @@ const GoalItem = React.memo(
         return (
             <div className={`goal-item ${goal.isComplete ? 'complete' : ''}`}>
                 <div className="goal-header">
-                    <h4 className="goal-title" onClick={() => onEdit(goal)}>
-                        {goal.title}
-                    </h4>
+                    <div className="goal-header-left">
+                        {goal.goalType === 'financial' ? (
+                            <span className="garden-badge garden-badge-emerald">💰 Financial</span>
+                        ) : (
+                            <span className="garden-badge garden-badge-purple">🎯 Milestone</span>
+                        )}
+                        <h4 className="goal-title" onClick={() => onEdit(goal)}>
+                            {goal.title}
+                        </h4>
+                    </div>
                     <button
                         className="complete-button"
                         onClick={() => onToggleComplete(goal.id, goal.isComplete)}
-                        title="Mark Complete"
+                        title={goal.isComplete ? 'Mark as in-progress' : 'Mark Complete'}
+                        aria-label="Toggle complete"
                     >
                         <CheckCircleIcon />
                     </button>
                 </div>
                 <div className="goal-body">
-                    <div className="progress-bar-container">
-                        <div
-                            className="progress-bar-fill"
-                            style={{ width: `${Math.min(progress, 100)}%` }}
-                        />
+                    <div className="progress-bar-row">
+                        <div className="progress-bar-container">
+                            <div
+                                className="progress-bar-fill"
+                                style={{ width: `${Math.min(progress, 100)}%` }}
+                            />
+                        </div>
+                        <span className="goal-pct-badge">{Math.min(Math.round(progress), 100)}%</span>
                     </div>
                     <div className="goal-stats">
                         <span>
@@ -141,22 +159,33 @@ const GoalItem = React.memo(
                         <div className="checkbox-grid">{renderCheckboxes()}</div>
                     )}
                     {goal.description && <p className="goal-description">{goal.description}</p>}
-                    {goal.deadline && <p className="goal-deadline">Deadline: {goal.deadline}</p>}
+                    {goal.deadline && <p className="goal-deadline">📅 Target: {goal.deadline}</p>}
                 </div>
                 <div className="goal-footer">
-                    <button
-                        className="button-icon delete-button"
-                        onClick={() => onDelete(goal)}
-                        title="Delete Goal"
-                    >
-                        <TrashIcon />
-                    </button>
+                    <div className="goal-footer-actions">
+                        <button
+                            className="button-icon edit-button"
+                            onClick={() => onEdit(goal)}
+                            title="Edit Goal"
+                            aria-label="Edit Goal"
+                        >
+                            <PencilIcon />
+                        </button>
+                        <button
+                            className="button-icon delete-button"
+                            onClick={() => onDelete(goal)}
+                            title="Delete Goal"
+                            aria-label="Delete Goal"
+                        >
+                            <TrashIcon />
+                        </button>
+                    </div>
                     {goal.goalType === 'financial' && !goal.isComplete && (
                         <button
                             className="button add-progress-button"
                             onClick={() => onAddProgress(goal)}
                         >
-                            Add Progress
+                            + Add Progress
                         </button>
                     )}
                 </div>
@@ -493,6 +522,8 @@ function CurrentGoals() {
         }
     };
 
+    const [filter, setFilter] = useState('all'); // 'all', 'inProgress', 'completed'
+
     const inProgressGoals = useMemo(
         () => goals.filter((g) => !g.isComplete),
         [goals]
@@ -510,8 +541,8 @@ function CurrentGoals() {
                         <BackIcon />
                     </Link>
                     <div className="header-title-container">
-                        <h1 className="header-title">Current Goals</h1>
-                        <span className="header-subtitle">Shared dreams & achievements</span>
+                        <h1 className="header-title">Current Goals 🎯</h1>
+                        <span className="header-subtitle">Dreams we achieve together</span>
                     </div>
                     <div className="header-right-actions">
                         <button
@@ -532,14 +563,39 @@ function CurrentGoals() {
                         <div className="empty-state-container">
                             <GoalsSvg className="empty-state-svg" />
                             <p>No goals set yet.</p>
-                            <span>Tap the '+' button above to create your first goal!</span>
+                            <span>Tap the '+' button above to create your first shared dream!</span>
                         </div>
                     ) : (
                         <>
-                            {inProgressGoals.length > 0 && (
+                            {/* Filter Bar */}
+                            <div className="garden-filter-bar">
+                                <button
+                                    type="button"
+                                    className={`garden-filter-pill ${filter === 'all' ? 'active' : ''}`}
+                                    onClick={() => setFilter('all')}
+                                >
+                                    All ({goals.length})
+                                </button>
+                                <button
+                                    type="button"
+                                    className={`garden-filter-pill ${filter === 'inProgress' ? 'active' : ''}`}
+                                    onClick={() => setFilter('inProgress')}
+                                >
+                                    In Progress ({inProgressGoals.length})
+                                </button>
+                                <button
+                                    type="button"
+                                    className={`garden-filter-pill ${filter === 'completed' ? 'active' : ''}`}
+                                    onClick={() => setFilter('completed')}
+                                >
+                                    ✨ Achieved ({completedGoals.length})
+                                </button>
+                            </div>
+
+                            {(filter === 'all' || filter === 'inProgress') && inProgressGoals.length > 0 && (
                                 <div className="list-section">
                                     <h3>
-                                        In Progress
+                                        🌱 In Progress
                                         <span className="count-badge">
                                             {inProgressGoals.length}
                                         </span>
@@ -559,10 +615,10 @@ function CurrentGoals() {
                                     </div>
                                 </div>
                             )}
-                            {completedGoals.length > 0 && (
+                            {(filter === 'all' || filter === 'completed') && completedGoals.length > 0 && (
                                 <div className="list-section">
                                     <h3>
-                                        Completed
+                                        ✨ Achieved Goals
                                         <span className="count-badge">
                                             {completedGoals.length}
                                         </span>
@@ -572,6 +628,7 @@ function CurrentGoals() {
                                             <GoalItem
                                                 key={goal.id}
                                                 goal={goal}
+                                                onAddProgress={handleOpenProgressModal}
                                                 onToggleComplete={handleToggleComplete}
                                                 onEdit={handleOpenGoalModal}
                                                 onDelete={handleDeleteRequest}
@@ -579,6 +636,18 @@ function CurrentGoals() {
                                             />
                                         ))}
                                     </div>
+                                </div>
+                            )}
+
+                            {filter === 'inProgress' && inProgressGoals.length === 0 && (
+                                <div className="empty-filter-state">
+                                    <p>All goals completed! Time to dream up new adventures 🎉</p>
+                                </div>
+                            )}
+
+                            {filter === 'completed' && completedGoals.length === 0 && (
+                                <div className="empty-filter-state">
+                                    <p>No goals completed yet. Keep growing together! 🌱</p>
                                 </div>
                             )}
                         </>

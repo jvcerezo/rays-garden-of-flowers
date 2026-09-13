@@ -44,12 +44,12 @@
 .goal-item {
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    border-radius: 16px;
+    border-radius: 18px;
     padding: 14px 16px;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
     box-sizing: border-box;
 }
 
@@ -57,9 +57,14 @@
     transform: scale(0.99);
 }
 
+.goal-item:hover {
+    border-color: #bae6fd;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.08);
+}
+
 .goal-item.complete {
-    border-left: 4px solid #10b981;
-    background-color: #f0fdf4;
+    border-color: #d1fae5;
+    background: linear-gradient(135deg, #ffffff 70%, #ecfdf5 100%);
 }
 
 .goal-item.complete .goal-title {
@@ -74,14 +79,22 @@
     gap: 8px;
 }
 
+.goal-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-grow: 1;
+    min-width: 0;
+}
+
 .goal-title {
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 700;
     margin: 0;
     color: #1e293b;
-    flex-grow: 1;
     cursor: pointer;
-    line-height: 1.3;
+    line-height: 1.35;
+    word-break: break-word;
 }
 
 .goal-title:hover {
@@ -121,26 +134,48 @@
 
 /* --- Progress Bar & Stats --- */
 .goal-body {
-    margin: 12px 0;
+    margin: 12px 0 8px;
+}
+
+.progress-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
 }
 
 .progress-bar-container {
-    width: 100%;
-    height: 7px;
+    flex: 1;
+    height: 8px;
     background-color: #f1f5f9;
-    border-radius: 4px;
+    border-radius: 9999px;
     overflow: hidden;
 }
 
 .progress-bar-fill {
     height: 100%;
     background: linear-gradient(90deg, #38bdf8 0%, #0284c7 100%);
-    border-radius: 4px;
+    border-radius: 9999px;
     transition: width 0.4s ease-out;
 }
 
 .goal-item.complete .progress-bar-fill {
     background: #10b981;
+}
+
+.goal-pct-badge {
+    font-size: 11px;
+    font-weight: 700;
+    color: #0369a1;
+    background: #e0f2fe;
+    padding: 2px 7px;
+    border-radius: 9999px;
+    flex-shrink: 0;
+}
+
+.goal-item.complete .goal-pct-badge {
+    color: #047857;
+    background: #d1fae5;
 }
 
 .goal-stats {
@@ -223,24 +258,27 @@
     align-items: center;
 }
 
-.delete-button {
-    margin-left: auto;
+.goal-footer-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .add-progress-button {
-    background-color: #0284c7;
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
     color: #ffffff;
     padding: 6px 14px;
-    border-radius: 8px;
+    border-radius: 9999px;
     font-weight: 600;
-    font-size: 12.5px;
+    font-size: 12px;
     border: none;
     cursor: pointer;
-    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.2);
+    transition: all 0.15s ease;
 }
 
-.add-progress-button:hover {
-    background-color: #0369a1;
+.add-progress-button:active {
+    transform: scale(0.96);
 }
 
 .goal-item.complete .add-progress-button {
