@@ -12,19 +12,13 @@ const CalorieDial = ({ progress = 0, consumed = 0, remaining = 0, target = 2000 
     return (
         <div className="calorie-dial-container">
             <svg className="calorie-dial-svg" viewBox="0 0 190 190">
-                <defs>
-                    <linearGradient id="calorieGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#34d399" />
-                        <stop offset="100%" stopColor="#10b981" />
-                    </linearGradient>
-                </defs>
                 <circle className="dial-track" cx="95" cy="95" r={radius} />
                 <circle
                     className="dial-progress"
                     cx="95"
                     cy="95"
                     r={radius}
-                    stroke="url(#calorieGradient)"
+                    stroke="#10b981"
                     strokeDasharray={circumference}
                     strokeDashoffset={offset}
                 />

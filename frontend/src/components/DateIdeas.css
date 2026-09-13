@@ -21,10 +21,10 @@
 }
 
 .date-surprise-btn {
-    border: none;
-    background: linear-gradient(135deg, #fce7f3 0%, #fff1f2 100%);
-    color: #9d174d;
-    box-shadow: 0 2px 6px rgba(236, 72, 153, 0.12);
+    border: 1.5px solid #fbcfe8;
+    background: #fdf2f8;
+    color: #be185d;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 /* --- List Section & Grid Layout --- */
@@ -75,8 +75,8 @@
 }
 
 .date-idea-item.finished {
-    background: linear-gradient(135deg, #ffffff 70%, #fdf2f8 100%);
-    border-color: #fbcfe8;
+    background: #fafafa;
+    border-color: #f1f5f9;
 }
 
 .date-idea-item.finished .date-idea-title {

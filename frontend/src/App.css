@@ -27,7 +27,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, var(--background-start) 0%, var(--background-end) 100%);
+  background: #f8fafc;
   min-height: 100vh;
 }
 
@@ -214,20 +214,6 @@ body {
   max-width: 500px;
   margin: 0 auto;
   position: relative;
-}
-
-.dashboard-page::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 20%, rgba(167, 139, 250, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(134, 239, 172, 0.03) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 0;
 }
 
 .dashboard-header,
@@ -459,15 +445,15 @@ body {
 
 /* --- Cozy Garden Welcome Banner --- */
 .garden-welcome-banner {
-  background: linear-gradient(135deg, #fff1f2 0%, #faf5ff 50%, #f0fdf4 100%);
-  border: 1px solid rgba(244, 114, 182, 0.2);
+  background: #ffffff;
+  border: 1.5px solid #fbcfe8;
   border-radius: 20px;
   padding: 14px 16px;
   margin-bottom: 16px;
   display: flex;
   align-items: center;
   gap: 12px;
-  box-shadow: 0 3px 12px rgba(244, 114, 182, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
   width: 100%;
   box-sizing: border-box;
 }
@@ -624,15 +610,15 @@ body {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #fbcfe8 0%, #c4b5fd 100%);
-  color: #581c87;
+  background: #f5f3ff;
+  color: #7c3aed;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 15px;
-  box-shadow: 0 2px 6px rgba(167, 139, 250, 0.25);
-  border: 2px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  border: 1.5px solid #ddd6fe;
 }
 
 .card-arrow-pill {
@@ -667,52 +653,52 @@ body {
   color: var(--primary-color);
 }
 
-/* Card Themes with Cozy Garden Accents */
+/* Card Themes with Clean Solid Borders & Backgrounds */
 .card-theme-rose {
-  border-color: #ffe4e6;
-  background: linear-gradient(135deg, #ffffff 70%, #fff1f2 100%);
+  border-color: #fecdd3;
+  background: #ffffff;
 }
 .card-theme-rose .card-icon { background: #ffe4e6; color: #e11d48; border-radius: 14px; }
 
 .card-theme-purple {
-  border-color: #f3e8ff;
-  background: linear-gradient(135deg, #ffffff 70%, #faf5ff 100%);
+  border-color: #ddd6fe;
+  background: #ffffff;
 }
 .card-theme-purple .card-icon { background: #f3e8ff; color: #9333ea; border-radius: 14px; }
 
 .card-theme-pink {
-  border-color: #fce7f3;
-  background: linear-gradient(135deg, #ffffff 70%, #fdf2f8 100%);
+  border-color: #fbcfe8;
+  background: #ffffff;
 }
 .card-theme-pink .card-icon { background: #fce7f3; color: #db2777; border-radius: 14px; }
 
 .card-theme-amber {
-  border-color: #fef3c7;
-  background: linear-gradient(135deg, #ffffff 70%, #fffbeb 100%);
+  border-color: #fde68a;
+  background: #ffffff;
 }
 .card-theme-amber .card-icon { background: #fef3c7; color: #d97706; border-radius: 14px; }
 
 .card-theme-emerald {
-  border-color: #d1fae5;
-  background: linear-gradient(135deg, #ffffff 70%, #ecfdf5 100%);
+  border-color: #a7f3d0;
+  background: #ffffff;
 }
 .card-theme-emerald .card-icon { background: #d1fae5; color: #059669; border-radius: 14px; }
 
 .card-theme-blue {
-  border-color: #e0f2fe;
-  background: linear-gradient(135deg, #ffffff 70%, #f0f9ff 100%);
+  border-color: #bae6fd;
+  background: #ffffff;
 }
 .card-theme-blue .card-icon { background: #e0f2fe; color: #0284c7; border-radius: 14px; }
 
 .card-theme-indigo {
-  border-color: #e0e7ff;
-  background: linear-gradient(135deg, #ffffff 70%, #eef2ff 100%);
+  border-color: #c7d2fe;
+  background: #ffffff;
 }
 .card-theme-indigo .card-icon { background: #e0e7ff; color: #4f46e5; border-radius: 14px; }
 
 .card-theme-violet {
-  border-color: #ede9fe;
-  background: linear-gradient(135deg, #ffffff 70%, #f5f3ff 100%);
+  border-color: #e9d5ff;
+  background: #ffffff;
 }
 .card-theme-violet .card-icon { background: #ede9fe; color: #7c3aed; border-radius: 14px; }
 
@@ -975,10 +961,10 @@ svg.spinner .path,
   width: 54px;
   height: 54px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary-color) 0%, #8b5cf6 100%);
+  background: #7c3aed;
   border: none;
   color: white;
-  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -47,8 +47,8 @@ export const PlayerStats = ({ data, playerName }) => {
             </div>
 
             <div className="player-stats-bars">
-                <StatBar label="HP" color="linear-gradient(90deg, #34d399, #10b981)" />
-                <StatBar label="MP" color="linear-gradient(90deg, #60a5fa, #3b82f6)" />
+                <StatBar label="HP" color="#10b981" />
+                <StatBar label="MP" color="#3b82f6" />
                 <div className="stat-bar-container">
                     <div className="stat-label">
                         <span>EXP</span>
@@ -58,7 +58,7 @@ export const PlayerStats = ({ data, playerName }) => {
                         <div 
                             className="stat-bar-progress" 
                             style={{ 
-                                background: "linear-gradient(90deg, #f59e0b, #fbbf24)", 
+                                background: "#f59e0b", 
                                 width: `${Math.min(expPercentage, 100)}%`,
                                 transition: 'width 0.4s ease-out'
                             }}

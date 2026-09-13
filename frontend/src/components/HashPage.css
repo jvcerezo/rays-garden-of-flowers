@@ -93,7 +93,8 @@
 .hash-success {
     margin-top: 30px;
     padding: 25px;
-    background: linear-gradient(135deg, #fbcfe8, #f5d0fe); /* Pink/purple gradient */
+    background: #fdf2f8;
+    border: 1.5px solid #fbcfe8;
     border-radius: 20px;
     color: #9d174d;
     display: flex;
