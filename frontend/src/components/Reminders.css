@@ -1,14 +1,14 @@
 /* --- Reminders Page Layout & Theme --- */
 .reminders-page { 
     justify-content: flex-start; 
-    padding: 4px 14px 100px 14px;
+    padding: 2px 0 100px 0;
     background: transparent;
     width: 100%;
 }
 
 .reminders-content {
     width: 100%;
-    max-width: 393px;
+    max-width: 100%;
     margin: 0 auto;
 }
 
@@ -18,10 +18,10 @@
     grid-template-columns: 38px 1fr 38px;
     align-items: center;
     width: 100%;
-    max-width: 393px;
     margin: 0 auto 12px;
     padding: 4px 0;
     box-sizing: border-box;
+    gap: 6px;
 }
 .header-title { 
     font-size: 18px; 

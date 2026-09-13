@@ -1,6 +1,6 @@
 /* --- Current Goals Page --- */
 .goals-page {
-    padding: 4px 14px 40px 14px;
+    padding: 2px 0 40px 0;
     background: transparent;
     width: 100%;
     min-height: 100%;
@@ -12,7 +12,7 @@
     border-radius: 24px;
     padding: 14px 12px;
     width: 100%;
-    max-width: 393px;
+    max-width: 100%;
     margin: 0 auto;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.8);
@@ -127,6 +127,21 @@
 .goals-tab.active .tab-badge {
     background: rgba(167, 139, 250, 0.15);
     color: var(--primary-color, #a78bfa);
+}
+
+@media (max-width: 365px) {
+    .goals-card {
+        padding: 12px 8px;
+    }
+    .goals-tab {
+        padding: 6px 4px;
+        font-size: 11px;
+        gap: 3px;
+    }
+    .goals-tab .tab-badge {
+        padding: 1px 4px;
+        font-size: 9px;
+    }
 }
 
 /* --- List & Grid Layout --- */

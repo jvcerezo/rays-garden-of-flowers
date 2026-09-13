@@ -36,12 +36,12 @@
 .date-ideas-page {
     min-height: 100%;
     background: transparent;
-    padding: 12px 14px 40px 14px;
+    padding: 2px 0 40px 0;
     width: 100%;
 }
 
 .date-ideas-card {
-    max-width: 393px;
+    max-width: 100%;
     margin: 0 auto;
     background: var(--bg-primary);
     border-radius: 24px;
@@ -192,6 +192,25 @@
 .date-tab.active .tab-badge {
     background: rgba(167, 139, 250, 0.15);
     color: var(--primary-color, #a78bfa);
+}
+
+@media (max-width: 365px) {
+    .date-ideas-card {
+        border-radius: 18px;
+    }
+    .date-filter-tabs {
+        margin: 10px 8px 4px 8px;
+        gap: 2px;
+    }
+    .date-tab {
+        padding: 6px 4px;
+        font-size: 11px;
+        gap: 3px;
+    }
+    .date-tab .tab-badge {
+        padding: 1px 4px;
+        font-size: 9px;
+    }
 }
 
 .empty-tab-container {

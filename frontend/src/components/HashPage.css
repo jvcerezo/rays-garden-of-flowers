@@ -5,20 +5,20 @@
     align-items: center;
     background-color: transparent;
     min-height: 100%;
-    padding: 0 16px 28px 16px;
+    padding: 2px 0 28px 0;
     box-sizing: border-box;
     width: 100%;
 }
 
 .hash-header {
     width: 100%;
-    max-width: 420px;
+    max-width: 100%;
     margin-bottom: 20px;
 }
 
 .hash-card {
     width: 100%;
-    max-width: 400px;
+    max-width: 100%;
     background-color: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);

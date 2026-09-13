@@ -1,7 +1,7 @@
 /* --- Ray-Connect Page --- */
 .ray-connect-page {
     justify-content: flex-start;
-    padding: 4px 14px 120px 14px; 
+    padding: 2px 0 120px 0; 
     box-sizing: border-box;
     width: 100%;
 }

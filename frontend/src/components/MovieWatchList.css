@@ -56,7 +56,7 @@
 .movie-page-container {
     min-height: 100%;
     background: transparent;
-    padding: 4px 14px 40px 14px;
+    padding: 2px 0 40px 0;
     display: flex;
     align-items: flex-start;
     justify-content: center;
@@ -66,7 +66,7 @@
 
 .movie-list-card {
     width: 100%;
-    max-width: 393px;
+    max-width: 100%;
     background: var(--bg-primary);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-lg);
@@ -261,6 +261,22 @@
 .movie-tab.active .tab-badge {
     background: rgba(167, 139, 250, 0.15);
     color: var(--primary, #a78bfa);
+}
+
+@media (max-width: 365px) {
+    .movie-filter-tabs {
+        margin: 10px 8px 4px 8px;
+        gap: 2px;
+    }
+    .movie-tab {
+        padding: 6px 4px;
+        font-size: 11px;
+        gap: 3px;
+    }
+    .movie-tab .tab-badge {
+        padding: 1px 4px;
+        font-size: 9px;
+    }
 }
 
 /* --- Content Container --- */

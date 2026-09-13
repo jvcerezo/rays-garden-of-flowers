@@ -15,7 +15,7 @@
 .playbook-page {
   min-height: 100%;
   background: transparent;
-  padding: 0 12px 28px 12px;
+  padding: 2px 0 28px 0;
   box-sizing: border-box;
   width: 100%;
 }
@@ -56,7 +56,7 @@
 /* Content Area */
 .playbook-content {
   padding: 0;
-  max-width: 480px;
+  max-width: 100%;
   margin: 0 auto;
   width: 100%;
   box-sizing: border-box;

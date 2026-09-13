@@ -2,7 +2,8 @@
 .calorie-tracker-page {
     background-color: transparent;
     justify-content: flex-start;
-    padding: 4px 14px 100px 14px;
+    padding: 2px 0 100px 0;
+    width: 100%;
 }
 
 .tracker-header {
@@ -10,10 +11,10 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    max-width: 393px;
     margin: 0 auto 10px;
     padding: 4px 0;
     box-sizing: border-box;
+    gap: 6px;
 }
 
 .calorie-date-navigator {
