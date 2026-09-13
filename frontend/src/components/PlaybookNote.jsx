@@ -4,6 +4,7 @@ import { doc, getDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/fir
 import { db } from '../firebase/firebase';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import { LoadingSpinner } from './LoadingSpinner';
 import './PlaybookNote.css';
 
 function PlaybookNote() {
@@ -61,6 +62,7 @@ function PlaybookNote() {
 
   useEffect(() => {
     fetchNote();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [noteId, user]);
 
   const fetchNote = async () => {
@@ -149,7 +151,7 @@ function PlaybookNote() {
   if (loading) {
     return (
       <div className="page-container playbook-note-page">
-        <div className="loading-state">Loading note...</div>
+        <LoadingSpinner text="Loading note..." />
       </div>
     );
   }
@@ -163,7 +165,7 @@ function PlaybookNote() {
   }
 
   return (
-    <div className="playbook-note-page">
+    <div className="page-container playbook-note-page">
       <header className="page-header">
         <Link to="/playbook" className="back-button">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">

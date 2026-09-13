@@ -1,55 +1,13 @@
 /* --- Reminders Page Layout & Theme --- */
 .reminders-page { 
     justify-content: flex-start; 
-    padding: 15px 15px 100px 15px;
-    background-color: #f8fafc;
+    padding-bottom: max(30px, env(safe-area-inset-bottom, 20px));
 }
 
 .reminders-content {
     width: 100%;
-    max-width: 600px;
     margin: 0 auto;
 }
-
-/* --- Header --- */
-.tracker-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto 15px;
-    padding: 10px 0;
-}
-.header-title { 
-    font-size: 22px; 
-    font-weight: 700; 
-    color: #1f2937;
-    text-align: center;
-    flex-grow: 1;
-}
-.back-button, .add-button {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #3b82f6;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    flex-shrink: 0;
-}
-.add-button {
-    background: #eef2ff;
-}
-.back-button:hover, .add-button:hover {
-    transform: scale(1.05);
-    background-color: #e0e7ff;
-}
-.back-button svg, .add-button svg { width: 22px; height: 22px; }
 
 /* --- Next Reminder Hero Card --- */
 .next-reminder-hero {

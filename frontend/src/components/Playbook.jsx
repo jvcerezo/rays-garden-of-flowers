@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { collection, addDoc, getDocs, query, orderBy, serverTimestamp, where } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, orderBy, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase/firebase';
 import { useAuth } from '../context/AuthContext';
+import { LoadingSpinner } from './LoadingSpinner';
 import './Playbook.css';
 
 function Playbook() {
@@ -43,10 +44,12 @@ function Playbook() {
 
   useEffect(() => {
     fetchNotes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   useEffect(() => {
     filterNotes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notes, activeFilter, searchTerm]);
 
   const fetchNotes = async () => {
@@ -190,34 +193,33 @@ function Playbook() {
         </div>
       </div>
       
-      <header className="page-header">
-        <Link to="/dashboard" className="back-button">
+      <header className="tracker-header">
+        <Link to="/dashboard" className="back-button" title="Back to Dashboard">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
             <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </Link>
-        <div className="header-title-section">
-          <h1 className="page-title">Our Shared Playbook</h1>
-          <p className="page-subtitle">Thoughts, dreams & ideas together</p>
+        <div className="header-title-container">
+          <h1 className="header-title">Our Shared Playbook</h1>
+          <span className="header-subtitle">Thoughts, dreams & ideas</span>
         </div>
-        <button 
-          className="add-note-button"
-          onClick={() => setShowAddModal(true)}
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
+        <div className="header-right-actions">
+          <button 
+            className="header-icon-button"
+            onClick={() => setShowAddModal(true)}
+            title="Add Note"
+            aria-label="Add Note"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </div>
       </header>
 
       <div className="playbook-content">
         {loading ? (
-          <div className="loading-state">
-            <div className="loading-spinner">
-              <div className="spinner"></div>
-            </div>
-            <p>Loading your journey...</p>
-          </div>
+          <LoadingSpinner text="Loading your journey..." />
         ) : (
           <>
             {/* Search and Filter Section */}

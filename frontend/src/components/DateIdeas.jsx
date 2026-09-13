@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import { useDateIdeas } from '../hooks/useDateIdeas';
+import { LoadingSpinner } from './LoadingSpinner';
 import './DateIdeas.css';
 import { ReactComponent as DateIdeasSvg } from '../assets/date-ideas.svg';
 
@@ -11,13 +11,10 @@ import { ReactComponent as DateIdeasSvg } from '../assets/date-ideas.svg';
 const BackIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" /></svg> );
 const LocationIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.003-.001c.194-.084.69-.344 1.337-.724 1.29-1.29 2.4-3.03 2.973-5.074.572-2.044.753-4.14.032-6.327C14.012 4.71 12.224 3 10 3S5.988 4.71 5.348 6.808c-.72 2.187-.54 4.283.032 6.327.573 2.044 1.683 3.784 2.973 5.074.647.38 1.143.64 1.337.724zM10 12.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clipRule="evenodd" /></svg> );
 const BudgetIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M10.75 10.837a.75.75 0 01-1.5 0V8.25h-.5a.75.75 0 010-1.5h.5V6a.75.75 0 011.5 0v.75h.5a.75.75 0 010 1.5h-.5v2.587z" /><path fillRule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm2-1a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V5a1 1 0 00-1-1H5z" clipRule="evenodd" /></svg> );
-const PencilIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg> );
 const PlusIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" /></svg> );
 const CloseIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" /></svg> );
 const SaveIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.24a.75.75 0 00-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z" clipRule="evenodd" /></svg> );
 const CheckCircleIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>);
-const SpinnerIcon = () => ( <svg className="spinner" viewBox="0 0 50 50"><circle className="path" cx="25" cy="25" r="20" fill="none" strokeWidth="5"></circle></svg> );
-const TrashIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clipRule="evenodd" /></svg> );
 
 // --- HELPER FUNCTIONS ---
 const formatBudget = (budgetStr) => {
@@ -220,7 +217,6 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, children }) => {
 };
 
 function DateIdeas() {
-    const { user } = useAuth();
     const { ideas, loading, addIdea, updateIdea, toggleFinished, deleteIdea } = useDateIdeas();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -241,27 +237,31 @@ function DateIdeas() {
 
     return (
         <>
-            <div className="date-ideas-page">
-                <div className="date-ideas-card">
-                    <div className="date-ideas-header">
-                        <Link to="/dashboard" className="back-button">
-                            <BackIcon />
-                        </Link>
-                        <div className="header-title-container">
-                            <DateIdeasSvg className="header-icon" />
-                            <h1 className="header-title">Date Night Ideas</h1>
-                        </div>
-                        <button className="add-idea-button" onClick={() => setIsAddModalOpen(true)}>
+            <div className="page-container date-ideas-page">
+                <header className="tracker-header">
+                    <Link to="/dashboard" className="back-button" title="Back to Dashboard">
+                        <BackIcon />
+                    </Link>
+                    <div className="header-title-container">
+                        <h1 className="header-title">Date Night Ideas</h1>
+                        <span className="header-subtitle">What to do next</span>
+                    </div>
+                    <div className="header-right-actions">
+                        <button
+                            className="header-icon-button"
+                            onClick={() => setIsAddModalOpen(true)}
+                            title="Add Date Idea"
+                            aria-label="Add Date Idea"
+                        >
                             <PlusIcon />
                         </button>
                     </div>
-                    <div className="date-ideas-content">
-                        {loading ? ( 
-                            <div className="centered-feedback">
-                                <SpinnerIcon/>
-                                <span>Loading your date ideas...</span>
-                            </div> 
-                        ) : isListCompletelyEmpty ? (
+                </header>
+
+                <div className="date-ideas-content">
+                    {loading ? ( 
+                        <LoadingSpinner text="Loading Date Ideas..." />
+                    ) : isListCompletelyEmpty ? (
                             <div className="empty-state-container">
                                 <DateIdeasSvg className="empty-state-svg" />
                                 <p>No date ideas yet.</p>
@@ -312,7 +312,6 @@ function DateIdeas() {
                             </>
                         )}
                     </div>
-                </div>
             </div>
             <AddIdeaModal 
                 isOpen={isAddModalOpen} 

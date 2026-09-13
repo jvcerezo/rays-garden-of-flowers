@@ -1,7 +1,10 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 
-const GoldIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" /></svg>);
+const GoldIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
+    </svg>
+);
 
 const StatBar = ({ label, color }) => {
     return (
@@ -24,12 +27,7 @@ export const PlayerStats = ({ data, playerName }) => {
     const expPercentage = stats.nextLevelExp > 0 ? (stats.exp / stats.nextLevelExp) * 100 : 0;
 
     return (
-        <motion.div 
-            className="player-stats-card"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-        >
+        <div className="player-stats-card">
             <div className="player-info-header">
                 <div className="player-icon-placeholder">
                     <span>{playerName?.charAt(0)}</span>
@@ -55,16 +53,19 @@ export const PlayerStats = ({ data, playerName }) => {
                         <span>{stats.exp || 0} / {stats.nextLevelExp}</span>
                     </div>
                     <div className="stat-bar-track">
-                        <motion.div 
+                        <div 
                             className="stat-bar-progress" 
-                            style={{ background: "linear-gradient(90deg, #facc15, #fde047)", width: `${expPercentage}%` }}
-                            initial={{ width: '0%' }}
-                            animate={{ width: `${expPercentage}%` }}
-                            transition={{ duration: 0.5, ease: 'easeOut' }}
+                            style={{ 
+                                background: "linear-gradient(90deg, #facc15, #fde047)", 
+                                width: `${Math.min(expPercentage, 100)}%`,
+                                transition: 'width 0.4s ease-out'
+                            }}
                         />
                     </div>
                 </div>
             </div>
-        </motion.div>
+        </div>
     );
 };
+
+export default PlayerStats;

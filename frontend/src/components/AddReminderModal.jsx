@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 
 export const AddReminderModal = ({ onClose, onAdd }) => {
     const [title, setTitle] = useState('');
@@ -13,13 +12,9 @@ export const AddReminderModal = ({ onClose, onAdd }) => {
 
     return (
         <div className="reminders-modal-backdrop" onClick={onClose}>
-            <motion.div
+            <div
                 className="reminders-modal-content"
-                initial={{ y: "100%" }}
-                animate={{ y: "0%" }}
-                exit={{ y: "100%" }}
-                transition={{ type: "spring", damping: 35, stiffness: 400 }}
-                onClick={e => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation()}
             >
                 <div className="modal-handle-bar" />
                 <h2 className="modal-title">New Reminder</h2>
@@ -33,6 +28,7 @@ export const AddReminderModal = ({ onClose, onAdd }) => {
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             required
+                            autoFocus
                         />
                     </div>
                     <div className="form-group">
@@ -46,11 +42,21 @@ export const AddReminderModal = ({ onClose, onAdd }) => {
                         />
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="button secondary" onClick={onClose}>Cancel</button>
-                        <button type="submit" className="button primary" disabled={!title || !dateTime}>Save Reminder</button>
+                        <button type="button" className="button secondary" onClick={onClose}>
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            className="button primary"
+                            disabled={!title || !dateTime}
+                        >
+                            Save Reminder
+                        </button>
                     </div>
                 </form>
-            </motion.div>
+            </div>
         </div>
     );
 };
+
+export default AddReminderModal;

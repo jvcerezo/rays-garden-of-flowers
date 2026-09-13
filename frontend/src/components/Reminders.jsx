@@ -4,20 +4,29 @@ import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase/firebase';
 import { collection, query, onSnapshot, addDoc, deleteDoc, doc, orderBy, serverTimestamp } from 'firebase/firestore';
 import { format, isPast, isToday, isTomorrow } from 'date-fns';
-import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 
 import { ReactComponent as RemindersEmptyIcon } from '../assets/reminders.svg';
 import { initializeFCM } from './firebase-messaging-init';
 import { AddReminderModal } from './AddReminderModal';
 import { ReminderList } from './ReminderList';
+import { LoadingSpinner } from './LoadingSpinner';
 import './Reminders.css';
 
 // --- Icon Components ---
-const BackIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" /></svg> );
-const PlusIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4a1 1 0 011 1v6h6a1 1 0 110 2h-6v6a1 1 0 11-2 0v-6H5a1 1 0 110-2h6V5a1 1 0 011-1z" /></svg> );
+const BackIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
+    </svg>
+);
 
-// --- Hero Card for the Next Reminder ---
+const PlusIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 4a1 1 0 011 1v6h6a1 1 0 110 2h-6v6a1 1 0 11-2 0v-6H5a1 1 0 110-2h6V5a1 1 0 011-1z" />
+    </svg>
+);
+
+// --- Lightweight Hero Card for Next Reminder ---
 const NextReminderHero = ({ reminder }) => {
     if (!reminder) return null;
 
@@ -28,19 +37,14 @@ const NextReminderHero = ({ reminder }) => {
     };
 
     return (
-        <motion.div 
-            className="next-reminder-hero"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-        >
+        <div className="next-reminder-hero">
             <div className="hero-accent" />
             <div className="hero-content">
                 <span className="hero-label">Next Up</span>
                 <h3 className="hero-title">{reminder.title}</h3>
                 <p className="hero-time">{formatRelativeTime(reminder.scheduledAt)}</p>
             </div>
-        </motion.div>
+        </div>
     );
 };
 
@@ -57,16 +61,21 @@ function Reminders() {
     }, [user]);
 
     useEffect(() => {
-        if (!user) { setLoading(false); return; }
+        if (!user) {
+            setLoading(false);
+            return;
+        }
         const remindersRef = collection(db, 'users', user.uid, 'reminders');
         const q = query(remindersRef, orderBy('scheduledAt', 'asc'));
-        
+
         const unsubscribe = onSnapshot(q, (snapshot) => {
-            setReminders(snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data(),
-                scheduledAt: doc.data().scheduledAt.toDate(),
-            })));
+            setReminders(
+                snapshot.docs.map((docSnap) => ({
+                    id: docSnap.id,
+                    ...docSnap.data(),
+                    scheduledAt: docSnap.data().scheduledAt.toDate(),
+                }))
+            );
             setLoading(false);
         });
         return () => unsubscribe();
@@ -77,9 +86,9 @@ function Reminders() {
         const promise = addDoc(collection(db, 'users', user.uid, 'reminders'), {
             ...newReminder,
             createdAt: serverTimestamp(),
-            status: 'pending'
+            status: 'pending',
         });
-        
+
         toast.promise(promise, {
             loading: 'Saving reminder...',
             success: <b>Reminder saved!</b>,
@@ -104,8 +113,8 @@ function Reminders() {
         const today = [];
         const upcoming = [];
         const past = [];
-        
-        reminders.forEach(r => {
+
+        reminders.forEach((r) => {
             if (isPast(r.scheduledAt) && !isToday(r.scheduledAt)) {
                 past.push(r);
             } else if (isToday(r.scheduledAt)) {
@@ -114,15 +123,15 @@ function Reminders() {
                 upcoming.push(r);
             }
         });
-        
-        const sortedToday = today.sort((a,b) => a.scheduledAt - b.scheduledAt);
-        const sortedUpcoming = upcoming.sort((a,b) => a.scheduledAt - b.scheduledAt);
-        const next = sortedToday.find(r => !isPast(r.scheduledAt)) || sortedUpcoming[0];
+
+        const sortedToday = today.sort((a, b) => a.scheduledAt - b.scheduledAt);
+        const sortedUpcoming = upcoming.sort((a, b) => a.scheduledAt - b.scheduledAt);
+        const next = sortedToday.find((r) => !isPast(r.scheduledAt)) || sortedUpcoming[0];
 
         return {
             todayReminders: sortedToday,
             upcomingReminders: sortedUpcoming,
-            pastReminders: past.sort((a,b) => b.scheduledAt - a.scheduledAt),
+            pastReminders: past.sort((a, b) => b.scheduledAt - a.scheduledAt),
             nextReminder: next,
         };
     }, [reminders]);
@@ -131,24 +140,36 @@ function Reminders() {
         <>
             <div className="page-container reminders-page">
                 <header className="tracker-header">
-                    <Link to="/dashboard" className="back-button"><BackIcon /></Link>
-                    <h1 className="header-title">Reminders</h1>
-                    <button className="add-button" onClick={() => setIsModalOpen(true)}>
-                        <PlusIcon />
-                    </button>
+                    <Link to="/dashboard" className="back-button" title="Back to Dashboard">
+                        <BackIcon />
+                    </Link>
+                    <div className="header-title-container">
+                        <h1 className="header-title">Reminders</h1>
+                        <span className="header-subtitle">Stay synced & on time</span>
+                    </div>
+                    <div className="header-right-actions">
+                        <button
+                            className="header-icon-button"
+                            onClick={() => setIsModalOpen(true)}
+                            title="Add Reminder"
+                            aria-label="Add Reminder"
+                        >
+                            <PlusIcon />
+                        </button>
+                    </div>
                 </header>
 
                 <div className="reminders-content">
-                    {loading && <p>Loading reminders...</p>}
-                    
+                    {loading && <LoadingSpinner text="Loading Reminders..." />}
+
                     {!loading && reminders.length === 0 && (
                         <div className="empty-state">
                             <RemindersEmptyIcon className="empty-state-icon" />
                             <h2>No Reminders Yet</h2>
-                            <p>Tap the '+' button to add your first reminder and stay on track.</p>
+                            <p>Tap the '+' button above to add your first reminder.</p>
                         </div>
                     )}
-                    
+
                     {!loading && reminders.length > 0 && (
                         <>
                             <NextReminderHero reminder={nextReminder} />
@@ -163,14 +184,12 @@ function Reminders() {
                 </div>
             </div>
 
-            <AnimatePresence>
-                {isModalOpen && (
-                    <AddReminderModal
-                        onClose={() => setIsModalOpen(false)}
-                        onAdd={handleAddReminder}
-                    />
-                )}
-            </AnimatePresence>
+            {isModalOpen && (
+                <AddReminderModal
+                    onClose={() => setIsModalOpen(false)}
+                    onAdd={handleAddReminder}
+                />
+            )}
         </>
     );
 }

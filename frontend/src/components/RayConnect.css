@@ -12,9 +12,7 @@ body {
 /* --- Ray-Connect Page --- */
 .ray-connect-page {
     justify-content: flex-start;
-    padding: 15px 15px 120px 15px; 
-    box-sizing: border-box;
-    width: 100%;
+    padding-bottom: max(90px, calc(env(safe-area-inset-bottom, 0px) + 80px));
 }
 
 /* --- Loading State --- */

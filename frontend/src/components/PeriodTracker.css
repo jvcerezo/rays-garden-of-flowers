@@ -1,105 +1,618 @@
-/* --- Period Tracker Page --- */
+/* --- Period Tracker Page (Native Mobile Fluidity) --- */
 .period-tracker-page {
     justify-content: flex-start;
-    background-color: #f8fafc;
-    padding-bottom: 100px; /* Space for FAB */
+    padding-bottom: max(90px, calc(env(safe-area-inset-bottom, 0px) + 80px));
 }
+
 .period-tracker-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px;
+    gap: 20px;
     width: 100%;
-    max-width: 420px;
-    margin: 20px auto 0;
+    max-width: 440px;
+    margin: 4px auto 0;
+    box-sizing: border-box;
 }
 
-/* --- Cycle Display & FAB --- */
-.cycle-display-container { position: relative; width: 260px; height: 260px; }
-.cycle-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-.cycle-track { fill: none; stroke: #f1f5f9; stroke-width: 16; }
-.cycle-progress { fill: none; stroke-width: 16; stroke-linecap: round; }
-.fab {
-    position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
-    border-radius: 50%; background: #4f46e5; border: none; color: white;
-    box-shadow: 0 8px 25px -5px rgba(79, 70, 229, 0.4); display: flex;
-    align-items: center; justify-content: center; cursor: pointer; z-index: 999;
+/* Header Action Buttons */
+.header-icon-button {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    padding: 0;
+    flex-shrink: 0;
 }
-.fab svg { width: 28px; height: 28px; }
 
-/* Phase Colors & Info Text */
-.phase-initial, .phase-luteal, .phase-follicular { stroke: #a78bfa; }
-.phase-fertile-window, .phase-ovulation-day { stroke: #60a5fa; }
-.phase-period { stroke: #f472b6; }
-.cycle-info { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-.cycle-primary-text { font-size: 44px; font-weight: 700; color: #1e293b; line-height: 1.1; }
-.cycle-secondary-text { font-size: 16px; color: #64748b; margin-top: 4px; }
+.header-icon-button:hover {
+    background: #f8fafc;
+    color: var(--primary-color, #a78bfa);
+    transform: scale(1.05);
+}
+
+.header-icon-button:active {
+    transform: scale(0.95);
+}
+
+/* --- Cycle Display Ring --- */
+.cycle-display-container {
+    position: relative;
+    width: 230px;
+    height: 230px;
+    margin: 0 auto;
+}
+
+.cycle-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.cycle-track {
+    fill: none;
+    stroke: #f1f5f9;
+    stroke-width: 14;
+}
+
+.cycle-progress {
+    fill: none;
+    stroke-width: 14;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Phase Colors & Typography */
+.phase-initial,
+.phase-luteal,
+.phase-follicular {
+    stroke: #a78bfa;
+}
+
+.phase-fertile-window,
+.phase-ovulation-day {
+    stroke: #38bdf8;
+}
+
+.phase-period {
+    stroke: #f43f5e;
+}
+
+.cycle-info {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 10px;
+}
+
+.cycle-primary-text {
+    font-size: 34px;
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.cycle-secondary-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748b;
+    margin-top: 4px;
+}
 
 /* --- Embedded Calendar Container --- */
 .calendar-container {
     width: 100%;
-    background: #fff;
-    border-radius: 24px;
-    padding: 20px 15px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 16px 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid #f1f5f9;
+    box-sizing: border-box;
 }
-.react-calendar { width: 100%; border: none; font-family: 'Poppins', sans-serif; }
-.react-calendar__tile { height: 42px; display: flex; align-items: center; justify-content: center; font-size: 13px; border-radius: 8px; position: relative; overflow: hidden; }
-.react-calendar__tile--now { border: 2px solid #4f46e5; }
-.react-calendar__tile.day-period { background-color: #fce7f3; color: #be185d; font-weight: 700; }
-.react-calendar__tile.day-predicted-period { background-color: rgba(252, 231, 243, 0.5); color: #9d174d; }
-.react-calendar__tile.day-fertile { background-color: #e0f2fe; color: #0369a1; }
-.react-calendar__tile.day-ovulation { background-color: #dbeafe; color: #1d4ed8; font-weight: 700; }
-.calendar-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 15px; margin-top: 20px; font-size: 12px; }
-.legend-item { display: flex; align-items: center; gap: 6px; }
-.legend-color { width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.1); }
-.legend-color.day-period { background-color: #fce7f3; border-color: #f9a8d4; }
-.legend-color.day-predicted-period { background-color: rgba(252, 231, 243, 0.5); border-color: #fbcfe8; }
-.legend-color.day-fertile { background-color: #e0f2fe; border-color: #bae6fd; }
-.legend-color.day-ovulation { background-color: #dbeafe; border-color: #bfdbfe; }
 
-/* --- Log Action Menu --- */
-.log-action-menu {
-    position: relative; width: 100%; max-width: 480px; background: #f9fafb;
-    border-radius: 28px 28px 0 0; box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
-    padding: 10px 25px 40px; box-sizing: border-box;
-    display: flex; flex-direction: column; gap: 10px;
+.calendar-header-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding: 0 4px;
 }
-.button.full-width { width: 100%; flex: none; }
 
-/* --- Unauthorized Message --- */
-.unauthorized-message { text-align: center; padding: 60px 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.unauthorized-message h2 { font-size: 20px; font-weight: 700; color: #1f2937; }
-.unauthorized-message p { font-size: 15px; color: #6b7280; }
+.calendar-meta-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.active-period-badge {
+    font-size: 11px;
+    font-weight: 600;
+    color: #e11d48;
+    background: #ffe4e6;
+    padding: 3px 8px;
+    border-radius: 9999px;
+}
+
+/* React Calendar Styles Override */
+.react-calendar {
+    width: 100%;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    background: transparent;
+}
+
+.react-calendar__navigation {
+    height: 40px;
+    margin-bottom: 8px;
+}
+
+.react-calendar__navigation button {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    border-radius: 8px;
+}
+
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+    background-color: #f8fafc;
+}
+
+.react-calendar__month-view__weekdays {
+    font-size: 11px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+}
+
+.react-calendar__tile {
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    margin: 1px 0;
+}
+
+.react-calendar__tile--now {
+    background: transparent;
+    border: 2px solid #a78bfa;
+    font-weight: 700;
+}
+
+.react-calendar__tile--active {
+    background: #ede9fe !important;
+    color: #5b21b6 !important;
+}
+
+.react-calendar__tile.day-period {
+    background-color: #ffe4e6 !important;
+    color: #be123c !important;
+    font-weight: 700;
+}
+
+.react-calendar__tile.day-predicted-period {
+    background-color: rgba(254, 205, 211, 0.45) !important;
+    color: #9f1239 !important;
+}
+
+.react-calendar__tile.day-fertile {
+    background-color: #e0f2fe !important;
+    color: #0369a1 !important;
+}
+
+.react-calendar__tile.day-ovulation {
+    background-color: #bae6fd !important;
+    color: #0c4a6e !important;
+    font-weight: 700;
+}
+
+/* Calendar Legend */
+.calendar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 14px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #f1f5f9;
+    font-size: 11px;
+    color: #64748b;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend-color {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.legend-color.day-period {
+    background-color: #ffe4e6;
+    border-color: #fecdd3;
+}
+
+.legend-color.day-predicted-period {
+    background-color: rgba(254, 205, 211, 0.45);
+    border-color: #fbcfe8;
+}
+
+.legend-color.day-fertile {
+    background-color: #e0f2fe;
+    border-color: #bae6fd;
+}
+
+.legend-color.day-ovulation {
+    background-color: #bae6fd;
+    border-color: #7dd3fc;
+}
+
+/* Selected Day Tap Banner */
+.selected-day-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 10px 12px;
+    margin-top: 14px;
+    gap: 8px;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.selected-day-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.selected-day-date {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.selected-day-phase {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+.selected-day-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.btn-sm-action {
+    background: #4f46e5;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-sm-action:hover {
+    background: #4338ca;
+}
+
+.btn-sm-close {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 14px;
+    padding: 4px;
+    cursor: pointer;
+}
+
+/* --- Cycle History Modal Styles --- */
+.history-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.history-close-btn {
+    background: #f1f5f9;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+    color: #64748b;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cycle-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 60vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-right: 2px;
+}
+
+.empty-history-text {
+    text-align: center;
+    padding: 30px 10px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.cycle-history-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.cycle-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.cycle-date-range {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.cycle-arrow-sep {
+    color: #94a3b8;
+    font-weight: 400;
+}
+
+.cycle-end.status-ongoing {
+    color: #e11d48;
+    font-weight: 700;
+}
+
+.cycle-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.cycle-action-btn {
+    background: transparent;
+    border: none;
+    font-size: 15px;
+    padding: 4px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+}
+
+.cycle-action-btn:hover {
+    background: #f1f5f9;
+}
+
+.cycle-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.meta-badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 6px;
+}
+
+.meta-badge.duration {
+    background: #fff1f2;
+    color: #be123c;
+}
+
+.meta-badge.ongoing {
+    background: #fef2f2;
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.meta-badge.interval {
+    background: #f0fdf4;
+    color: #166534;
+}
+
+/* Edit form within history item */
+.cycle-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cycle-edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.button.sm {
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 8px;
+}
+
+/* --- Backtracking Log Modal Form --- */
+.quick-active-box {
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.quick-active-text {
+    font-size: 13px;
+    color: #9f1239;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.quick-end-btn {
+    padding: 10px !important;
+    font-size: 13px !important;
+    background: #e11d48 !important;
+}
+
+.log-cycle-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.input-tip {
+    font-size: 11px;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+.form-group-checkbox {
+    margin: 4px 0;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #334155;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #4f46e5;
+    cursor: pointer;
+}
 
 /* --- Confirmation Toast --- */
-.confirmation-toast { background-color: #fff; color: #1f2937; padding: 15px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); text-align: center; max-width: 320px; }
-.confirmation-toast h4 { font-size: 16px; font-weight: 700; margin: 0 0 5px; }
-.confirmation-toast p { font-size: 14px; color: #6b7280; margin: 0 0 15px; }
-.toast-buttons { display: flex; gap: 10px; }
-.toast-buttons button { flex: 1; padding: 8px 12px; border-radius: 8px; font-size: 14px; font-weight: 600; border: 1px solid transparent; cursor: pointer; transition: background-color 0.2s; }
-.toast-buttons .button-confirm { background-color: #ef4444; color: #fff; border-color: #ef4444; }
-.toast-buttons .button-confirm:hover { background-color: #dc2626; }
-.toast-buttons .button-cancel { background-color: #e5e7eb; color: #4b5563; }
-.toast-buttons .button-cancel:hover { background-color: #d1d5db; }
+.confirmation-toast {
+    background-color: #fff;
+    color: #1f2937;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    text-align: center;
+    max-width: 320px;
+}
 
-/* --- Shared Modal, Form, Danger Zone Styles --- */
-.reminders-modal-backdrop { position: fixed; inset: 0; background-color: rgba(17, 24, 39, 0.6); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: flex-end; justify-content: center; }
-.reminders-modal-content { position: relative; width: 100%; max-width: 480px; background: #f9fafb; border-radius: 28px 28px 0 0; box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2); padding: 10px 25px 40px; box-sizing: border-box; }
-.modal-handle-bar { width: 40px; height: 5px; background-color: #e5e7eb; border-radius: 2.5px; margin: 0 auto 20px; }
-.modal-title { text-align: center; font-size: 18px; font-weight: 600; color: #1f2937; margin-bottom: 25px; }
-.new-reminder-form { display: flex; flex-direction: column; gap: 20px; }
-.form-group { display: flex; flex-direction: column; }
-.form-group label { font-size: 14px; font-weight: 500; color: #4b5563; margin-bottom: 8px; }
-.form-group input { width: 100%; padding: 14px; font-size: 16px; font-family: 'Poppins', sans-serif; border-radius: 12px; border: 1px solid #d1d5db; background-color: #fff; box-sizing: border-box; transition: all 0.2s ease; }
-.form-group input:focus { outline: none; border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2); }
-.modal-footer { display: flex; gap: 10px; margin-top: 15px; }
-.button { flex: 1; padding: 16px; border-radius: 14px; font-size: 16px; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s ease; }
-.button.primary { background: #4f46e5; color: #fff; }
-.button.secondary { background-color: #fff; color: #4b5563; border: 1px solid #d1d5db; }
-.button:disabled { background: #e5e7eb; color: #9ca3af; cursor: not-allowed; }
-.danger-zone { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; text-align: center; }
-.danger-zone-title { color: #be123c; font-size: 16px; font-weight: 600; margin-bottom: 5px; }
-.danger-zone p { font-size: 13px; color: #4b5563; max-width: 300px; margin: 0 auto 15px; }
-.button.danger { width: 100%; background: #fee2e2; color: #be123c; border: 1px solid #fecaca; }
-.button.danger:hover { background: #fecaca; color: #9f1239; }
+.confirmation-toast h4 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 5px;
+}
+
+.confirmation-toast p {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0 0 15px;
+}
+
+.toast-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.toast-buttons button {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.toast-buttons .button-confirm {
+    background-color: #ef4444;
+    color: #fff;
+    border-color: #ef4444;
+}
+
+.toast-buttons .button-confirm:hover {
+    background-color: #dc2626;
+}
+
+.toast-buttons .button-cancel {
+    background-color: #e5e7eb;
+    color: #4b5563;
+}
+
+.toast-buttons .button-cancel:hover {
+    background-color: #d1d5db;
+}
+
+/* --- Unauthorized Message --- */
+.unauthorized-message {
+    text-align: center;
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.unauthorized-message h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.unauthorized-message p {
+    font-size: 15px;
+    color: #6b7280;
+}
